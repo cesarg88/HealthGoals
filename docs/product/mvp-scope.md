@@ -25,7 +25,7 @@ Debe validar el core loop:
 
 > **Baseline y patrón semanal → Objetivo → Progreso respecto al ritmo personal → Gap → Nueva semana**
 
-La entrega tiene un timebox de **ocho semanas hasta TestFlight**, con un máximo de dos días iniciales para infraestructura reusable mínima. La fecha de inicio y los hitos se concretarán en las Issues. El objetivo es terminar, publicar y aprovechar el aprendizaje para otros productos del portfolio.
+Las **ocho semanas hasta TestFlight** son una referencia tentativa para este proyecto personal, sin compromiso rígido ni prisa. No se fija una fecha de entrega ni se reinicia el plazo. La infraestructura reusable se mantiene mínima. El objetivo es terminar, publicar y aprovechar el aprendizaje para otros productos del portfolio.
 
 ---
 
@@ -36,6 +36,10 @@ El MVP está diseñado principalmente para:
 > **Una persona con iPhone y Apple Watch que quiere moverse más o ser más constante con su actividad, pero no sigue un plan deportivo profesional y no quiere registrar manualmente sus hábitos.**
 
 No necesitamos servir inicialmente a todos los usuarios de HealthKit.
+
+La compatibilidad confirmada por César es **iOS 26 e iPadOS 26 como mínimo, iPhone e iPad y todas las orientaciones**. El diseño y la validación deben contemplar adaptación a ambos dispositivos y cambios de orientación. Cualquier limitación técnica real de plataforma debe registrarse antes de afirmar cobertura. Este soporte no añade sincronización multidispositivo al MVP.
+
+La app ofrecerá **inglés y español desde el inicio**, confirmado por César. Seguir el idioma del sistema sin selector es una propuesta pendiente de confirmación; esta decisión no fija todavía el comportamiento de selección de idioma.
 
 ---
 
@@ -643,7 +647,7 @@ HealthGoals MVP está completo cuando un usuario puede:
 
 La entrega debe aportar evidencia de aceptación y checks para el SHA actual, revisión independiente y validación de César en dispositivo real para HealthKit, permisos, sincronización con Apple Watch, background y WidgetKit. No basta con CI verde para dar esas integraciones por verificadas.
 
-La salida a TestFlight se evalúa dentro del timebox de ocho semanas; la publicación comercial requiere resolver el precio y mecanismo de pago único. Completar el loop y validar la hipótesis de producto son resultados distintos.
+La salida a TestFlight toma las ocho semanas como referencia tentativa, sin compromiso rígido ni prisa; la publicación comercial requiere resolver el precio y mecanismo de pago único. Completar el loop y validar la hipótesis de producto son resultados distintos.
 
 Si ese loop funciona y genera uso recurrente, tendremos evidencia para ampliar el producto.
 
