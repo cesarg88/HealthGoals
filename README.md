@@ -57,7 +57,7 @@ Cada ejecución conserva sus logs y un `.xcresult` por dispositivo en un nuevo d
 
 `BootstrapTests` comprueba lanzamiento, vista raíz visible y adaptación al girar en ambos dispositivos. Las cuatro orientaciones están declaradas para iPhone/iPad; el test cubre portrait y ambos landscape en iPhone, y añade portrait upside down en iPad. Los iPhone con Face ID pueden impedir upside down por política del sistema. No se simula su aceptación ni se modifica esa política.
 
-El deployment target 26.0 no equivale a haber ejecutado en 26.0: esta combinación prueba **26.5**, no el runtime mínimo. Tampoco valida multitarea/ventanas redimensionadas de iPad, dispositivo físico, HealthKit, Watch, background, widgets, distribución ni TestFlight. El idioma de producto sigue pendiente; la vista técnica usa solo `HealthGoals`. Bundle IDs `com.example.HealthGoals` y `com.example.HealthGoalsUITests` son provisionales de bootstrap, sin Team ni certificados; deben resolverse antes de signing.
+El deployment target 26.0 no equivale a haber ejecutado en 26.0: esta combinación prueba **26.5**, no el runtime mínimo. Tampoco valida multitarea/ventanas redimensionadas de iPad, dispositivo físico, HealthKit, Watch, background, widgets, distribución ni TestFlight. Inglés y español están declarados en `knownRegions` y `CFBundleLocalizations`; la vista técnica usa solo `HealthGoals`, sin copy artificial ni selector. Seguir el idioma del sistema para las futuras pantallas es una propuesta pendiente de Product, no una decisión de comportamiento implementada. Bundle IDs `com.example.HealthGoals` y `com.example.HealthGoalsUITests` son provisionales de bootstrap, sin Team ni certificados; deben resolverse antes de signing.
 
 Checks de infraestructura:
 
