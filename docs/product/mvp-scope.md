@@ -39,7 +39,7 @@ No necesitamos servir inicialmente a todos los usuarios de HealthKit.
 
 La compatibilidad confirmada por César es **iOS 26 e iPadOS 26 como mínimo, iPhone e iPad y todas las orientaciones**. El diseño y la validación deben contemplar adaptación a ambos dispositivos y cambios de orientación. Cualquier limitación técnica real de plataforma debe registrarse antes de afirmar cobertura. Este soporte no añade sincronización multidispositivo al MVP.
 
-El idioma de la app sigue pendiente de confirmación; el español es una propuesta, no una decisión aprobada.
+La app ofrecerá **inglés y español desde el inicio**, confirmado por César. Seguir el idioma del sistema sin selector es una propuesta pendiente de confirmación; esta decisión no fija todavía el comportamiento de selección de idioma.
 
 ---
 

@@ -583,7 +583,7 @@ El objetivo es terminar el MVP, publicarlo y utilizar lo aprendido para siguient
 
 Las **ocho semanas hasta TestFlight** son una referencia tentativa para este proyecto personal, sin compromiso rígido ni prisa. No se fija una fecha de entrega ni se reinicia el plazo. La preparación de infraestructura se mantiene mínima y se demuestra con entregas reales.
 
-La compatibilidad confirmada por César es **iOS 26 e iPadOS 26 como mínimo, iPhone e iPad y todas las orientaciones**. El diseño y la validación deben contemplar adaptación a ambos dispositivos y cambios de orientación, registrando las limitaciones técnicas reales antes de afirmar cobertura. El idioma de la app sigue pendiente de confirmación.
+La compatibilidad confirmada por César es **iOS 26 e iPadOS 26 como mínimo, iPhone e iPad y todas las orientaciones**. El diseño y la validación deben contemplar adaptación a ambos dispositivos y cambios de orientación, registrando las limitaciones técnicas reales antes de afirmar cobertura. La app ofrecerá **inglés y español desde el inicio**. Seguir el idioma del sistema sin selector es una propuesta pendiente de confirmación.
 
 La infraestructura se demuestra con entregas reales: Issue, implementación, PR, revisión independiente del SHA actual, CI y validación humana cuando corresponda. Las integraciones con HealthKit, permisos, Apple Watch, background y widgets requieren validación de César en dispositivo real.
 

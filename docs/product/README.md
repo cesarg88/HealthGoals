@@ -5,7 +5,7 @@ Aquí se conserva el contexto aprobado de producto: alcance, requisitos y diseñ
 - [one-pager.md](one-pager.md): visión, propuesta de valor y principios del producto.
 - [mvp-scope.md](mvp-scope.md): alcance inicial, exclusiones y criterios de éxito.
 
-Ambos documentos parten de los textos proporcionados por César y conservan las decisiones posteriores confirmadas por él. La [Issue #9](https://github.com/cesarg88/HealthGoals/issues/9) registra la actualización de calendario orientativo y compatibilidad, sin reabrir el alcance del MVP.
+Ambos documentos parten de los textos proporcionados por César y conservan las decisiones posteriores confirmadas por él. La [Issue #9](https://github.com/cesarg88/HealthGoals/issues/9) registra la actualización de calendario orientativo, compatibilidad e idiomas, sin reabrir el alcance del MVP.
 
 Product Lead define el alcance y los criterios de éxito. Product Designer documenta los flujos y estados necesarios para ese alcance, con referencias a los requisitos correspondientes. Las propuestas deben distinguir claramente lo aprobado de las preguntas abiertas.
 
