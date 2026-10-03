@@ -8,7 +8,7 @@ Core loop: `Intención → Baseline → Plan → Progress → Gap → Adapt`.
 
 ## Estado actual
 
-Este repositorio contiene la base documental y el workflow manual de desarrollo. Todavía no hay proyecto Xcode, código de producto ni comandos de build o tests.
+Este repositorio contiene la base documental, el workflow manual y las herramientas reutilizables de agentes. Todavía no hay proyecto Xcode, código de producto ni comandos de build de la app. Los checks de infraestructura verifican la integridad del kit y su helper de GitHub.
 
 La definición de producto está en [one-pager.md](docs/product/one-pager.md) y el alcance inicial en [mvp-scope.md](docs/product/mvp-scope.md).
 
@@ -28,4 +28,4 @@ GitHub es la fuente de verdad: las Issues definen unidades de ejecución, las PR
 2. Confirmar que la Issue tiene alcance y criterios de aceptación verificables y que sus dependencias están resueltas.
 3. Trabajar en una rama y checkout/worktree exclusivos siguiendo el workflow manual.
 
-César coordina inicialmente las asignaciones, revisiones y merges. No hay orquestación automática, skills propias ni configuración de protección de ramas incluida en estos archivos.
+César coordina las asignaciones, revisiones y merges. Los [roles y dos skills del kit](agents/README.md#kit-reutilizable) apoyan ese workflow manual; no hay orquestación automática ni protección de ramas configurada por estos archivos.

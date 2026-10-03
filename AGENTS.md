@@ -11,6 +11,12 @@ Estas instrucciones se aplican a todo el repositorio.
 - Si falta una decisión necesaria, registra el bloqueo y solicita a César o al responsable de la Issue que lo resuelva. No inventes requisitos de producto ni criterios para poder cerrar la tarea.
 - Usa una rama y un checkout/worktree exclusivos por agente y tarea. No compartas un directorio de trabajo con otro agente activo ni trabajes directamente sobre la rama de integración. César indica la base; actualmente es `develop`.
 
+## Kit reutilizable
+
+- Usa los roles [coordinator](agents/roles/coordinator.md), [implementer](agents/roles/implementer.md) y [reviewer](agents/roles/reviewer.md) según tu ejecución, y las skills locales `implement-issue` y `review-pr` en `.agents/skills/`.
+- La política de este repositorio prevalece sobre los ejemplos genéricos del kit: aquí solo está autorizado el modo App.
+- Las copias están fijadas en [kit-lock.json](agents/kit-lock.json). Las mejoras reutilizables se integran primero en el kit; su adopción aquí requiere una Issue, un nuevo SHA integrado, copias exactas y hashes actualizados. No edites las copias como una implementación local independiente.
+
 ## Durante la ejecución
 
 - Limita los cambios a la Issue; mantén las PRs pequeñas y revisables.

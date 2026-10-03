@@ -21,10 +21,20 @@ CI puede ejecutarse en paralelo a la revisión. El merge requiere que ambos corr
 7. **Verificar y fusionar.** César comprueba que el SHA aprobado coincide con el head actual de la PR, que los checks de ese SHA terminaron correctamente y que se cumplen los criterios sin bloqueos pendientes. Después realiza o autoriza el merge. Si cambia el head, repetir la verificación.
 8. **Resolver dependencias.** Tras confirmar el merge, César actualiza la Issue completada y las Issues dependientes. Una tarea se desbloquea únicamente cuando todas sus condiciones de dependencia se cumplen; no basta con abrir o aprobar una PR.
 
+## Kit reutilizable
+
+HealthGoals consume [agent-engineering-kit](https://github.com/cesarg88/agent-engineering-kit) en el commit integrado `a7d77a422bbdf0da5a02fe68b2eb4ec32352c45a`. [kit-lock.json](kit-lock.json) registra la procedencia, las rutas originales y SHA-256 de las siete copias exactas. Se conservan en inglés, el idioma del kit.
+
+- Roles: [coordinator](roles/coordinator.md), [implementer](roles/implementer.md), [reviewer](roles/reviewer.md).
+- Skills del repositorio: [implement-issue](../.agents/skills/implement-issue/SKILL.md) y [review-pr](../.agents/skills/review-pr/SKILL.md). Leerlas directamente si el cliente no las descubre; no requieren instalación global.
+- Helper: `tools/agent-github/agent_github.py`; configuración y operaciones en [la política local](github-authentication.md).
+
+Para actualizar el kit, comprobar primero el merge upstream, recuperar las siete rutas originales del nuevo SHA, sustituir las copias y actualizar SHA/hashes del manifiesto en una Issue dedicada. Revisar también cualquier cambio de configuración requerido. CI detecta divergencias de las copias respecto al manifiesto; la revisión independiente verifica la procedencia frente al SHA upstream. No se descarga el repositorio privado durante CI.
+
 ## CI y límites actuales
 
-`Repository checks / whitespace` comprueba errores de whitespace introducidos por la PR usando su head SHA explícito. Es un check de higiene; no verifica comportamiento, enlaces, compilación ni tests de producto. No hay app ejecutable todavía.
+`Repository checks / whitespace` comprueba errores de whitespace introducidos por la PR usando su head SHA explícito. Es un check de higiene. `Repository checks / agent-kit` ejecuta `python3 scripts/check-agent-kit.py` y `python3 -m unittest discover -s tests -v` sobre el mismo head explícito; valida las copias y el comportamiento del helper. No verifica compilación ni tests de producto: no hay app ejecutable todavía.
 
 Las plantillas y estas instrucciones no configuran protecciones de GitHub, aprobaciones obligatorias ni invalidación automática de aprobaciones. En esta etapa César verifica esas condiciones manualmente. Cuando se añada el proyecto iOS, la tarea correspondiente debe definir cómo compilar y probar, y ampliar CI.
 
-La orquestación, el desbloqueo automático de dependencias y las skills reutilizables se añadirán solo tras probar este flujo manual y detectar una necesidad concreta.
+Los roles y skills apoyan el flujo manual. No automatizan asignaciones, desbloqueos ni merges.
