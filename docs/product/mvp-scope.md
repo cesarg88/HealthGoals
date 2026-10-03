@@ -1,6 +1,6 @@
 # HealthGoals — MVP Scope
 
-**Estado:** Scope inicial  
+**Estado:** Alcance cerrado para el MVP  
 **Fecha:** Octubre de 2026  
 **Versión objetivo:** MVP / 1.0 inicial
 
@@ -10,11 +10,11 @@
 
 El MVP de HealthGoals debe validar una única hipótesis:
 
-> **Un usuario obtiene valor recurrente cuando HealthGoals utiliza automáticamente sus datos de actividad para establecer objetivos semanales razonables, mostrar su progreso y decirle exactamente qué le queda para completarlos.**
+> **Una persona con Apple Watch y semanas variables obtiene valor de perseguir un objetivo semanal flexible, entendiendo cómo va respecto a su propio ritmo y qué le queda, sin tener que cumplir el mismo objetivo todos los días.**
 
 El MVP no pretende demostrar todavía:
 
-- monetización;
+- viabilidad económica a escala;
 - escalabilidad;
 - coaching;
 - personalización avanzada;
@@ -23,7 +23,9 @@ El MVP no pretende demostrar todavía:
 
 Debe validar el core loop:
 
-> **Baseline → Objetivo → Progress → Gap → Nueva semana**
+> **Baseline y patrón semanal → Objetivo → Progreso respecto al ritmo personal → Gap → Nueva semana**
+
+La entrega tiene un timebox de **ocho semanas hasta TestFlight**, con un máximo de dos días iniciales para infraestructura reusable mínima. La fecha de inicio y los hitos se concretarán en las Issues. El objetivo es terminar, publicar y aprovechar el aprendizaje para otros productos del portfolio.
 
 ---
 
@@ -43,10 +45,10 @@ Durante onboarding, el usuario podrá indicar qué quiere mejorar.
 
 Opciones iniciales:
 
-- **Moverme más**
-- **Caminar más**
-- **Ser más activo**
-- **Ser más constante con mi actividad**
+- **Caminar más** → objetivo principal de pasos semanales.
+- **Moverme más** → objetivo principal de actividad semanal, medida en energía activa.
+
+Después, el usuario puede añadir un objetivo de la otra métrica, hasta un máximo de dos. La selección cambia realmente la propuesta; la constancia es un resultado esperado del uso.
 
 No habrá campo de texto libre en el MVP.
 
@@ -149,7 +151,9 @@ Ejemplo:
 
 El baseline debe poder manejar semanas atípicas razonablemente.
 
-La implementación exacta de cálculo se definirá en arquitectura y tests.
+También obtendremos, por métrica, el patrón habitual de distribución de actividad entre los días de la semana. Ese patrón sirve para interpretar el ritmo actual; no obliga a repetir la misma distribución.
+
+La implementación exacta del baseline, del patrón y de la suficiencia de historial se definirá en la Issue correspondiente y se verificará con tests. No se fijan aquí porcentajes de progresión ni umbrales de datos suficientes.
 
 ---
 
@@ -158,6 +162,8 @@ La implementación exacta de cálculo se definirá en arquitectura y tests.
 A partir del baseline, HealthGoals propondrá como máximo:
 
 > **dos objetivos semanales.**
+
+La intención determina la métrica principal; la segunda se añade por elección del usuario.
 
 Ejemplo:
 
@@ -203,11 +209,7 @@ Principio:
 
 No necesitamos optimizar todavía el algoritmo de progresión.
 
-Necesitamos comprobar si el concepto de:
-
-> baseline → propuesta razonable
-
-es útil.
+La propuesta inicial debe ayudar a empezar. La hipótesis principal se valida mediante la utilidad de la semana flexible, la interpretación del ritmo personal y la consulta del restante.
 
 Las reglas exactas deberán ser:
 
@@ -225,7 +227,7 @@ La Home debe responder inmediatamente:
 
 Ejemplo:
 
-## Vas bien esta semana
+## Vas a tu ritmo esta semana
 
 **Pasos**
 
@@ -255,9 +257,9 @@ No necesitamos un dashboard complejo.
 
 La Home debe priorizar:
 
-1. estado;
+1. estado respecto al ritmo personal;
 2. progreso;
-3. gap.
+3. gap y reparto diario orientativo.
 
 ---
 
@@ -267,12 +269,16 @@ El MVP puede utilizar estados sencillos.
 
 Por ejemplo:
 
-- **Vas bien**
+- **Vas a tu ritmo**
 - **Necesitas recuperar algo de ritmo**
 - **Estás cerca**
 - **Objetivo completado**
 
-La lógica debe ser determinista y explicable.
+El estado de ritmo compara el progreso con el patrón histórico del usuario para esa métrica y ese momento de la semana. No se deduce exclusivamente del porcentaje de días transcurridos ni del reparto uniforme entre siete días.
+
+Por ejemplo, si el usuario suele concentrar actividad durante el fin de semana, llevar menos de la mitad del objetivo el jueves no implica por sí solo ir retrasado.
+
+La lógica debe ser determinista y explicable. La Issue de implementación concretará cómo trata el día en curso y los umbrales de cada estado. Si no hay historial suficiente para estimar el patrón, se comunica esa limitación y no se presenta un estado personalizado como conocido.
 
 No utilizaremos IA para decidir el estado.
 
@@ -284,7 +290,7 @@ El wording no debe generar culpa ni presentar un mal día como fracaso.
 
 Para cada objetivo calcularemos:
 
-> `objetivo − progreso actual`
+> `máximo(0, objetivo − progreso actual)`
 
 Y cuando tenga sentido:
 
@@ -298,13 +304,13 @@ Con tres días restantes:
 
 > ~3.200 pasos/día.
 
-La división diaria es informativa.
+La división diaria es informativa y no determina el estado de ritmo personal.
 
 No significa que el usuario deba repartir exactamente la actividad de esa manera.
 
 ---
 
-# 13. Actualización
+# 13. Actualización y seguimiento
 
 El progreso se actualizará mediante HealthKit.
 
@@ -322,6 +328,15 @@ El producto debe tolerar:
 - actualizaciones en background;
 - aplicación cerrada;
 - datos temporalmente inaccesibles.
+
+## Notificación local opcional
+
+El MVP incluye una notificación local de seguimiento semanal, por ejemplo a mitad de semana:
+
+> **Así va tu semana**
+> Mira cómo estás avanzando y qué te queda.
+
+No muestra pasos, energía activa ni otros valores de salud. El usuario elige si la activa y puede desactivarla desde Ajustes. No requiere backend. El momento exacto y las reglas de programación se concretarán en la Issue correspondiente.
 
 ---
 
@@ -398,7 +413,9 @@ Principios obligatorios:
 - no almacenar datos de salud innecesariamente;
 - no utilizar analytics que incluyan pasos, energía activa u otros valores HealthKit.
 
-Podemos medir eventos de producto como:
+El futuro plan de validación concretará el método de medición y su compatibilidad con la persistencia local y la ausencia de backend del MVP. Esta lista no autoriza añadir un SDK ni un servicio de analytics.
+
+Podemos evaluar señales de producto como:
 
 - onboarding completado;
 - objetivo propuesto;
@@ -490,6 +507,7 @@ Como mínimo:
 
 - privacidad;
 - gestión de HealthKit;
+- activar o desactivar el seguimiento semanal;
 - información sobre los objetivos;
 - disclaimer de bienestar.
 
@@ -515,7 +533,7 @@ El MVP se diseñará principalmente para usuarios con Apple Watch.
 
 ## Histórico limitado
 
-Si el usuario solo concede acceso reciente, utilizaremos el periodo disponible.
+Si solo hay histórico reciente disponible, utilizaremos el periodo disponible.
 
 La propuesta debe reflejar que el análisis se basa en menos histórico.
 
@@ -528,6 +546,8 @@ Mostrar último estado conocido.
 ---
 
 # 21. Criterios de éxito
+
+Las siguientes son preguntas de validación, no métricas ya instrumentadas. Se definirán cohortes de TestFlight, método de medición, definiciones de uso recurrente y umbrales de decisión en un futuro `docs/product/validation-plan.md`. No se inventan valores para cerrar la tarea.
 
 El MVP debe ayudarnos a responder:
 
@@ -579,16 +599,11 @@ Buscamos:
 
 # 22. Monetización
 
-No forma parte de la validación principal del MVP.
+La decisión inicial es **pago único desde el lanzamiento comercial**. La distribución en TestFlight permite validar el uso antes de publicar.
 
-No introduciremos publicidad.
+El precio y el mecanismo de cobro quedan pendientes de una decisión explícita en la Issue correspondiente. Esta decisión sustituye la hipótesis anterior de decidir una oferta gratuita/premium después de validar el uso recurrente.
 
-El producto debe diseñarse para permitir posteriormente una oferta:
-
-- gratuita;
-- premium mediante compra única.
-
-La decisión exacta se tomará después de validar que existe uso recurrente.
+No introduciremos publicidad. El éxito de esta primera app no exige sustituir un salario: buscamos publicar un producto útil, comprobar su monetización y aprender para el portfolio.
 
 ---
 
@@ -605,7 +620,7 @@ Deberemos cuestionar seriamente el producto si, tras probarlo con usuarios reale
 
 El objetivo del MVP no es demostrar que nuestra idea es correcta.
 
-Es comprobar rápidamente si merece convertirse en un producto mayor.
+Es comprobar rápidamente si merece convertirse en un producto mayor. El plan de validación deberá convertir estas señales en condiciones observables antes de tomar una decisión de continuar, ajustar o abandonar.
 
 ---
 
@@ -620,10 +635,15 @@ HealthGoals MVP está completo cuando un usuario puede:
 5. recibir una propuesta de objetivos semanales;
 6. aceptar o editar esos objetivos;
 7. ver automáticamente su progreso;
-8. saber exactamente qué le queda durante la semana;
+8. entender su progreso respecto a su patrón semanal cuando el historial lo permita, y saber exactamente qué le queda durante la semana;
 9. consultar ese gap desde un widget;
 10. completar una semana;
-11. mantener o ajustar sus objetivos para la siguiente.
+11. mantener o ajustar sus objetivos para la siguiente;
+12. activar o desactivar una notificación local semanal sin datos de salud.
+
+La entrega debe aportar evidencia de aceptación y checks para el SHA actual, revisión independiente y validación de César en dispositivo real para HealthKit, permisos, sincronización con Apple Watch, background y WidgetKit. No basta con CI verde para dar esas integraciones por verificadas.
+
+La salida a TestFlight se evalúa dentro del timebox de ocho semanas; la publicación comercial requiere resolver el precio y mecanismo de pago único. Completar el loop y validar la hipótesis de producto son resultados distintos.
 
 Si ese loop funciona y genera uso recurrente, tendremos evidencia para ampliar el producto.
 
