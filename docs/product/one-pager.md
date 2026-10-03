@@ -1,6 +1,6 @@
 # HealthGoals — One-Pager
 
-**Estado:** Definición de producto  
+**Estado:** Definición de producto cerrada para el MVP  
 **Fecha:** Octubre de 2026  
 **Nombre:** Provisional
 
@@ -36,9 +36,12 @@ Por ejemplo:
 
 > “Quiero caminar más.”
 
-> “Quiero ser más activo.”
+La intención determina el objetivo principal:
 
-> “Quiero ser más constante con mi actividad.”
+- **Caminar más** → pasos semanales.
+- **Moverme más** → actividad semanal, medida en energía activa.
+
+El usuario puede añadir después el objetivo de la otra métrica, hasta un máximo de dos. La constancia es un resultado que buscamos, no una intención adicional del onboarding.
 
 Con permiso del usuario, HealthGoals analiza su historial reciente de HealthKit para entender cuál es su nivel de actividad habitual.
 
@@ -114,7 +117,11 @@ El usuario decide si quiere aceptarlos.
 
 ## 4. Progress
 
-HealthKit actualiza automáticamente el progreso.
+HealthKit actualiza automáticamente el progreso. HealthGoals compara ese avance con cómo suele distribuir el usuario su actividad entre los días de la semana.
+
+El estado semanal responde a **cómo voy respecto a mi propio ritmo**, sin asumir que todos los días deben aportar la misma actividad. Por ejemplo, una persona que concentra actividad en el fin de semana puede estar a su ritmo el jueves aunque haya completado menos que una proporción lineal de siete días.
+
+Este patrón se calcula por métrica con reglas explícitas, explicables y testeables. Si el historial no permite estimarlo, la aplicación debe comunicar esa limitación.
 
 El usuario no tiene que registrar:
 
@@ -291,6 +298,8 @@ y secundariamente mediante su unidad:
 
 El objetivo no es utilizar calorías para dieta o pérdida de peso, sino disponer de una medida común de actividad.
 
+El número de entrenamientos por semana queda fuera del MVP. Es una posible primera expansión después de validar esta experiencia, no un compromiso de la versión inicial.
+
 ---
 
 # Target user inicial
@@ -349,6 +358,8 @@ Ejemplo:
 > Te proponemos comenzar con 42.000.
 
 El usuario debe poder entender por qué recibe esa propuesta.
+
+El motor también utiliza el patrón histórico de actividad por día de la semana para interpretar el progreso. Su valor principal es ayudar a entender la semana flexible, el ritmo personal y el restante; la propuesta de un número inicial no constituye por sí sola la diferenciación.
 
 HealthGoals no debe responder:
 
@@ -505,6 +516,8 @@ El usuario elige:
 
 > **Quiero moverme más.**
 
+Su objetivo principal será Actividad. En este ejemplo también añade Pasos.
+
 HealthGoals analiza cuatro semanas.
 
 Resultado:
@@ -525,7 +538,7 @@ El usuario acepta.
 
 El jueves:
 
-> **Vas bien esta semana**
+> **Vas a tu ritmo esta semana**
 >
 > Pasos  
 > 26.800 / 42.000
@@ -562,32 +575,23 @@ Nueva semana:
 
 ---
 
-# Monetización — hipótesis inicial
+# Monetización y entrega
 
-La monetización no es el objetivo inmediato del MVP.
+La decisión inicial es **pago único desde el lanzamiento comercial**, sin publicidad. El precio y el mecanismo de cobro se concretarán en la Issue correspondiente antes de implementarlos.
 
-Una posible estructura futura:
+El objetivo es terminar el MVP, publicarlo y utilizar lo aprendido para siguientes productos del portfolio. Sustituir un salario no es el criterio de éxito de esta primera app.
 
-## Free
+El timebox acordado es **ocho semanas hasta TestFlight**, con un máximo de dos días iniciales para la infraestructura reusable mínima. La fecha de inicio y los hitos se registrarán en las Issues; este documento no fija una fecha de entrega de calendario.
 
-- seguimiento básico;
-- un número limitado de objetivos;
-- experiencia principal.
+La infraestructura se demuestra con entregas reales: Issue, implementación, PR, revisión independiente del SHA actual, CI y validación humana cuando corresponda. Las integraciones con HealthKit, permisos, Apple Watch, background y widgets requieren validación de César en dispositivo real.
 
-## Premium
+---
 
-Posible pago único.
+# Seguimiento y validación
 
-Podría incluir:
+El MVP incluye una notificación local opcional de seguimiento semanal, por ejemplo a mitad de semana. Invita a consultar el progreso sin mostrar datos de salud en la notificación. El usuario puede desactivarla.
 
-- múltiples objetivos;
-- histórico avanzado;
-- personalización;
-- más widgets;
-- insights adicionales;
-- evolución de objetivos.
-
-No se introducirán anuncios basados en datos de salud.
+El plan de validación se definirá después en `docs/product/validation-plan.md`: cohortes de TestFlight, método de medición, uso recurrente y umbrales para continuar, ajustar o abandonar. No se fijan porcentajes arbitrarios ni se presupone una herramienta de analytics.
 
 ---
 
@@ -599,13 +603,11 @@ Es que el usuario considere:
 
 > “Apple Fitness ya me da suficiente información.”
 
-HealthGoals necesita demostrar que existe una diferencia de valor entre:
+La hipótesis que debemos validar es:
 
-> **ver cuánto he hecho**
+> **Una persona con Apple Watch y semanas variables obtiene valor de perseguir un objetivo semanal flexible, entendiendo cómo va respecto a su propio ritmo y qué le queda, sin tener que cumplir el mismo objetivo todos los días.**
 
-y:
-
-> **saber exactamente dónde estoy respecto a mi semana y qué me queda para conseguir lo que me propuse.**
+La diferenciación propuesta es **semana flexible + ritmo personal + restante**. Las métricas y la propuesta inicial basada en historial son medios para esa experiencia, no evidencia de que el producto esté validado.
 
 ---
 
