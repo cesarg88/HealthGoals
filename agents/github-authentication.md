@@ -48,7 +48,7 @@ El helper verifica App ID, slug, instalación y repositorio; genera en memoria u
 
 El push requiere un clon completo y los objetos locales necesarios. Fija el SHA antes de autenticar y verifica ese mismo SHA en la rama remota tras el push. El helper no ejecuta hooks de push; ejecutar antes los checks del proyecto.
 
-Permisos: `contents: write` para push, `pull_requests: write` para PRs, `issues: write` para Issues/comentarios y `workflows: write` adicional al modificar workflows. Las consultas de Actions requieren `actions: read`; la administración de protecciones requiere permisos específicos y no queda autorizada por este helper.
+Permisos: `contents: write` para push, `pull_requests: write` para PRs y sus comentarios (también al usar `/issues/{numero}/comments` sobre una PR), `issues: write` para Issues y sus comentarios y `workflows: write` adicional al modificar workflows. Las consultas de Actions requieren `actions: read`; la administración de protecciones requiere permisos específicos y no queda autorizada por este helper.
 
 La verificación de identidad ocurre antes de la petición. Al crear una Issue, PR o comentario, comprobar además su autor `cesar-ia-agent[bot]`. El campo `user` de un recurso actualizado identifica a su autor original, no necesariamente a quien lo modificó: no usarlo como prueba del actor de una actualización.
 
