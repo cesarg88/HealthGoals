@@ -1,0 +1,41 @@
+{
+  "repository": "cesarg88/agent-engineering-kit",
+  "commit": "a7d77a422bbdf0da5a02fe68b2eb4ec32352c45a",
+  "files": [
+    {
+      "source": "skills/implement-issue/SKILL.md",
+      "target": ".agents/skills/implement-issue/SKILL.md",
+      "sha256": "48158e42302a3d5d27e9c40023fe2bdb2439b13cd052496988009676ebe9eb00"
+    },
+    {
+      "source": "skills/review-pr/SKILL.md",
+      "target": ".agents/skills/review-pr/SKILL.md",
+      "sha256": "7c72ff5c201268ac7bb6e924b3d8c2880018487cd0ea14082dbd87a0863658b6"
+    },
+    {
+      "source": "agents/coordinator.md",
+      "target": "agents/roles/coordinator.md",
+      "sha256": "c1bb45e8de1bcb0170520e3d0d3ca92e14881f97ae137d7ba7454f1eb816d130"
+    },
+    {
+      "source": "agents/implementer.md",
+      "target": "agents/roles/implementer.md",
+      "sha256": "a6e788ae8d41d3b530bfabf0189fbb922f65780a79048f2a1e24c44cd8303da1"
+    },
+    {
+      "source": "agents/reviewer.md",
+      "target": "agents/roles/reviewer.md",
+      "sha256": "bc5ace4b9ad8b7aa6a0360c2373b93778f24f53a290203b4a7c467abeb2b2fd6"
+    },
+    {
+      "source": "tools/agent-github/agent_github.py",
+      "target": "tools/agent-github/agent_github.py",
+      "sha256": "476552564f196a1cf9304d13b26a42c968fd10af50ad2064891be7c885265070"
+    },
+    {
+      "source": "tests/test_agent_github.py",
+      "target": "tests/test_agent_github.py",
+      "sha256": "ea958fe8ea26e6bdb21972e6408d12ec5cc862f380ccb8a8f668aa944e459908"
+    }
+  ]
+}
