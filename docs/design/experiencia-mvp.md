@@ -10,7 +10,7 @@ El producto transforma actividad observada en un objetivo semanal controlado por
 
 Caminar más selecciona Pasos como principal; Moverme más selecciona Actividad, con kcal activas como unidad secundaria. Solo se añade la otra métrica por elección. La primera propuesta muestra un único objetivo. La Home prioriza estado por métrica, progreso y restante; la orientación diaria tiene menor énfasis y nunca decide el ritmo.
 
-Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES. Documentación española; textos ingleses son contenido de interfaz para localización. El documento integrado describe ocho semanas como referencia tentativa sin fecha rígida; el último encargo enfatiza timebox fuerte. Conservamos simplicidad sin inventar fecha ni cambiar el compromiso.
+Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES. Documentación española; textos ingleses son contenido de interfaz para localización. Las ocho semanas son una referencia tentativa, sin compromiso rígido ni prisa, como recoge el producto integrado y confirma Product en su revisión del 4 de octubre. D10 queda resuelta; no se requiere otra confirmación ni se fija una fecha. La simplicidad sigue siendo un criterio de diseño.
 
 ## 2. Recorrido completo propuesto
 
@@ -19,7 +19,7 @@ Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES
 3. Al regresar → S03 análisis: carga indeterminada, sin porcentaje ni promesa de duración. Solicitud completada no equivale a permiso de lectura concedido.
 4. Consulta con información apta → S03 baseline y propuesta juntos: periodo real, estimación semanal, explicación y objetivo editable. Ajustar abre S05; aceptar activa únicamente los objetivos elegidos.
 5. Opcional Añadir Actividad/Pasos → segunda sección en S03 o S05, con su propio historial/propuesta/estado. No repetir onboarding ni activar automáticamente.
-6. Objetivo aceptado → S04 Home. Consultas posteriores actualizan los datos locales; el objetivo no aumenta solo.
+6. Primera aceptación → onboarding completado → S04 Home. Las aperturas posteriores van a Home, no reinician la bienvenida ni la autorización. Consultas posteriores actualizan los datos locales; el objetivo no aumenta solo.
 7. Durante la semana → S04 permanece como destino de apertura, widget y notificación. Ajustar abre S05. Explicación del ritmo se expande en la tarjeta, sin pantalla analítica adicional.
 8. Al terminar el intervalo semanal → S06 resumen con resultados por métrica, incluidos parciales/desconocidos. Mantener conserva valores; Ajustar usa S05 con contexto de semana siguiente. Cuándo se inicia esa semana y si el resumen bloquea están pendientes D03.
 9. Nueva semana → S04 con un intervalo nuevo y datos de esa semana, nunca el acumulado anterior. Repetición de 6–8 durante semanas 2 y 4; sin historial navegable nuevo.
@@ -35,8 +35,8 @@ Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES
 - Datos de una métrica solamente → avanzar con la métrica disponible si elegida; no sustituir la intención principal silenciosamente. Si principal no disponible y otra sí, ofrecer cambio explícito a la otra intención.
 - Posible actividad incompleta → texto sobre disponibilidad de la métrica; no inferir ausencia de Watch. Los pasos pueden seguir disponibles.
 - Error durante semana activa → S04 mantiene snapshot de la misma semana con aviso/fecha. Sin snapshot de esa semana, muestra desconocido. Reintentar no rejuvenece el timestamp.
-- Cerrar en onboarding → recomendación: retomar la etapa pendiente, sin repetir autorización innecesaria ni crear objetivo. Persistencia de esta elección pendiente de viabilidad.
-- Eliminar el último objetivo → Home sin objetivo y CTA Elegir objetivo, pendiente D04. No mostrar un cero de progreso ni una propuesta automática nueva.
+- Cerrar durante onboarding → retomar la etapa pendiente. Product confirma este comportamiento: no repetir etapas completadas ni crear un objetivo por reabrir. Ingeniería debe preservarlo o escalar una limitación real; no es una alternativa de UX pendiente.
+- Eliminar el último objetivo → propuesta pendiente D04: Home sin objetivo y CTA Elegir objetivo. Reutilizar solo la selección de intención de S01 y la propuesta S03; no reiniciar el onboarding completo, repetir bienvenida ni volver a pedir autorización por eliminar un objetivo. La recuperación de acceso, si procede por su estado observado, es independiente. No mostrar un cero de progreso ni una propuesta automática nueva.
 
 ## 3. Inventario cerrado de superficies
 
@@ -44,7 +44,7 @@ Siete superficies propias, una autorización del sistema, un widget y una notifi
 
 | ID y nombre | Propósito e información principal | CTA principal | CTA secundaria | Entrada | Salida | Estados especiales |
 | --- | --- | --- | --- | --- | --- | --- |
-| S01 Bienvenida e intención | Promesa breve, semana flexible; Caminar más/Pasos o Moverme más/Actividad | Continuar | Ninguna | Primera apertura; elegir objetivo tras eliminar último | S02 | Sin selección; selección única; reentrada |
+| S01 Bienvenida e intención | Promesa breve, semana flexible; Caminar más/Pasos o Moverme más/Actividad | Continuar | Ninguna | Primera apertura; etapa pendiente; solo selección al elegir objetivo tras eliminar último (D04) | S02 durante onboarding; S03 al elegir otro objetivo con contexto ya completado | Sin selección; selección única; variante sin bienvenida/permisos para usuario con onboarding completado |
 | S02 Conectar con Salud | Qué lee, para qué, solo lectura y dispositivo | Conectar con Salud; Reintentar si capacidad/error | Volver; Revisar acceso cuando pertinente | S01; recuperación desde S03/S07 | Autorización nativa → S03; volver S01 | Disponible; no disponible observado; solicitud en curso/error; sin afirmar acceso concedido |
 | S03 Tu punto de partida | Análisis, periodo observado, baseline, propuesta explicada por métrica | Usar este objetivo / Usar estos objetivos | Ajustar; Añadir otra métrica; Reintentar/Revisar acceso en vacío | S02/autorización; S05 cancelar/guardar borrador | S05 o S04 tras aceptación | Carga; suficiente; limitado; insuficiente; métrica sin datos; propuesta pendiente; error |
 | S04 Esta semana (Home) | Intervalo, estado por métrica, progreso, restante, días; referencia diaria secundaria | Ajustar objetivo como acción disponible; consulta no exige CTA | Ajustes; Cómo interpretamos tu ritmo; resumen disponible | Aceptación, aperturas, widget/aviso, fin de edición | S05, S06, S07, S01 sin objetivos | Un/dos objetivos; estados diferentes; ritmo desconocido; completado; dato antiguo/desconocido; semana nueva; error |
@@ -84,7 +84,7 @@ Son dimensiones combinables por métrica, no un enum lineal. Baseline y patrón 
 | Objetivo completado | Progreso válido ≥ objetivo | «Objetivo completado», restante 0; cifra real puede superar objetivo, barra limitada visualmente | Mantener hasta cierre; no aumentar objetivo |
 | Semana terminada | Intervalo terminó según calendario/zona confirmados | S06 por métrica, neutral si incompleto/desconocido | Mantener/ajustar; D03 rige continuidad |
 | Error recuperable | Error de solicitud, consulta, análisis o guardado | Aviso en contexto, sin borrar información aceptada | Reintentar misma operación; cancelar edición restaura origen |
-| Sin objetivos | Eliminación de último o aún no aceptación | S04 vacío; no métricas falsas | S01; comportamiento definitivo pendiente D04 |
+| Sin objetivos | Eliminación del último tras onboarding completo | S04 vacío propuesto; no métricas falsas | Elegir objetivo → selección reutilizada y propuesta, sin reiniciar onboarding; estado vacío/eliminación pendiente D04 |
 
 Prioridad visual propuesta: integridad/edad del dato → completado si dato válido → ritmo conocido → ritmo desconocido. Un error de la segunda métrica no borra la primera. No hay estado global «A tu ritmo» si contradice una tarjeta. Home puede titular «Esta semana» y mostrar ambos estados.
 
@@ -141,7 +141,7 @@ No bloquean exploración reversible; sí impiden cerrar un handoff implementable
 | ID | Decisión pendiente | Recomendación y motivo | Responsable |
 | --- | --- | --- | --- |
 | D01 | Inicio/fin semana, zona horaria, día en curso y cambios de calendario | Una convención explícita visible; definir antes de validar cifras/días o programar aviso | Product + ingeniería |
-| D02 | Primer objetivo aceptado a mitad de semana | Evitar prorrateo invisible. Proponer explicar intervalo y actividad ya contada; decidir si semana inicial parcial o siguiente completa | Product |
+| D02 | Primer objetivo aceptado a mitad de semana; pendiente de aceptación de César | Product recomienda semana actual con actividad accesible desde el lunes, aunque se abra el jueves; explicarlo antes de aceptar y sin prorratear. Es recomendación, no decisión aprobada | César/Product |
 | D03 | ¿Objetivos continúan solos o exigen Mantener? ¿Resumen bloqueante? | Mantener mismos valores sin aumentarlos y resumen no bloqueante reduce fricción; confirmar consentimiento/continuidad | Product |
 | D04 | Efecto de editar/eliminar en semana activa; último objetivo | Recomendar efecto explícito en semana actual sin alterar actividad observada; último eliminado devuelve vacío con Elegir objetivo; confirmar historia del resumen | Product |
 | D05 | Configuración manual sin baseline, no garantizada por scope | Permitir solo si progreso puede observarse; patrón desconocido. Sin datos actuales, no prometer seguimiento | Product |
@@ -149,7 +149,11 @@ No bloquean exploración reversible; sí impiden cerrar un handoff implementable
 | D07 | Cuándo dato antiguo pierde estado de ritmo; etiquetas de consulta/dato | Marcar antigüedad y no presentar ritmo como actual; reglas freshness no son umbrales UX inventados | Product + ingeniería |
 | D08 | Baseline mínimo 4 semanas vs histórico limitado utilizable | Motor debe distinguir mínimo preferido, suficiencia real y patrón; no inventar porcentaje de subida ni asumir media aritmética | Product |
 | D09 | Horario del aviso y cierre visible con datos tardíos | Aviso opcional único sin datos; resumen reconoce datos incompletos y no cierra falsamente como éxito | Product + ingeniería |
-| D10 | «Timebox fuerte» del encargo vs fuente integrada tentativa | Mantener propuesta pequeña; confirmar compromiso solo si se necesita calendario de entrega | César/Product |
+
+
+D10 resuelta: ocho semanas tentativas, sin compromiso rígido ni prisa. La revisión de Product del 4 de octubre confirma la fuente integrada; no se vuelve a solicitar confirmación del plazo. Product confirma también el onboarding solo hasta la primera aceptación, la reanudación de etapas pendientes y Home en aperturas posteriores. Estas correcciones no aprueban todavía D02–D05.
+
+Las consultas a César se secuencian: primero semana y arranque; después histórico insuficiente/objetivo y, por último, continuidad/edición. El inventario de pendientes conserva contexto, no es un cuestionario simultáneo.
 
 También queda por definir el rango permitido y tratamiento de decimales al editar energía activa. Los ejemplos 38.500→40.000 son demostraciones, no política de progresión aprobada.
 
@@ -167,7 +171,7 @@ Recorridos reproducibles con datos ficticios:
 8. Revisar en ventana estrecha/paisaje/iPad y texto ampliado/EN: scroll, unidad legible, acciones accesibles. Figma ilustra composición, no valida runtime.
 9. Widget refleja uno/dos objetivos, antigüedad y ausencia de datos; pulsar vuelve Home. Aviso opt-in sin valores sensibles; desactivar cancela programación.
 
-Ejecutado: lectura de fuentes integradas, identidad App y Figma Full comprobadas, inspección de estructura de Figma y revisión visual según evidencia de entrega; `git diff --check` y checks documentales/kit se registrarán en PR. Pendiente: revisión César/Product, decisiones D01–D10, revisión independiente de SHA y CI. No aplicable a esta PR: compilación de app, permisos reales, VoiceOver/Dynamic Type ejecutados, Watch/background/widget real y TestFlight. No se declara resuelta la hipótesis por wireframes.
+Ejecutado: lectura de fuentes integradas, identidad App y Figma Full comprobadas, inspección de estructura de Figma y revisión visual según evidencia de entrega; `git diff --check` y checks documentales/kit se registrarán en PR. Pendiente: revisión César/Product, decisiones D01–D09, revisión independiente de SHA y CI. No aplicable a esta PR: compilación de app, permisos reales, VoiceOver/Dynamic Type ejecutados, Watch/background/widget real y TestFlight. No se declara resuelta la hipótesis por wireframes.
 
 ## 9. Enlaces de revisión y evidencia visual
 
@@ -184,3 +188,5 @@ Inspección ejecutada: composición principal con 126 descendientes (10 frames, 
 Los wireframes son estáticos. Un intento de enlaces de navegación fue rechazado porque los destinos están agrupados bajo una composición; no se presenta como prototipo interactivo terminado. El recorrido y las transiciones están documentados en el flujo. Notas técnicas dentro de los wireframes son anotaciones de revisión, no copy final de la app. La tarjeta de valor en S05 representa un campo numérico, no un botón de selección. El widget W01 del recorrido expresa intención; el nodo mediano de estados muestra su tamaño/composición propuesta.
 
 No todos los estados de la matriz tienen una pantalla ilustrada; los casos representativos solicitados sí están cubiertos. La matriz es el contrato propuesto para completar estados antes de implementación, sujeto a decisiones Product.
+
+Revisión de coherencia Product (4 de octubre): D10 resuelta, onboarding de primera aceptación/reanudación aclarado y reelección tras último objetivo separada del onboarding. Flujo Figma `5:2` actualizado y captura revisada sin solapamientos; D02 sigue pendiente de aceptación. Esta actualización exige nueva revisión y CI sobre el nuevo SHA.
