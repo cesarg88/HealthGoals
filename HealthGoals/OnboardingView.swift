@@ -5,20 +5,32 @@ struct OnboardingView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
                 switch model.stage {
-                case .intention: intentionContent
-                case .connectHealth: healthContent
-                case .startingPoint: startingPointContent
+                    case .intention: intentionContent
+                    case .connectHealth: healthContent
+                    case .startingPoint: startingPointContent
                 }
             }
-            .frame(maxWidth: 560, alignment: .leading)
-            .padding(24)
+            .frame(maxWidth: Constants.maximumContentWidth, alignment: .leading)
+            .padding(Constants.contentPadding)
             .frame(maxWidth: .infinity, alignment: .top)
         }
     }
+}
 
-    private var intentionContent: some View {
+private extension OnboardingView {
+    enum Constants {
+        static let sectionSpacing: CGFloat = 20
+        static let maximumContentWidth: CGFloat = 560
+        static let contentPadding: CGFloat = 24
+        static let optionSpacing: CGFloat = 16
+        static let labelSpacing: CGFloat = 4
+        static let minimumTouchHeight: CGFloat = 44
+        static let optionCornerRadius: CGFloat = 10
+    }
+
+    var intentionContent: some View {
         Group {
             heading("intention.title", identifier: "onboarding.intention.title")
             Text("intention.promise")
@@ -34,13 +46,13 @@ struct OnboardingView: View {
         }
     }
 
-    private func intentionButton(_ intention: ActivityIntention) -> some View {
+    func intentionButton(_ intention: ActivityIntention) -> some View {
         let selected = model.intention == intention
         return Button {
             model.select(intention)
         } label: {
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: Constants.optionSpacing) {
+                VStack(alignment: .leading, spacing: Constants.labelSpacing) {
                     Text(LocalizedStringKey(intention == .walking ? "intention.walking" : "intention.activity"))
                         .font(.headline)
                     Text(LocalizedStringKey(intention == .walking ? "metric.steps" : "metric.activity"))
@@ -51,16 +63,19 @@ struct OnboardingView: View {
                 Image(systemName: selected ? "checkmark.circle.fill" : "circle")
                     .accessibilityHidden(true)
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-            .background(Color(uiColor: .secondarySystemBackground), in: RoundedRectangle(cornerRadius: 10))
+            .padding(Constants.optionSpacing)
+            .frame(maxWidth: .infinity, minHeight: Constants.minimumTouchHeight, alignment: .leading)
+            .background(
+                Color(uiColor: .secondarySystemBackground),
+                in: RoundedRectangle(cornerRadius: Constants.optionCornerRadius)
+            )
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? [.isSelected] : [])
         .accessibilityIdentifier("onboarding.intention.\(intention.rawValue)")
     }
 
-    private var healthContent: some View {
+    var healthContent: some View {
         Group {
             heading("health.title", identifier: "onboarding.health.title")
             Text("health.explanation")
@@ -74,7 +89,8 @@ struct OnboardingView: View {
                 ProgressView("health.requesting")
             }
             Button(LocalizedStringKey(model.requestState == .failed || model.requestState == .unavailable
-                   ? "common.retry" : "health.connect")) {
+                    ? "common.retry" : "health.connect"))
+            {
                 Task { await model.connectHealth() }
             }
             .buttonStyle(.borderedProminent)
@@ -89,16 +105,16 @@ struct OnboardingView: View {
         }
     }
 
-    private var startingPointContent: some View {
+    var startingPointContent: some View {
         Group {
             heading("startingPoint.title", identifier: "onboarding.startingPoint.title")
-            // La siguiente Issue añadirá consultas y baseline; esta entrega no lee Salud.
+            // The next Issue adds queries and baseline; this delivery does not read Health data.
             Text("startingPoint.pending")
             Text("startingPoint.requestCompleted").foregroundStyle(.secondary)
         }
     }
 
-    private func heading(_ key: LocalizedStringKey, identifier: String) -> some View {
+    func heading(_ key: LocalizedStringKey, identifier: String) -> some View {
         Text(key)
             .font(.largeTitle.bold())
             .accessibilityAddTraits(.isHeader)

@@ -3,13 +3,16 @@ import HealthKit
 @MainActor
 protocol HealthAuthorizing {
     var isAvailable: Bool { get }
-    /// Finalización de la solicitud, sin estado de permiso de lectura.
+    /// Completes the request without exposing read authorization status.
     func requestReadAuthorization() async throws
 }
 
 @MainActor
 final class HealthAuthorization: HealthAuthorizing {
-    var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
+    var isAvailable: Bool {
+        HKHealthStore.isHealthDataAvailable()
+    }
+
     private var store: HKHealthStore?
 
     func requestReadAuthorization() async throws {
@@ -17,9 +20,9 @@ final class HealthAuthorization: HealthAuthorizing {
         let store = store ?? HKHealthStore()
         self.store = store
         let readTypes: Set<HKObjectType> = [
-            HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned)
+            HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned),
         ]
-        // La API async lanza error si la solicitud no finaliza. No expone permisos READ.
+        // The async API throws if the request does not finish. It exposes no read permission status.
         try await store.requestAuthorization(toShare: [], read: readTypes)
     }
 }

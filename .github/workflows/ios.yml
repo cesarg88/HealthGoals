@@ -22,6 +22,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
+      - name: Check format and lint with pinned tools
+        run: |
+          make setup
+          make format-check lint
       - name: Prepare one iPhone simulator
         id: simulator
         run: |
@@ -34,24 +38,11 @@ jobs:
           echo "udid=$simulator_id" >> "$GITHUB_OUTPUT"
           xcrun simctl bootstatus "$simulator_id" -b
       - name: Test onboarding logic and launch on iPhone
-        run: |
-          xcodebuild test -project HealthGoals.xcodeproj -scheme HealthGoals \
-            -configuration Debug \
-            -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}' \
-            -only-testing:HealthGoalsTests \
-            -only-testing:HealthGoalsUITests/BootstrapTests/testLaunch \
-            -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/HealthGoalsTests" \
-            -resultBundlePath "$RUNNER_TEMP/Launch.xcresult" CODE_SIGNING_ALLOWED=NO
+        run: make test SIMULATOR_UDID='${{ steps.simulator.outputs.udid }}' RESULT_DIR="$RUNNER_TEMP/HealthGoalsVerify"
       - name: Analyze
-        run: |
-          xcodebuild analyze -project HealthGoals.xcodeproj -scheme HealthGoals \
-            -configuration Debug -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath "$RUNNER_TEMP/HealthGoalsTests" CODE_SIGNING_ALLOWED=NO
+        run: make analyze RESULT_DIR="$RUNNER_TEMP/HealthGoalsVerify"
       - name: Build release without signing
-        run: |
-          xcodebuild build -project HealthGoals.xcodeproj -scheme HealthGoals \
-            -configuration Release -destination 'generic/platform=iOS' \
-            -derivedDataPath "$RUNNER_TEMP/HealthGoalsRelease" CODE_SIGNING_ALLOWED=NO
+        run: make build-release RESULT_DIR="$RUNNER_TEMP/HealthGoalsVerify"
       - name: Clean up owned simulator
         if: always() && steps.simulator.outputs.udid != ''
         env:
@@ -64,6 +55,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-launch-${{ github.event.pull_request.head.sha }}
-          path: ${{ runner.temp }}/Launch.xcresult
+          path: ${{ runner.temp }}/HealthGoalsVerify/Tests.xcresult
           if-no-files-found: warn
           retention-days: 7

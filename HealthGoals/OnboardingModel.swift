@@ -5,8 +5,13 @@ enum ActivityIntention: String, CaseIterable, Identifiable {
     case walking
     case activity
 
-    var id: Self { self }
-    var metric: ActivityMetric { self == .walking ? .steps : .activeEnergy }
+    var id: Self {
+        self
+    }
+
+    var metric: ActivityMetric {
+        self == .walking ? .steps : .activeEnergy
+    }
 }
 
 enum ActivityMetric { case steps, activeEnergy }
@@ -23,16 +28,19 @@ final class OnboardingModel {
     private let defaults: UserDefaults
     private static let progressKey = "onboarding.progress"
 
-    var canContinue: Bool { intention != nil }
+    var canContinue: Bool {
+        intention != nil
+    }
 
     init(healthAuthorization: any HealthAuthorizing, defaults: UserDefaults) {
         self.healthAuthorization = healthAuthorization
         self.defaults = defaults
         let progress = defaults.dictionary(forKey: Self.progressKey)
         intention = (progress?["intention"] as? String).flatMap(ActivityIntention.init(rawValue:))
-        // Sin intención válida, una etapa guardada nunca permite saltar S01.
+        // A saved stage never skips S01 without a valid intention.
         if intention != nil, let rawStage = progress?["stage"] as? String,
-           let savedStage = OnboardingStage(rawValue: rawStage) {
+           let savedStage = OnboardingStage(rawValue: rawStage)
+        {
             stage = savedStage
         }
     }
@@ -66,7 +74,7 @@ final class OnboardingModel {
         requestState = .requesting
         do {
             try await healthAuthorization.requestReadAuthorization()
-            // Solo finalizó la solicitud. No conocemos permisos de lectura ni datos.
+            // Only the request finished. Read access and available data remain unknown.
             stage = .startingPoint
             requestState = .idle
             saveProgress()
@@ -74,10 +82,12 @@ final class OnboardingModel {
             requestState = .failed
         }
     }
+}
 
-    private func saveProgress() {
+private extension OnboardingModel {
+    func saveProgress() {
         guard let intention else { return }
-        // S02 se guarda antes de pedir autorización; nunca se persiste una operación en curso.
+        // Persist S02 before requesting authorization; never persist an in-flight operation.
         defaults.set(["intention": intention.rawValue, "stage": stage.rawValue], forKey: Self.progressKey)
     }
 }

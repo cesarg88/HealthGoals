@@ -1,22 +1,22 @@
 #!/bin/bash
-# Verificación específica de HealthGoals; no instala herramientas ni modifica fuentes.
+# HealthGoals verification; does not install tools or modify sources.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-: "${DEVELOPER_DIR:?Selecciona explícitamente Xcode 26.6 mediante DEVELOPER_DIR}"
+: "${DEVELOPER_DIR:?Select Xcode 26.6 explicitly with DEVELOPER_DIR}"
 expected_xcode=$'Xcode 26.6\nBuild version 17F113'
 if [[ "$(xcodebuild -version)" != "$expected_xcode" ]]; then
-    echo "Se requiere Xcode 26.6 (17F113)." >&2
+    echo "Xcode 26.6 (17F113) is required." >&2
     exit 1
 fi
 runtime=com.apple.CoreSimulator.SimRuntime.iOS-26-5
 xcrun simctl list runtimes --json | python3 -c '
 import json, sys
 runtimes = json.load(sys.stdin)["runtimes"]
-assert any(r["identifier"] == sys.argv[1] and r["isAvailable"] for r in runtimes), "Falta runtime iOS 26.5"
+assert any(r["identifier"] == sys.argv[1] and r["isAvailable"] for r in runtimes), "Missing iOS 26.5 runtime"
 ' "$runtime"
 mkdir -p .build
 results_dir=$(mktemp -d "$PWD/.build/ios.XXXXXX")
-echo "Resultados: $results_dir"
+echo "Results: $results_dir"
 simulator_id=''
 cleanup() {
     if [[ -n "$simulator_id" ]]; then

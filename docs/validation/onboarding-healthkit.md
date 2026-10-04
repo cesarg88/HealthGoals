@@ -17,7 +17,7 @@
 3. Pulsar Continuar. S02 explica pasos y energía activa, acceso solo de lectura, ausencia de modificación de Salud y de envío a un backend.
 4. Pulsar Volver: Caminar más sigue seleccionada. Volver a S02.
 5. Pulsar Conectar con Salud. Comprobar que aparece el panel nativo de Apple con Pasos y Energía activa para lectura, sin tipos de escritura. Mientras la solicitud está en curso no se permiten otra solicitud ni Volver.
-6. Finalizar el panel. Si HealthKit completa la solicitud sin error, aparece «Tu punto de partida», sin números y sin afirmar permiso concedido. Si hay un error técnico, permanece en S02, muestra el mensaje recuperable y permite Reintentar/Volver conservando intención.
+6. Finalizar el panel. iOS puede mostrar un panel nativo adicional para elegir últimos 30 días y datos futuros o todo lo registrado y datos futuros; esa elección pertenece al sistema y no se reproduce en una pantalla propia. Si HealthKit completa la solicitud sin error, aparece «Tu punto de partida», sin números y sin afirmar permiso concedido. Si hay un error técnico, permanece en S02, muestra el mensaje recuperable y permite Reintentar/Volver conservando intención.
 7. Cerrar completamente la app y abrirla: S03 se recupera; solo significa que terminó la solicitud. No se reabre el panel automáticamente.
 8. Para repetir con Moverme más, eliminar la app de prueba y reinstalar desde Xcode. Esto elimina el progreso local, pero **no garantiza** que iOS vuelva a presentar autorización: Apple puede recordar la elección de permisos. No añadir un botón de reset a producción. Ejecutar de nuevo los pasos anteriores y comprobar la selección exclusiva.
 9. Repetir una solicitud limitando/denegando lectura de uno o ambos tipos cuando iOS permita mostrar el panel. También se pueden revisar/revocar permisos desde Salud o Ajustes. La app nunca dice «permiso concedido/denegado» ni confirma datos existentes. Un retorno sin panel si ya se eligieron permisos es un comportamiento válido de HealthKit.
@@ -29,11 +29,17 @@
 
 Un iPhone compatible normal no permite provocar de forma determinista un error técnico o la indisponibilidad de HealthKit. No manipular entitlements, perfiles ni datos personales para inventar una prueba. Los tests con un servicio pequeño sustituido verifican indisponibilidad, error/reintento y solicitud en curso; no acreditan integración física. Registrar qué casos físicos se han observado y cuáles no fueron reproducibles. La app conserva la selección y ofrece Reintentar/Volver ante no disponibilidad, sin prometer poder habilitar Salud en un dispositivo incompatible.
 
-La validación en iPhone real, signing, panel nativo y mensajes EN/ES quedan pendientes de César hasta que registre el resultado para el SHA de la PR. Simulador/CI no acreditan estos puntos. No adjuntar capturas con datos reales de Salud. Apple Watch, consultas históricas y baseline pertenecen a la siguiente Issue.
+César ha comunicado pruebas físicas previas, descritas debajo. Quedan pendientes el SHA y versión/modelo probados y los casos aún no informados; no atribuir esa evidencia a un commit posterior. Simulador/CI no acreditan esos puntos. No adjuntar capturas con datos reales de Salud. Apple Watch, consultas históricas y baseline pertenecen a la siguiente Issue.
+
+## Resultado físico comunicado por César
+
+César informó de los puntos 1–9 del recorrido: 1–5 correctos; en 6 apareció el panel nativo adicional de ventana de acceso, eligió últimos 30 días y datos futuros y llegó a S03; 7 correcto; 8 correcto e iOS volvió a pedir permisos; 9 denegar lectura terminó también en S03. Denegar y entrar en S03 es coherente con finalizar la solicitud sin conocer acceso READ. No se deduce disponibilidad de datos ni se añaden consultas a esta entrega.
+
+Es evidencia declarada por César, no una ejecución del agente. No facilitó modelo/versión de iPhone ni SHA ejecutado. El candidato existente al comunicarla era `216037d1cb8a81c81866410b07c559cddb5f9649`; eso no confirma que fuera el binario instalado. Los ajustes de convenciones/format/lint posteriores necesitan su propia verificación del nuevo SHA. Puntos 10–12, error/reintento técnico real y accesibilidad/idiomas físicos no fueron informados.
 
 ## Comprobación automática
 
-Con Xcode 26.6 y un simulador iOS 26.5 propio ya arrancado:
+Ejecutar `make setup`, `make format` antes del commit y `make verify` como gate completo sin corrección. Los filtros unit/smoke de un iPhone se comparten con CI mediante Makefile. Para reproducir solo tests, con Xcode 26.6 y un simulador iOS 26.5 propio ya arrancado:
 
 ```sh
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer

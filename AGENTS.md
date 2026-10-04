@@ -25,6 +25,16 @@ Estas instrucciones se aplican a todo el repositorio.
 - No implementes features ni crees el proyecto Xcode como consecuencia implícita de preparar documentación o infraestructura.
 - No incluyas credenciales ni datos personales de salud en commits, fixtures, Issues o PRs.
 
+## Convenciones de código y gate local
+
+- Identificadores y comentarios de código en inglés; documentación persistente del proyecto en español. Los textos localizados EN/ES y las copias inmutables del kit conservan sus idiomas.
+- Métodos y propiedades calculadas privados en una `private extension` del tipo. Las propiedades almacenadas permanecen dentro del tipo porque Swift no permite almacenarlas en extensions. La revisión comprueba esta organización y el idioma; el lint no los garantiza.
+- Configuración numérica de estilo o comportamiento en un `enum Constants` con `static let`, nombres que expliquen su significado y alcance local al tipo. No extraer cifras evidentes de aserciones, identidades matemáticas ni copy como si fueran configuración, ni crear un contenedor global genérico.
+- Mantener Swift Concurrency y protocolos nombrados por capacidad, sin imports de Combine ni sufijo `Protocol`. SwiftLint comprueba estas dos reglas y números mágicos; su regla `no_magic_numbers` es conservadora y no sustituye revisar el significado de una constante.
+- Ejecutar `make setup` para herramientas de calidad fijadas en la caché ignorada del checkout. No instala hooks ni cambia herramientas o credenciales globales. `make format` modifica Swift y se ejecuta antes de commit; comprobar idempotencia con `make format-check`.
+- Antes de publicar/entregar un SHA que cambie Swift o configuración de build, ejecutar `make verify`: formato/lint estrictos sin corregir fuentes, kit/helper/whitespace, unit tests + smoke de un iPhone, análisis y Release sin signing. Solo crea artefactos ignorados y un simulador propio que limpia al terminar. No incorpora la batería manual iPad/rotación.
+- Para cambios solo documentales, ejecutar checks de documentación/kit/whitespace pertinentes, sin Xcode innecesario. Después de un nuevo commit repetir los checks afectados y exigir CI/revisión independientes del nuevo SHA.
+
 ## Entrega y revisión
 
 - Explica qué cambió y vincula cada criterio de aceptación con evidencia o un procedimiento reproducible de validación.

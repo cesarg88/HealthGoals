@@ -1,17 +1,11 @@
 import Foundation
-import Testing
 @testable import HealthGoals
+import Testing
 
 @Suite @MainActor
 struct OnboardingTests {
-    private func setup() -> (OnboardingModel, FakeHealthAuthorization, UserDefaults) {
-        let defaults = UserDefaults(suiteName: "HealthGoalsTests.\(UUID().uuidString)")!
-        let service = FakeHealthAuthorization()
-        return (OnboardingModel(healthAuthorization: service, defaults: defaults), service, defaults)
-    }
-
-    @Test func initialStateCannotContinue() {
-        let (model, _, _) = setup()
+    @Test func initialStateCannotContinue() throws {
+        let (model, _, _) = try setup()
         #expect(model.intention == nil)
         #expect(model.stage == .intention)
         #expect(!model.canContinue)
@@ -19,8 +13,8 @@ struct OnboardingTests {
         #expect(model.stage == .intention)
     }
 
-    @Test func intentionIsExclusiveAndIndependentOfCopy() {
-        let (model, _, _) = setup()
+    @Test func intentionIsExclusiveAndIndependentOfCopy() throws {
+        let (model, _, _) = try setup()
         model.select(.walking)
         #expect(model.canContinue)
         #expect(model.intention?.metric == .steps)
@@ -29,8 +23,8 @@ struct OnboardingTests {
         #expect(model.intention?.metric == .activeEnergy)
     }
 
-    @Test func continueAndBackPreserveSelection() {
-        let (model, _, _) = setup()
+    @Test func continueAndBackPreserveSelection() throws {
+        let (model, _, _) = try setup()
         model.select(.walking)
         model.continueToHealth()
         #expect(model.stage == .connectHealth)
@@ -40,8 +34,8 @@ struct OnboardingTests {
         #expect(model.canContinue)
     }
 
-    @Test func technicalErrorIsRecoverable() async {
-        let (model, service, _) = setup()
+    @Test func technicalErrorIsRecoverable() async throws {
+        let (model, service, _) = try setup()
         model.select(.activity)
         model.continueToHealth()
         service.shouldFail = true
@@ -55,8 +49,8 @@ struct OnboardingTests {
         #expect(service.requests == 2)
     }
 
-    @Test func unavailableCanRetryWithoutLosingIntention() async {
-        let (model, service, _) = setup()
+    @Test func unavailableCanRetryWithoutLosingIntention() async throws {
+        let (model, service, _) = try setup()
         model.select(.walking)
         model.continueToHealth()
         service.isAvailable = false
@@ -70,26 +64,26 @@ struct OnboardingTests {
         #expect(model.stage == .startingPoint)
     }
 
-    @Test func completedRequestAdvancesWithoutAnyReadPermissionResult() async {
-        let (model, service, _) = setup()
+    @Test func completedRequestAdvancesWithoutAnyReadPermissionResult() async throws {
+        let (model, service, _) = try setup()
         model.select(.activity)
         model.continueToHealth()
-        // El servicio no devuelve granted/denied ni datos. Ambos son desconocidos.
+        // The service returns neither granted/denied nor data. Both remain unknown.
         await model.connectHealth()
         #expect(model.stage == .startingPoint)
         #expect(model.requestState == .idle)
         #expect(service.requests == 1)
     }
 
-    @Test func connectionCannotSkipIntentionScreen() async {
-        let (model, service, _) = setup()
+    @Test func connectionCannotSkipIntentionScreen() async throws {
+        let (model, service, _) = try setup()
         await model.connectHealth()
         #expect(model.stage == .intention)
         #expect(service.requests == 0)
     }
 
-    @Test func restorationBeforeAndAfterBack() {
-        let (model, service, defaults) = setup()
+    @Test func restorationBeforeAndAfterBack() throws {
+        let (model, service, defaults) = try setup()
         model.select(.walking)
         #expect(OnboardingModel(healthAuthorization: service, defaults: defaults).intention == .walking)
         model.continueToHealth()
@@ -100,8 +94,8 @@ struct OnboardingTests {
         #expect(restored.intention == .walking)
     }
 
-    @Test func restorationOfCompletedRequestIsOnlyAStage() async {
-        let (model, service, defaults) = setup()
+    @Test func restorationOfCompletedRequestIsOnlyAStage() async throws {
+        let (model, service, defaults) = try setup()
         model.select(.activity)
         model.continueToHealth()
         await model.connectHealth()
@@ -112,21 +106,23 @@ struct OnboardingTests {
         #expect(defaults.dictionary(forKey: "onboarding.progress")?.count == 2)
     }
 
-    @Test func malformedProgressCannotSkipIntention() {
-        let (_, service, defaults) = setup()
+    @Test func malformedProgressCannotSkipIntention() throws {
+        let (_, service, defaults) = try setup()
         defaults.set(["stage": "startingPoint", "intention": "unknown"], forKey: "onboarding.progress")
         let restored = OnboardingModel(healthAuthorization: service, defaults: defaults)
         #expect(restored.stage == .intention)
         #expect(restored.intention == nil)
     }
 
-    @Test func interruptedRequestRestoresS02AndCannotDuplicate() async {
-        let (model, service, defaults) = setup()
+    @Test func interruptedRequestRestoresS02AndCannotDuplicate() async throws {
+        let (model, service, defaults) = try setup()
         model.select(.walking)
         model.continueToHealth()
         service.suspendRequest = true
         let task = Task { await model.connectHealth() }
-        while service.continuation == nil { await Task.yield() }
+        while service.continuation == nil {
+            await Task.yield()
+        }
         #expect(model.requestState == .requesting)
         await model.connectHealth()
         model.backToIntention()
@@ -139,6 +135,14 @@ struct OnboardingTests {
         service.continuation?.resume()
         await task.value
         #expect(model.stage == .startingPoint)
+    }
+}
+
+private extension OnboardingTests {
+    func setup() throws -> (OnboardingModel, FakeHealthAuthorization, UserDefaults) {
+        let defaults = try #require(UserDefaults(suiteName: "HealthGoalsTests.\(UUID().uuidString)"))
+        let service = FakeHealthAuthorization()
+        return (OnboardingModel(healthAuthorization: service, defaults: defaults), service, defaults)
     }
 }
 
