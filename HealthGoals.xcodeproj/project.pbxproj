@@ -1,0 +1,275 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = "1";
+	"classes" = {
+	};
+	"objectVersion" = "56";
+	"objects" = {
+		"000000000000000000000001" = {
+			"isa" = "PBXProject";
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "2660";
+				"TargetAttributes" = {
+					"00000000000000000000000A" = {
+						"CreatedOnToolsVersion" = "26.6";
+					};
+					"00000000000000000000000B" = {
+						"CreatedOnToolsVersion" = "26.6";
+						"TestTargetID" = "00000000000000000000000A";
+					};
+				};
+			};
+			"buildConfigurationList" = "000000000000000000000028";
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "en";
+			"hasScannedForEncodings" = "0";
+			"knownRegions" = ("en", "es", "Base");
+			"mainGroup" = "000000000000000000000002";
+			"productRefGroup" = "000000000000000000000005";
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = ("00000000000000000000000A", "00000000000000000000000B");
+		};
+		"000000000000000000000002" = {
+			"isa" = "PBXGroup";
+			"children" = ("000000000000000000000003", "000000000000000000000004", "000000000000000000000005");
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000003" = {
+			"isa" = "PBXGroup";
+			"children" = ("000000000000000000000014", "000000000000000000000015");
+			"path" = "HealthGoals";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000004" = {
+			"isa" = "PBXGroup";
+			"children" = ("000000000000000000000016");
+			"path" = "HealthGoalsUITests";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000005" = {
+			"isa" = "PBXGroup";
+			"children" = ("000000000000000000000017", "000000000000000000000018");
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000014" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "HealthGoalsApp.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000015" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.xml";
+			"path" = "Info.plist";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000016" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "BootstrapTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000017" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = "0";
+			"path" = "HealthGoals.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"000000000000000000000018" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"includeInIndex" = "0";
+			"path" = "HealthGoalsUITests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"000000000000000000000019" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000014";
+		};
+		"00000000000000000000001A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000016";
+		};
+		"00000000000000000000001E" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("000000000000000000000019");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"00000000000000000000001F" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("00000000000000000000001A");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000020" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000021" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000022" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000023" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000024" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "000000000000000000000001";
+			"proxyType" = "1";
+			"remoteGlobalIDString" = "00000000000000000000000A";
+			"remoteInfo" = "HealthGoals";
+		};
+		"000000000000000000000025" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "00000000000000000000000A";
+			"targetProxy" = "000000000000000000000024";
+		};
+		"00000000000000000000000A" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "000000000000000000000029";
+			"buildPhases" = ("00000000000000000000001E", "000000000000000000000020", "000000000000000000000022");
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "HealthGoals";
+			"productName" = "HealthGoals";
+			"productReference" = "000000000000000000000017";
+			"productType" = "com.apple.product-type.application";
+		};
+		"00000000000000000000000B" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "00000000000000000000002A";
+			"buildPhases" = ("00000000000000000000001F", "000000000000000000000021", "000000000000000000000023");
+			"buildRules" = ();
+			"dependencies" = ("000000000000000000000025");
+			"name" = "HealthGoalsUITests";
+			"productName" = "HealthGoalsUITests";
+			"productReference" = "000000000000000000000018";
+			"productType" = "com.apple.product-type.bundle.ui-testing";
+		};
+		"000000000000000000000028" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("000000000000000000000032", "000000000000000000000033");
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+		};
+		"000000000000000000000032" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"SDKROOT" = "iphoneos";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG $(inherited)";
+			};
+			"name" = "Debug";
+		};
+		"000000000000000000000033" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CLANG_ENABLE_OBJC_ARC" = "YES";
+				"SDKROOT" = "iphoneos";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
+				"SWIFT_VERSION" = "6.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"SUPPORTS_MACCATALYST" = "NO";
+				"SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD" = "NO";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"ENABLE_TESTABILITY" = "NO";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "$(inherited)";
+			};
+			"name" = "Release";
+		};
+		"000000000000000000000029" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("000000000000000000000034", "000000000000000000000035");
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+		};
+		"000000000000000000000034" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"INFOPLIST_FILE" = "HealthGoals/Info.plist";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoals";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"MARKETING_VERSION" = "0.1";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+			};
+			"name" = "Debug";
+		};
+		"000000000000000000000035" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"INFOPLIST_FILE" = "HealthGoals/Info.plist";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoals";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"MARKETING_VERSION" = "0.1";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+			};
+			"name" = "Release";
+		};
+		"00000000000000000000002A" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("000000000000000000000036", "000000000000000000000037");
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+		};
+		"000000000000000000000036" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoalsUITests";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"TEST_TARGET_NAME" = "HealthGoals";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+			};
+			"name" = "Debug";
+		};
+		"000000000000000000000037" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoalsUITests";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"TEST_TARGET_NAME" = "HealthGoals";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+			};
+			"name" = "Release";
+		};
+	};
+	"rootObject" = "000000000000000000000001";
+}

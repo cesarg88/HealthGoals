@@ -49,8 +49,8 @@ Para actualizar el kit, comprobar primero el merge upstream, recuperar las siete
 
 ## CI y límites actuales
 
-`Repository checks / whitespace` comprueba errores de whitespace introducidos por la PR usando su head SHA explícito. Es un check de higiene. `Repository checks / agent-kit` ejecuta `python3 scripts/check-agent-kit.py` y `python3 -m unittest discover -s tests -v` sobre el mismo head explícito; valida las copias y el comportamiento del helper. No verifica compilación ni tests de producto: no hay app ejecutable todavía.
+`Repository checks / whitespace` comprueba errores de whitespace introducidos por la PR usando su head SHA explícito. Es un check de higiene. `Repository checks / agent-kit` ejecuta `python3 scripts/check-agent-kit.py` y `python3 -m unittest discover -s tests -v` sobre el mismo head explícito; valida las copias y el comportamiento del helper. `iOS / ios-build-test` ejecuta solo lanzamiento en un iPhone, análisis estático y build Release iOS sin signing sobre el head explícito; no ejecuta rotación ni iPad en cada PR. `iOS UI tests (manual) / ios-ui-tests` conserva lanzamiento y rotación en iPhone/iPad con `scripts/test-ios.sh`, mediante workflow_dispatch o ejecución local; se solicita por entrega cuando corresponda al comportamiento modificado, no en cada PR. Los requisitos y límites están en el [README](../README.md#build-y-tests-de-simulador).
 
-Las plantillas y estas instrucciones no configuran protecciones de GitHub, aprobaciones obligatorias ni invalidación automática de aprobaciones. En esta etapa César verifica esas condiciones manualmente. Cuando se añada el proyecto iOS, la tarea correspondiente debe definir cómo compilar y probar, y ampliar CI.
+`develop` tiene protecciones administradas en GitHub; los archivos del repositorio no las aplican automáticamente. Añadir `ios-build-test` como obligatorio requiere observarlo verde y coordinar el cambio con César. La revisión independiente del SHA completo y la autorización de merge de César siguen siendo controles manuales.
 
 Los roles y skills apoyan el flujo manual. No automatizan asignaciones, desbloqueos ni merges.
