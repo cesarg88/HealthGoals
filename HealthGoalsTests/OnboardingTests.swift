@@ -85,11 +85,17 @@ struct OnboardingTests {
     @Test func restorationBeforeAndAfterBack() throws {
         let (model, service, defaults) = try setup()
         model.select(.walking)
-        #expect(OnboardingModel(healthAuthorization: service, defaults: defaults).intention == .walking)
+        #expect(OnboardingModel(healthAuthorization: service, healthReading: FakeHealthReader(), defaults: defaults)
+            .intention == .walking)
         model.continueToHealth()
-        #expect(OnboardingModel(healthAuthorization: service, defaults: defaults).stage == .connectHealth)
+        #expect(OnboardingModel(healthAuthorization: service, healthReading: FakeHealthReader(), defaults: defaults)
+            .stage == .connectHealth)
         model.backToIntention()
-        let restored = OnboardingModel(healthAuthorization: service, defaults: defaults)
+        let restored = OnboardingModel(
+            healthAuthorization: service,
+            healthReading: FakeHealthReader(),
+            defaults: defaults
+        )
         #expect(restored.stage == .intention)
         #expect(restored.intention == .walking)
     }
@@ -99,7 +105,11 @@ struct OnboardingTests {
         model.select(.activity)
         model.continueToHealth()
         await model.connectHealth()
-        let restored = OnboardingModel(healthAuthorization: service, defaults: defaults)
+        let restored = OnboardingModel(
+            healthAuthorization: service,
+            healthReading: FakeHealthReader(),
+            defaults: defaults
+        )
         #expect(restored.stage == .startingPoint)
         #expect(restored.intention == .activity)
         #expect(restored.requestState == .idle)
@@ -109,7 +119,11 @@ struct OnboardingTests {
     @Test func malformedProgressCannotSkipIntention() throws {
         let (_, service, defaults) = try setup()
         defaults.set(["stage": "startingPoint", "intention": "unknown"], forKey: "onboarding.progress")
-        let restored = OnboardingModel(healthAuthorization: service, defaults: defaults)
+        let restored = OnboardingModel(
+            healthAuthorization: service,
+            healthReading: FakeHealthReader(),
+            defaults: defaults
+        )
         #expect(restored.stage == .intention)
         #expect(restored.intention == nil)
     }
@@ -128,7 +142,11 @@ struct OnboardingTests {
         model.backToIntention()
         #expect(service.requests == 1)
         #expect(model.stage == .connectHealth)
-        let restored = OnboardingModel(healthAuthorization: service, defaults: defaults)
+        let restored = OnboardingModel(
+            healthAuthorization: service,
+            healthReading: FakeHealthReader(),
+            defaults: defaults
+        )
         #expect(restored.stage == .connectHealth)
         #expect(restored.requestState == .idle)
         #expect(restored.intention == .walking)
@@ -142,7 +160,11 @@ private extension OnboardingTests {
     func setup() throws -> (OnboardingModel, FakeHealthAuthorization, UserDefaults) {
         let defaults = try #require(UserDefaults(suiteName: "HealthGoalsTests.\(UUID().uuidString)"))
         let service = FakeHealthAuthorization()
-        return (OnboardingModel(healthAuthorization: service, defaults: defaults), service, defaults)
+        return (
+            OnboardingModel(healthAuthorization: service, healthReading: FakeHealthReader(), defaults: defaults),
+            service,
+            defaults
+        )
     }
 }
 
