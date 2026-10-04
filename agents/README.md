@@ -17,12 +17,12 @@ CI puede ejecutarse en paralelo a la revisión. El merge requiere que ambos corr
 
 César autoriza de forma permanente los mensajes directos, handoffs y consultas útiles entre Product, Engineering, Design e Infra. No se solicita permiso para cada mensaje. Esta autorización permite coordinar el trabajo aprobado; no amplía permisos de merge, gasto, publicación ni alcance de producto. Solo César realiza o autoriza merges.
 
-| Rol | Chat | Identificador |
-| --- | --- | --- |
-| Product | healthGoals-Product | `01a10068-087a-7061-aa0d-599e77078e28` |
-| Engineering | líder técnico y orquestador | `01a103c7-bc58-7ec3-84b9-285095f112ee` |
-| Design | healthGoals-design | `01a1006d-83d1-7520-8ac9-77b42e754d1b` |
-| Infra | healthgoals-infra | `01a0fceb-8d06-74b0-b2a7-83fff94950f4` |
+| Rol | Chat |
+| --- | --- |
+| Product | healthGoals-Product |
+| Engineering | líder técnico y orquestador |
+| Design | healthGoals-design |
+| Infra | healthgoals-infra |
 
 Las decisiones necesarias se conservan en Issues y documentación antes de depender de ellas; los mensajes no sustituyen ese registro. La [Issue #9](https://github.com/cesarg88/HealthGoals/issues/9) registra esta autorización y los roles confirmados.
 
