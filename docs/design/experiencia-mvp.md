@@ -142,8 +142,7 @@ No bloquean exploración reversible; sí impiden cerrar un handoff implementable
 
 | ID | Decisión pendiente | Recomendación y motivo | Responsable |
 | --- | --- | --- | --- |
-| D01 | Inicio/fin semana, zona horaria, día en curso y cambios de calendario | Una convención explícita visible; definir antes de validar cifras/días o programar aviso | Product + ingeniería |
-
+| D01 | Zona horaria, momento de corte semanal, día en curso y cambios de calendario | La primera semana desde lunes ya está confirmada; concretar los detalles temporales antes de validar cifras/días o programar aviso | Product + ingeniería |
 | D04 | Efecto de editar/eliminar en semana activa; último objetivo | Recomendar efecto explícito en semana actual sin alterar actividad observada; último eliminado devuelve vacío con Elegir objetivo; confirmar historia del resumen | Product |
 | D05 | Configuración manual sin baseline, no garantizada por scope | Permitir solo si progreso puede observarse; patrón desconocido. Sin datos actuales, no prometer seguimiento | Product |
 | D06 | Selección de idioma | Sistema y ajustes de idioma de iOS; sin selector propio, pendiente confirmación | Product |
