@@ -8,7 +8,7 @@ Core loop: `Intención → Baseline → Plan → Progress → Gap → Adapt`.
 
 ## Estado actual
 
-Este repositorio contiene la base documental, las herramientas de agentes y un bootstrap nativo SwiftUI para iPhone e iPad (iOS/iPadOS 26 mínimo). La vista técnica solo muestra el nombre de la app; todavía no implementa features de producto. El proyecto y el scheme compartido se llaman `HealthGoals`.
+Este repositorio contiene la base documental, las herramientas de agentes y un bootstrap nativo SwiftUI para iPhone e iPad (iOS/iPadOS 26 mínimo). La primera vertical permite elegir intención, conectar con Salud mediante autorización nativa de lectura y entrar a un S03 sin análisis todavía. [Issue #16](https://github.com/cesarg88/HealthGoals/issues/16) y [validación en iPhone](docs/validation/onboarding-healthkit.md) delimitan la entrega. El proyecto y el scheme compartido se llaman `HealthGoals`.
 
 La definición de producto está en [one-pager.md](docs/product/one-pager.md) y el alcance inicial en [mvp-scope.md](docs/product/mvp-scope.md).
 
@@ -34,23 +34,36 @@ El líder técnico coordina las asignaciones y revisiones con Product, Design e 
 
 ### Validación automática en cada PR
 
-El check `ios-build-test` sigue la estructura útil de PickOne: una prueba de lanzamiento en **un iPhone 17 Pro / iOS 26.5**, análisis estático y build **Release para iOS sin signing**. No ejecuta rotación ni iPad en cada PR. `xcodebuild test` construye app y runner, sin un build Debug previo separado. Preparación, test, análisis y Release son pasos separados para observar sus tiempos. `whitespace` y `agent-kit` se conservan; no se añaden herramientas de formato/lint ni configuración específica de PickOne.
+El check `ios-build-test` ejecuta formato/lint de código con versiones fijadas, tests aislados de onboarding y una prueba de lanzamiento en **un iPhone 17 Pro / iOS 26.5**, análisis estático y build **Release para iOS sin signing**. No ejecuta rotación ni iPad en cada PR. `xcodebuild test` construye app y runner sin build Debug previo. Preparación, test, análisis y Release son pasos separados; CI usa las operaciones del mismo Makefile que el gate local, evitando comandos duplicados.
 
-CI usa Xcode **26.6 (17F113)** en `macos-26` arm64, ruta `/Applications/Xcode_26.6.app/Contents/Developer`, checkout del head SHA explícito y un simulador exclusivo que elimina al terminar. Para reproducir los comandos tras preparar un simulador y obtener su UDID:
+CI usa Xcode **26.6 (17F113)** en `macos-26` arm64, ruta `/Applications/Xcode_26.6.app/Contents/Developer`, checkout del head SHA explícito y un simulador exclusivo eliminado al terminar. El resultado de tests se conserva siete días bajo `ios-launch-<head SHA>`; los logs de cada paso quedan en Actions. Release sin firma no acredita instalación en hardware ni distribución.
+
+### Formato, lint y gate local
+
+```sh
+make setup         # Download pinned tools only to .build/tools
+make format        # Write Swift sources; run before committing
+make format-check  # Fail on formatting drift without corrections
+make lint          # Strict lint without corrections
+make verify        # Full gate without changing sources
+```
+
+Las configuraciones conservadoras provienen de PickOne y se adaptan a HealthGoals: `.swiftformat` y `.swiftlint.yml`, exclusiones `.build`, `.worktrees`, `artifacts`, Build y DerivedData; mensajes de HealthGoals, sin Combine ni sufijo Protocol. Se añade la regla opt-in `no_magic_numbers`; el significado de Constants y la organización en private extensions se verifican mediante revisión, sin afirmar cobertura automática de esas convenciones.
+
+Versiones fijadas: [SwiftFormat 0.59.1](https://github.com/nicklockwood/SwiftFormat/releases/tag/0.59.1) y [SwiftLint 0.65.0](https://github.com/realm/SwiftLint/releases/tag/0.65.0). `make setup` verifica SHA-256 de los ZIP oficiales y la versión de cada binario; los hashes están en `scripts/setup-quality-tools.sh`. No utiliza Homebrew, hooks, credenciales ni instalaciones globales. Si falta una herramienta o su versión no coincide, el gate falla e indica ejecutar setup. Las verificaciones no descargan ni actualizan herramientas automáticamente.
+
+`make verify` ejecuta formato/lint sin corrección, checks del kit y helper y `git diff --check HEAD`, y crea un único simulador iPhone para `make test`, `make analyze` y `make build-release`. Comprueba Xcode 26.6, utiliza runtime 26.5, conserva `.xcresult`/logs/DerivedData en un directorio nuevo `.build/verify.*` y elimina su simulador incluso ante errores. Las fuentes y configuraciones permanecen intactas. No confundir «sin modificar fuentes» con ausencia de artefactos temporales.
+
+Los mismos comandos pueden ejecutarse individualmente con un iPhone exclusivo ya arrancado y un directorio nuevo de resultados:
 
 ```sh
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
-xcodebuild test -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Debug \
-  -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
-  -only-testing:HealthGoalsUITests/BootstrapTests/testLaunch \
-  -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO
-xcodebuild analyze -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Debug \
-  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
-xcodebuild build -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Release \
-  -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO
+make test SIMULATOR_UDID="$SIMULATOR_UDID" RESULT_DIR="$RESULT_DIR"
+make analyze RESULT_DIR="$RESULT_DIR"
+make build-release RESULT_DIR="$RESULT_DIR"
 ```
 
-El resultado de lanzamiento se conserva siete días bajo `ios-launch-<head SHA>`; los logs de cada paso quedan en Actions. El build Release no acredita instalación en hardware ni distribución.
+El filtro automático contiene `HealthGoalsTests` y `HealthGoalsUITests/BootstrapTests/testLaunch`. Para cambios únicamente documentales, ejecutar `make repository-checks` y validar la documentación afectada, sin repetir Xcode; no reutilizar evidencia anterior tras un cambio de código/build.
 
 ### Pruebas manuales de lanzamiento y rotación
 
@@ -64,7 +77,7 @@ scripts/test-ios.sh
 El script crea simuladores exclusivos, resuelve sus UDID y ejecuta para cada uno:
 
 ```sh
-# SIMULATOR_UDID y RESULT_DIR se obtienen de la preparación del script.
+# SIMULATOR_UDID and RESULT_DIR come from the script preparation.
 xcodebuild -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Debug \
   -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
   -derivedDataPath "$RESULT_DIR/DerivedData" CODE_SIGNING_ALLOWED=NO build
@@ -76,9 +89,9 @@ xcodebuild -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Deb
 
 Cada ejecución conserva sus logs y un `.xcresult` por dispositivo en un nuevo directorio `.build/ios.*`; las fuentes no se formatean ni modifican. Los simuladores propios se apagan y eliminan al terminar, también ante errores. El workflow separado `iOS UI tests (manual)` usa exactamente `scripts/test-ios.sh`, propaga errores y publica resultados durante siete días bajo `ios-ui-results-<SHA>-<run ID>`. En Actions, seleccionar ese workflow, Run workflow y la rama a validar; el checkout usa el SHA seleccionado por GitHub. GitHub solo ofrece workflow_dispatch cuando el workflow existe en la rama predeterminada; hasta entonces, ejecutar el script local y registrar SHA, comando y resultados en la PR. No ejecutar estas pruebas automáticamente en cada PR: solicitar evidencia por entrega cuando cambie comportamiento relevante, como lanzamiento o adaptación de UI. Una compilación verde no acredita estas pruebas ni sustituye la validación física requerida por producto.
 
-`BootstrapTests` comprueba lanzamiento, vista raíz visible y adaptación al girar en ambos dispositivos. Las cuatro orientaciones están declaradas para iPhone/iPad; el test cubre portrait y ambos landscape en iPhone, y añade portrait upside down en iPad. Los iPhone con Face ID pueden impedir upside down por política del sistema. No se simula su aceptación ni se modifica esa política.
+`HealthGoalsTests` comprueba selección, navegación, autorización sustituida, errores/reintento, exclusión de solicitudes y restauración segura. `BootstrapTests` comprueba lanzamiento, S01 visible y adaptación al girar, e incluye navegación/Volver sin abrir Salud. Las cuatro orientaciones están declaradas para iPhone/iPad; el test cubre portrait y ambos landscape en iPhone, y añade portrait upside down en iPad. Los iPhone con Face ID pueden impedir upside down por política del sistema. No se simula su aceptación ni se modifica esa política.
 
-El deployment target 26.0 no equivale a haber ejecutado en 26.0: esta combinación prueba **26.5**, no el runtime mínimo. Tampoco valida multitarea/ventanas redimensionadas de iPad, dispositivo físico, HealthKit, Watch, background, widgets, distribución ni TestFlight. Inglés y español están declarados en `knownRegions` y `CFBundleLocalizations`; la vista técnica usa solo `HealthGoals`, sin copy artificial ni selector. Seguir el idioma del sistema para las futuras pantallas es una propuesta pendiente de Product, no una decisión de comportamiento implementada. Bundle IDs `com.example.HealthGoals` y `com.example.HealthGoalsUITests` son provisionales de bootstrap, sin Team ni certificados; deben resolverse antes de signing.
+El deployment target 26.0 no equivale a haber ejecutado en 26.0: esta combinación prueba **26.5**, no el runtime mínimo. Tampoco valida multitarea/ventanas redimensionadas de iPad, dispositivo físico, HealthKit, Watch, background, widgets, distribución ni TestFlight. Inglés y español están declarados en `knownRegions` y `CFBundleLocalizations`; textos de onboarding y uso nativo de Salud están localizados. No hay selector propio; las capacidades nativas de iOS resuelven el idioma de esta entrega sin cerrar D06. César ha confirmado `com.example.HealthGoals` y el Team `Cesar Gonzalez (Personal Team)` para esta entrega. El Team se selecciona localmente en Xcode según la [guía física](docs/validation/onboarding-healthkit.md); no se ha facilitado su ID numérico ni se guardan certificados/perfiles en el repositorio. Los targets de tests usan el mismo prefijo.
 
 Checks de infraestructura:
 
@@ -88,4 +101,4 @@ python3 -m unittest discover -s tests -v
 git diff --check
 ```
 
-La evidencia del SHA y de cada ejecución vive en la PR de [Issue #8](https://github.com/cesarg88/HealthGoals/issues/8). El check automático conserva el nombre `ios-build-test` con el alcance reducido descrito arriba; debe observarse verde y coordinar su obligatoriedad con César. `ios-ui-tests` es manual y no se propone como requisito de cada PR. Esta entrega no cambia las protecciones.
+El bootstrap [#8](https://github.com/cesarg88/HealthGoals/issues/8) está cerrado: PR #11 integrada y ruleset de `develop` verificado con `whitespace`, `agent-kit` e `ios-build-test` obligatorios. La evidencia vigente de producto y convenciones vive en [Issue #16](https://github.com/cesarg88/HealthGoals/issues/16) y [PR #17](https://github.com/cesarg88/HealthGoals/pull/17). `ios-ui-tests` sigue manual y no es requisito de cada PR. Esta entrega no modifica protecciones.

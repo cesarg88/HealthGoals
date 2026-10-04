@@ -2,13 +2,13 @@ import SwiftUI
 
 @main
 struct HealthGoalsApp: App {
+    @State private var onboarding = OnboardingModel(
+        healthAuthorization: HealthAuthorization(), defaults: .standard
+    )
+
     var body: some Scene {
         WindowGroup {
-            Text(verbatim: "HealthGoals")
-                .font(.title)
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .accessibilityIdentifier("bootstrap.title")
+            OnboardingView(model: onboarding)
         }
     }
 }

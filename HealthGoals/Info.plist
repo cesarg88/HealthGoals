@@ -46,5 +46,7 @@
 		<string>en</string>
 		<string>es</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+	<string>HealthGoals reads steps and active energy to understand your recent activity and follow weekly goals. It does not change your Health data or send it to a backend.</string>
 </dict>
 </plist>
