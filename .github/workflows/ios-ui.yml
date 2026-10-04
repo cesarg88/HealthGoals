@@ -1,0 +1,32 @@
+name: iOS UI tests (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios-ui-tests:
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Build and test iPhone and iPad without signing
+        run: scripts/test-ios.sh
+      - name: Preserve test results and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ui-results-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            .build/ios.*/*.log
+            .build/ios.*/*.xcresult
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
