@@ -33,11 +33,12 @@ jobs:
             com.apple.CoreSimulator.SimRuntime.iOS-26-5)
           echo "udid=$simulator_id" >> "$GITHUB_OUTPUT"
           xcrun simctl bootstatus "$simulator_id" -b
-      - name: Test launch on iPhone
+      - name: Test onboarding logic and launch on iPhone
         run: |
           xcodebuild test -project HealthGoals.xcodeproj -scheme HealthGoals \
             -configuration Debug \
             -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}' \
+            -only-testing:HealthGoalsTests \
             -only-testing:HealthGoalsUITests/BootstrapTests/testLaunch \
             -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/HealthGoalsTests" \
             -resultBundlePath "$RUNNER_TEMP/Launch.xcresult" CODE_SIGNING_ALLOWED=NO

@@ -11,8 +11,10 @@
 				"BuildIndependentTargetsInParallel" = "YES";
 				"LastUpgradeCheck" = "2660";
 				"TargetAttributes" = {
+					"00000000000000000000006E" = { "CreatedOnToolsVersion" = "26.6"; "TestTargetID" = "00000000000000000000000A"; };
 					"00000000000000000000000A" = {
 						"CreatedOnToolsVersion" = "26.6";
+						"SystemCapabilities" = { "com.apple.HealthKit" = { "enabled" = "1"; }; };
 					};
 					"00000000000000000000000B" = {
 						"CreatedOnToolsVersion" = "26.6";
@@ -29,16 +31,16 @@
 			"productRefGroup" = "000000000000000000000005";
 			"projectDirPath" = "";
 			"projectRoot" = "";
-			"targets" = ("00000000000000000000000A", "00000000000000000000000B");
+			"targets" = ("00000000000000000000000A", "00000000000000000000000B", "00000000000000000000006E");
 		};
 		"000000000000000000000002" = {
 			"isa" = "PBXGroup";
-			"children" = ("000000000000000000000003", "000000000000000000000004", "000000000000000000000005");
+			"children" = ("000000000000000000000003", "000000000000000000000004", "000000000000000000000064", "000000000000000000000005");
 			"sourceTree" = "<group>";
 		};
 		"000000000000000000000003" = {
 			"isa" = "PBXGroup";
-			"children" = ("000000000000000000000014", "000000000000000000000015");
+			"children" = ("000000000000000000000014", "000000000000000000000015", "000000000000000000000040", "000000000000000000000041", "000000000000000000000042", "000000000000000000000043", "000000000000000000000044", "00000000000000000000005A", "000000000000000000000070");
 			"path" = "HealthGoals";
 			"sourceTree" = "<group>";
 		};
@@ -50,7 +52,7 @@
 		};
 		"000000000000000000000005" = {
 			"isa" = "PBXGroup";
-			"children" = ("000000000000000000000017", "000000000000000000000018");
+			"children" = ("000000000000000000000017", "000000000000000000000018", "000000000000000000000066");
 			"name" = "Products";
 			"sourceTree" = "<group>";
 		};
@@ -97,7 +99,7 @@
 		"00000000000000000000001E" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = "2147483647";
-			"files" = ("000000000000000000000019");
+			"files" = ("000000000000000000000019", "00000000000000000000004A", "00000000000000000000004B", "00000000000000000000004C");
 			"runOnlyForDeploymentPostprocessing" = "0";
 		};
 		"00000000000000000000001F" = {
@@ -121,7 +123,7 @@
 		"000000000000000000000022" = {
 			"isa" = "PBXResourcesBuildPhase";
 			"buildActionMask" = "2147483647";
-			"files" = ();
+			"files" = ("00000000000000000000004D", "00000000000000000000005D", "000000000000000000000071");
 			"runOnlyForDeploymentPostprocessing" = "0";
 		};
 		"000000000000000000000023" = {
@@ -219,6 +221,7 @@
 		"000000000000000000000034" = {
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
+				"CODE_SIGN_ENTITLEMENTS" = "HealthGoals/HealthGoals.entitlements";
 				"INFOPLIST_FILE" = "HealthGoals/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoals";
@@ -232,6 +235,7 @@
 		"000000000000000000000035" = {
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
+				"CODE_SIGN_ENTITLEMENTS" = "HealthGoals/HealthGoals.entitlements";
 				"INFOPLIST_FILE" = "HealthGoals/Info.plist";
 				"GENERATE_INFOPLIST_FILE" = "NO";
 				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoals";
@@ -269,6 +273,168 @@
 				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
 			};
 			"name" = "Release";
+		};
+		"000000000000000000000040" = {
+			"isa" = "PBXFileReference";
+			"path" = "OnboardingModel.swift";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000041" = {
+			"isa" = "PBXFileReference";
+			"path" = "OnboardingView.swift";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000042" = {
+			"isa" = "PBXFileReference";
+			"path" = "HealthAuthorization.swift";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000043" = {
+			"isa" = "PBXFileReference";
+			"path" = "Localizable.xcstrings";
+			"lastKnownFileType" = "text.json.xcstrings";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000044" = {
+			"isa" = "PBXFileReference";
+			"path" = "HealthGoals.entitlements";
+			"lastKnownFileType" = "text.plist.entitlements";
+			"sourceTree" = "<group>";
+		};
+		"00000000000000000000004A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000040";
+		};
+		"00000000000000000000004B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000041";
+		};
+		"00000000000000000000004C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000042";
+		};
+		"00000000000000000000004D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000043";
+		};
+		"00000000000000000000005A" = {
+			"isa" = "PBXVariantGroup";
+			"name" = "InfoPlist.strings";
+			"children" = ("00000000000000000000005B", "00000000000000000000005C");
+			"sourceTree" = "<group>";
+		};
+		"00000000000000000000005B" = {
+			"isa" = "PBXFileReference";
+			"path" = "en.lproj/InfoPlist.strings";
+			"name" = "en";
+			"lastKnownFileType" = "text.plist.strings";
+			"sourceTree" = "<group>";
+		};
+		"00000000000000000000005C" = {
+			"isa" = "PBXFileReference";
+			"path" = "es.lproj/InfoPlist.strings";
+			"name" = "es";
+			"lastKnownFileType" = "text.plist.strings";
+			"sourceTree" = "<group>";
+		};
+		"00000000000000000000005D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "00000000000000000000005A";
+		};
+		"000000000000000000000064" = {
+			"isa" = "PBXGroup";
+			"path" = "HealthGoalsTests";
+			"children" = ("000000000000000000000065");
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000065" = {
+			"isa" = "PBXFileReference";
+			"path" = "OnboardingTests.swift";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000066" = {
+			"isa" = "PBXFileReference";
+			"path" = "HealthGoalsTests.xctest";
+			"includeInIndex" = "0";
+			"explicitFileType" = "wrapper.cfbundle";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"000000000000000000000067" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000065";
+		};
+		"000000000000000000000068" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("000000000000000000000067");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"000000000000000000000069" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"00000000000000000000006A" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"00000000000000000000006B" = {
+			"isa" = "XCConfigurationList";
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+			"buildConfigurations" = ("00000000000000000000006C", "00000000000000000000006D");
+		};
+		"00000000000000000000006C" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/HealthGoals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HealthGoals";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoalsTests";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+			};
+		};
+		"00000000000000000000006D" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"TEST_HOST" = "$(BUILT_PRODUCTS_DIR)/HealthGoals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HealthGoals";
+				"BUNDLE_LOADER" = "$(TEST_HOST)";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "com.example.HealthGoalsTests";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks");
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+			};
+		};
+		"00000000000000000000006E" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "00000000000000000000006B";
+			"productReference" = "000000000000000000000066";
+			"productType" = "com.apple.product-type.bundle.unit-test";
+			"productName" = "HealthGoalsTests";
+			"buildPhases" = ("000000000000000000000068", "000000000000000000000069", "00000000000000000000006A");
+			"dependencies" = ("000000000000000000000025");
+			"name" = "HealthGoalsTests";
+			"buildRules" = ();
+		};
+		"000000000000000000000070" = {
+			"isa" = "PBXFileReference";
+			"path" = "PrivacyInfo.xcprivacy";
+			"lastKnownFileType" = "text.xml";
+			"sourceTree" = "<group>";
+		};
+		"000000000000000000000071" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "000000000000000000000070";
 		};
 	};
 	"rootObject" = "000000000000000000000001";

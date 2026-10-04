@@ -5,9 +5,37 @@ final class BootstrapTests: XCTestCase {
     @MainActor
     func testLaunch() {
         let app = XCUIApplication()
+        app.launchArguments = ["-onboarding.progress", ""]
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
-        XCTAssertTrue(app.staticTexts["bootstrap.title"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["onboarding.intention.title"].waitForExistence(timeout: 10))
+    }
+
+    @MainActor
+    func testIntentionNavigationAndBack() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-onboarding.progress", ""]
+        app.launch()
+        let continueButton = app.buttons["onboarding.continue"]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 10))
+        XCTAssertFalse(continueButton.isEnabled)
+        capture(app)
+        app.buttons["onboarding.intention.walking"].tap()
+        XCTAssertTrue(continueButton.isEnabled)
+        continueButton.tap()
+        XCTAssertTrue(app.staticTexts["onboarding.health.title"].waitForExistence(timeout: 10))
+        capture(app)
+        app.buttons["onboarding.back"].tap()
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(continueButton.isEnabled)
+        XCTAssertTrue(app.buttons["onboarding.intention.walking"].isSelected)
+    }
+
+    @MainActor
+    private func capture(_ app: XCUIApplication) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     @MainActor
@@ -16,8 +44,9 @@ final class BootstrapTests: XCTestCase {
         defer { device.orientation = .portrait }
         device.orientation = .portrait
         let app = XCUIApplication()
+        app.launchArguments = ["-onboarding.progress", ""]
         app.launch()
-        let title = app.staticTexts["bootstrap.title"]
+        let title = app.staticTexts["onboarding.intention.title"]
         XCTAssertTrue(title.waitForExistence(timeout: 10))
 
         // Face ID iPhones do not rotate upside down; iPad covers this orientation.
