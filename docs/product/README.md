@@ -10,3 +10,7 @@ Ambos documentos parten de los textos proporcionados por César y conservan las 
 Product Lead define el alcance y los criterios de éxito. Product Designer documenta los flujos y estados necesarios para ese alcance, con referencias a los requisitos correspondientes. Las propuestas deben distinguir claramente lo aprobado de las preguntas abiertas.
 
 Las Issues de implementación enlazarán los documentos relevantes y concretarán criterios de aceptación verificables. Las decisiones necesarias para ejecutar una Issue deben estar resueltas antes de asignarla a implementación.
+
+## Propuestas de diseño en revisión
+
+- [Experiencia completa del MVP](../design/experiencia-mvp.md): flujo, inventario de superficies, matriz de estados, wireframes y preguntas pendientes de la Issue #12. No modifica el alcance aprobado.
