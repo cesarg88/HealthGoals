@@ -41,7 +41,7 @@ La intención determina el objetivo principal:
 - **Caminar más** → pasos semanales.
 - **Moverme más** → actividad semanal, medida en energía activa.
 
-El usuario puede añadir después el objetivo de la otra métrica, hasta un máximo de dos. La constancia es un resultado que buscamos, no una intención adicional del onboarding.
+El usuario puede añadir después el objetivo de la otra métrica, hasta un máximo de dos. La segunda métrica es opcional; si elige ambas, Home muestra los dos objetivos simultáneamente. Las etiquetas de intención y métrica semanal son propuestas de wording, no literales obligatorios. La constancia es un resultado que buscamos, no una intención adicional del onboarding.
 
 Con permiso del usuario, HealthGoals analiza su historial reciente de HealthKit para entender cuál es su nivel de actividad habitual.
 
@@ -121,6 +121,8 @@ HealthKit actualiza automáticamente el progreso. HealthGoals compara ese avance
 
 El estado semanal responde a **cómo voy respecto a mi propio ritmo**, sin asumir que todos los días deben aportar la misma actividad. Por ejemplo, una persona que concentra actividad en el fin de semana puede estar a su ritmo el jueves aunque haya completado menos que una proporción lineal de siete días.
 
+La explicación del ritmo es información secundaria de Home, sin eliminar el estado de ritmo personal.
+
 Este patrón se calcula por métrica con reglas explícitas, explicables y testeables. Si el historial no permite estimarlo, la aplicación debe comunicar esa limitación.
 
 El usuario no tiene que registrar:
@@ -159,16 +161,7 @@ Por ejemplo:
 > - 10.600 pasos;
 > - 1.150 kcal activas.
 
-Si quedan tres días:
-
-> Aproximadamente:
->
-> - 3.530 pasos diarios;
-> - 383 kcal activas diarias.
-
-No se trata de una prescripción.
-
-Es una traducción matemática del objetivo restante.
+Home conserva el restante semanal y no muestra un reparto lineal diario.
 
 ## 7. Adapt
 
@@ -176,7 +169,9 @@ Cada vez que HealthKit incorpora nueva actividad, el gap se recalcula.
 
 Si el sábado el usuario camina mucho más de lo habitual, lo que necesita durante el domingo se reduce automáticamente.
 
-Al comenzar una nueva semana, el loop vuelve a empezar.
+Al comenzar una nueva semana, los objetivos continúan automáticamente con el mismo valor, sin incremento automático ni confirmación obligatoria para empezar. El resumen permite revisar y ajustar.
+
+La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes, y el efecto temporal de editar objetivos, siguen pendientes de decisión.
 
 ---
 
@@ -571,7 +566,7 @@ El domingo:
 
 Nueva semana:
 
-> ¿Quieres mantener estos objetivos?
+> Tus objetivos continúan con el mismo valor. Puedes revisarlos y ajustarlos.
 
 ---
 
