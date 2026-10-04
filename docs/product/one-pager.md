@@ -171,7 +171,7 @@ Si el sábado el usuario camina mucho más de lo habitual, lo que necesita duran
 
 Al comenzar una nueva semana, los objetivos continúan automáticamente con el mismo valor, sin incremento automático ni confirmación obligatoria para empezar. El resumen permite revisar y ajustar.
 
-La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes, y el efecto temporal de editar objetivos, siguen pendientes de decisión.
+La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes siguen pendientes de decisión. El comportamiento de edición y eliminación se define en el [MVP Scope](mvp-scope.md#8-control-del-usuario).
 
 ---
 
