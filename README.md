@@ -41,11 +41,11 @@ CI usa Xcode **26.6 (17F113)** en `macos-26` arm64, ruta `/Applications/Xcode_26
 ### Formato, lint y gate local
 
 ```sh
-make setup         # Descarga herramientas fijadas solo a .build/tools
-make format        # Modifica fuentes Swift; ejecutar antes del commit
-make format-check  # Falla si hay drift, sin corregirlo
-make lint          # Lint estricto, sin correcciones
-make verify        # Gate completo, sin modificar fuentes
+make setup         # Download pinned tools only to .build/tools
+make format        # Write Swift sources; run before committing
+make format-check  # Fail on formatting drift without corrections
+make lint          # Strict lint without corrections
+make verify        # Full gate without changing sources
 ```
 
 Las configuraciones conservadoras provienen de PickOne y se adaptan a HealthGoals: `.swiftformat` y `.swiftlint.yml`, exclusiones `.build`, `.worktrees`, `artifacts`, Build y DerivedData; mensajes de HealthGoals, sin Combine ni sufijo Protocol. Se añade la regla opt-in `no_magic_numbers`; el significado de Constants y la organización en private extensions se verifican mediante revisión, sin afirmar cobertura automática de esas convenciones.
@@ -77,7 +77,7 @@ scripts/test-ios.sh
 El script crea simuladores exclusivos, resuelve sus UDID y ejecuta para cada uno:
 
 ```sh
-# SIMULATOR_UDID y RESULT_DIR se obtienen de la preparación del script.
+# SIMULATOR_UDID and RESULT_DIR come from the script preparation.
 xcodebuild -project HealthGoals.xcodeproj -scheme HealthGoals -configuration Debug \
   -destination "platform=iOS Simulator,id=$SIMULATOR_UDID" \
   -derivedDataPath "$RESULT_DIR/DerivedData" CODE_SIGNING_ALLOWED=NO build
@@ -101,4 +101,4 @@ python3 -m unittest discover -s tests -v
 git diff --check
 ```
 
-La evidencia del SHA y de cada ejecución vive en la PR de [Issue #8](https://github.com/cesarg88/HealthGoals/issues/8). El check automático conserva el nombre `ios-build-test` con el alcance reducido descrito arriba; debe observarse verde y coordinar su obligatoriedad con César. `ios-ui-tests` es manual y no se propone como requisito de cada PR. Esta entrega no cambia las protecciones.
+El bootstrap [#8](https://github.com/cesarg88/HealthGoals/issues/8) está cerrado: PR #11 integrada y ruleset de `develop` verificado con `whitespace`, `agent-kit` e `ios-build-test` obligatorios. La evidencia vigente de producto y convenciones vive en [Issue #16](https://github.com/cesarg88/HealthGoals/issues/16) y [PR #17](https://github.com/cesarg88/HealthGoals/pull/17). `ios-ui-tests` sigue manual y no es requisito de cada PR. Esta entrega no modifica protecciones.
