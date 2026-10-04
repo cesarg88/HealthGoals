@@ -54,6 +54,8 @@ Opciones iniciales:
 
 Después, el usuario puede añadir un objetivo de la otra métrica, hasta un máximo de dos. La selección cambia realmente la propuesta; la constancia es un resultado esperado del uso.
 
+Las etiquetas de intención y métrica semanal son propuestas de wording, no literales obligatorios.
+
 No habrá campo de texto libre en el MVP.
 
 No utilizaremos Foundation Models para interpretar intención.
@@ -167,7 +169,7 @@ A partir del baseline, HealthGoals propondrá como máximo:
 
 > **dos objetivos semanales.**
 
-La intención determina la métrica principal; la segunda se añade por elección del usuario.
+La intención determina la métrica principal; la segunda es opcional y se añade por elección del usuario. Si elige ambas, Home muestra los dos objetivos simultáneamente.
 
 Ejemplo:
 
@@ -200,6 +202,8 @@ El usuario podrá:
 - mantener solo uno de los dos objetivos.
 
 HealthGoals nunca incrementará automáticamente un objetivo.
+
+La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes (D01), y el efecto temporal de editar objetivos, siguen pendientes de decisión.
 
 ---
 
@@ -241,8 +245,6 @@ Te quedan:
 
 **9.600 pasos**
 
-~3.200/día hasta el domingo
-
 ---
 
 **Actividad**
@@ -253,8 +255,6 @@ Te quedan:
 
 **1.050 kcal activas**
 
-~350/día hasta el domingo
-
 ---
 
 No necesitamos un dashboard complejo.
@@ -263,7 +263,9 @@ La Home debe priorizar:
 
 1. estado respecto al ritmo personal;
 2. progreso;
-3. gap y reparto diario orientativo.
+3. gap semanal.
+
+Home no muestra reparto lineal diario. La explicación del ritmo es información secundaria; el estado de ritmo personal sigue formando parte de la experiencia.
 
 ---
 
@@ -296,21 +298,11 @@ Para cada objetivo calcularemos:
 
 > `máximo(0, objetivo − progreso actual)`
 
-Y cuando tenga sentido:
-
-> `gap / días restantes`
-
 Ejemplo:
 
-> Te quedan 9.600 pasos.
+> Te quedan 9.600 pasos esta semana.
 
-Con tres días restantes:
-
-> ~3.200 pasos/día.
-
-La división diaria es informativa y no determina el estado de ritmo personal.
-
-No significa que el usuario deba repartir exactamente la actividad de esa manera.
+Home muestra el restante semanal sin reparto lineal diario. El cálculo del gap no determina el estado de ritmo personal.
 
 ---
 
@@ -358,16 +350,9 @@ Ejemplo:
 > Actividad  
 > 4.340 / 4.200 kcal ✓
 
-Después preguntaremos:
+Al cambiar de semana, los objetivos continúan automáticamente con el mismo valor. No se requiere pulsar Mantener ni otra confirmación para comenzar la nueva semana. El resumen permite revisar los resultados y ajustar los objetivos.
 
-> **¿Quieres mantener estos objetivos otra semana?**
-
-Opciones:
-
-- Mantener
-- Ajustar
-
-El MVP no propone todavía automáticamente aumentar los objetivos después de cada semana.
+HealthGoals no aumenta automáticamente los objetivos.
 
 ---
 
@@ -503,7 +488,7 @@ Permitir modificar los valores aceptados.
 
 ## Resumen semanal
 
-Resultado de la semana y decisión sobre la siguiente.
+Resultado de la semana y revisión/ajuste opcional; los objetivos continúan automáticamente con el mismo valor.
 
 ## Ajustes
 
@@ -642,7 +627,7 @@ HealthGoals MVP está completo cuando un usuario puede:
 8. entender su progreso respecto a su patrón semanal cuando el historial lo permita, y saber exactamente qué le queda durante la semana;
 9. consultar ese gap desde un widget;
 10. completar una semana;
-11. mantener o ajustar sus objetivos para la siguiente;
+11. comenzar la siguiente semana automáticamente con objetivos del mismo valor y poder revisarlos o ajustarlos;
 12. activar o desactivar una notificación local semanal sin datos de salud.
 
 La entrega debe aportar evidencia de aceptación y checks para el SHA actual, revisión independiente y validación de César en dispositivo real para HealthKit, permisos, sincronización con Apple Watch, background y WidgetKit. No basta con CI verde para dar esas integraciones por verificadas.
