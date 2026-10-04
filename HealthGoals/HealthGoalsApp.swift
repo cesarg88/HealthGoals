@@ -2,13 +2,18 @@ import SwiftUI
 
 @main
 struct HealthGoalsApp: App {
-    @State private var onboarding = OnboardingModel(
-        healthAuthorization: HealthAuthorization(), defaults: .standard
-    )
+    @State private var onboarding = makeOnboarding()
 
     var body: some Scene {
         WindowGroup {
             OnboardingView(model: onboarding)
         }
+    }
+}
+
+private extension HealthGoalsApp {
+    static func makeOnboarding() -> OnboardingModel {
+        let health = HealthAuthorization()
+        return OnboardingModel(healthAuthorization: health, healthReading: health, defaults: .standard)
     }
 }

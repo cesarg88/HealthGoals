@@ -14,7 +14,7 @@ enum ActivityIntention: String, CaseIterable, Identifiable {
     }
 }
 
-enum ActivityMetric { case steps, activeEnergy }
+enum ActivityMetric: Equatable { case steps, activeEnergy }
 enum OnboardingStage: String { case intention, connectHealth, startingPoint }
 enum AuthorizationRequestState: Equatable { case idle, requesting, unavailable, failed }
 
@@ -24,7 +24,13 @@ final class OnboardingModel {
     private(set) var intention: ActivityIntention?
     private(set) var stage: OnboardingStage = .intention
     private(set) var requestState: AuthorizationRequestState = .idle
+    private(set) var baselineState: BaselineState = .loading
     private let healthAuthorization: any HealthAuthorizing
+    private let healthReading: any HealthReading
+    private let now: () -> Date
+    private let calendar: () -> Calendar
+    private var baselineTask: Task<Void, Never>?
+    private var hasLoadedBaseline = false
     private let defaults: UserDefaults
     private static let progressKey = "onboarding.progress"
 
@@ -32,7 +38,16 @@ final class OnboardingModel {
         intention != nil
     }
 
-    init(healthAuthorization: any HealthAuthorizing, defaults: UserDefaults) {
+    init(
+        healthAuthorization: any HealthAuthorizing,
+        healthReading: any HealthReading,
+        defaults: UserDefaults,
+        now: @escaping () -> Date = Date.init,
+        calendar: @escaping () -> Calendar = { .current }
+    ) {
+        self.healthReading = healthReading
+        self.now = now
+        self.calendar = calendar
         self.healthAuthorization = healthAuthorization
         self.defaults = defaults
         let progress = defaults.dictionary(forKey: Self.progressKey)
@@ -82,9 +97,39 @@ final class OnboardingModel {
             requestState = .failed
         }
     }
+
+    func loadBaseline(retry: Bool = false) async {
+        guard stage == .startingPoint, let intention else { return }
+        if let baselineTask {
+            await baselineTask.value
+            return
+        }
+        guard retry || !hasLoadedBaseline, !Task.isCancelled else { return }
+        baselineState = .loading
+        // The model owns this finite query; disappearing SwiftUI tasks must not strand S03 in loading.
+        let task = Task { await fetchBaseline(for: intention.metric) }
+        baselineTask = task
+        await task.value
+        baselineTask = nil
+    }
 }
 
 private extension OnboardingModel {
+    func fetchBaseline(for metric: ActivityMetric) async {
+        do {
+            let window = try BaselineWindow(now: now(), calendar: calendar())
+            let totals = try await healthReading.weeklyTotals(for: metric, in: window)
+            if let baseline = BaselineCalculator.calculate(metric: metric, weeklyTotals: totals) {
+                baselineState = .available(baseline)
+            } else {
+                baselineState = .insufficient
+            }
+        } catch {
+            baselineState = .failed
+        }
+        hasLoadedBaseline = true
+    }
+
     func saveProgress() {
         guard let intention else { return }
         // Persist S02 before requesting authorization; never persist an in-flight operation.

@@ -9,13 +9,14 @@ struct OnboardingView: View {
                 switch model.stage {
                     case .intention: intentionContent
                     case .connectHealth: healthContent
-                    case .startingPoint: startingPointContent
+                    case .startingPoint: BaselineView(model: model)
                 }
             }
             .frame(maxWidth: Constants.maximumContentWidth, alignment: .leading)
             .padding(Constants.contentPadding)
             .frame(maxWidth: .infinity, alignment: .top)
         }
+        .background(model.stage == .startingPoint ? Color("BaselineBackground") : Color(uiColor: .systemBackground))
     }
 }
 
@@ -102,15 +103,6 @@ private extension OnboardingView {
                 .controlSize(.large)
                 .disabled(model.requestState == .requesting)
                 .accessibilityIdentifier("onboarding.back")
-        }
-    }
-
-    var startingPointContent: some View {
-        Group {
-            heading("startingPoint.title", identifier: "onboarding.startingPoint.title")
-            // The next Issue adds queries and baseline; this delivery does not read Health data.
-            Text("startingPoint.pending")
-            Text("startingPoint.requestCompleted").foregroundStyle(.secondary)
         }
     }
 

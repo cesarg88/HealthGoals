@@ -307,36 +307,186 @@
         }
       }
     },
-    "startingPoint.pending": {
+    "baseline.loading": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your recent activity will appear here when this feature is available."
+            "value": "Analyzing your recent activity…"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu actividad reciente aparecerá aquí cuando esta función esté disponible."
+            "value": "Analizando tu actividad reciente…"
           }
         }
       }
     },
-    "startingPoint.requestCompleted": {
+    "baseline.recentActivity": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The Health request has finished. We have not checked which activity data is accessible yet."
+            "value": "Your recent activity"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "La solicitud de Salud ha terminado. Todavía no hemos comprobado qué datos de actividad son accesibles."
+            "value": "Tu actividad reciente"
+          }
+        }
+      }
+    },
+    "baseline.averageExplanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average over the last 4 weeks"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Media de las últimas 4 semanas"
+          }
+        }
+      }
+    },
+    "baseline.insufficient": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is not enough accessible recent activity to calculate your starting point. You can try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay suficiente actividad reciente accesible para calcular tu punto de partida. Puedes reintentar."
+          }
+        }
+      }
+    },
+    "baseline.error": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your recent activity could not be loaded. Try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo cargar tu actividad reciente. Reintenta."
+          }
+        }
+      }
+    },
+    "baseline.windowExplanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We use the 28 complete days before today, grouped into four periods of seven days."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilizamos los 28 días completos anteriores a hoy, agrupados en cuatro períodos de siete días."
+          }
+        }
+      }
+    },
+    "baseline.steps %lf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nstep / week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nsteps / week"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\npaso / semana"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\npasos / semana"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "baseline.energy %lf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nactive kcal / week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nactive kcal / week"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nkcal activas / semana"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "**%.0f**\nkcal activas / semana"
+                }
+              }
+            }
           }
         }
       }
