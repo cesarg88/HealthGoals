@@ -21,7 +21,7 @@ Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES
 5. Opcional Añadir Actividad/Pasos → segunda sección en S03 o S05, con su propio historial/propuesta/estado. No repetir onboarding ni activar automáticamente.
 6. Primera aceptación → onboarding completado → S04 Home. Las aperturas posteriores van a Home, no reinician la bienvenida ni la autorización. Consultas posteriores actualizan los datos locales; el objetivo no aumenta solo.
 7. Durante la semana → S04 permanece como destino de apertura, widget y notificación. Ajustar abre S05. Explicación del ritmo se expande en la tarjeta, sin pantalla analítica adicional.
-8. Al terminar el intervalo semanal → el objetivo continúa automáticamente con el mismo valor para la nueva semana, sin confirmación ni incremento. S06 es un resumen no bloqueante con resultados por métrica, incluidos parciales/desconocidos; su CTA principal es Ver esta semana y el secundario Ajustar. El resumen no es un paso necesario para activar el seguimiento de la nueva semana (D03 confirmada). El efecto temporal concreto de una edición sigue D04.
+8. Al terminar el intervalo semanal → el objetivo continúa automáticamente con el mismo valor para la nueva semana, sin confirmación ni incremento. S06 es un resumen no bloqueante con resultados por métrica, incluidos parciales/desconocidos; su CTA principal es Ver esta semana y el secundario Ajustar. El resumen no es un paso necesario para activar el seguimiento de la nueva semana (D03 confirmada). Guardar cambios aplica en la semana actual y conserva la actividad registrada (D04 confirmada en #23).
 9. Nueva semana → S04 con un intervalo nuevo y datos de esa semana, nunca el acumulado anterior. Repetición de 6–8 durante semanas 2 y 4; sin historial navegable nuevo.
 10. S07 Ajustes desde Home: Salud, privacidad, información de objetivos, bienestar y aviso opcional. Volver conserva Home y objetivo.
 
@@ -36,7 +36,7 @@ Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES
 - Posible actividad incompleta → texto sobre disponibilidad de la métrica; no inferir ausencia de Watch. Los pasos pueden seguir disponibles.
 - Error durante semana activa → S04 mantiene snapshot de la misma semana con aviso/fecha. Sin snapshot de esa semana, muestra desconocido. Reintentar no rejuvenece el timestamp.
 - Cerrar durante onboarding → retomar la etapa pendiente. Product confirma este comportamiento: no repetir etapas completadas ni crear un objetivo por reabrir. Ingeniería debe preservarlo o escalar una limitación real; no es una alternativa de UX pendiente.
-- Eliminar el último objetivo → propuesta pendiente D04: Home sin objetivo y CTA Elegir objetivo. Reutilizar solo la selección de intención de S01 y la propuesta S03; no reiniciar el onboarding completo, repetir bienvenida ni volver a pedir autorización por eliminar un objetivo. La recuperación de acceso, si procede por su estado observado, es independiente. No mostrar un cero de progreso ni una propuesta automática nueva.
+- Eliminar el último objetivo → D04 confirmada en #23: Home sin objetivo y CTA Elegir objetivo. Reutilizar solo la selección de intención de S01 y la propuesta S03; no reiniciar el onboarding completo, repetir bienvenida ni volver a pedir autorización por eliminar un objetivo. La recuperación de acceso, si procede por su estado observado, es independiente. No mostrar un cero de progreso ni una propuesta automática nueva.
 
 ## 3. Inventario cerrado de superficies
 
@@ -48,7 +48,7 @@ Siete superficies propias, una autorización del sistema, un widget y una notifi
 | S02 Conectar con Salud | Qué lee, para qué, solo lectura y dispositivo | Conectar con Salud; Reintentar si capacidad/error | Volver; Revisar acceso cuando pertinente | S01; recuperación desde S03/S07 | Autorización nativa → S03; volver S01 | Disponible; no disponible observado; solicitud en curso/error; sin afirmar acceso concedido |
 | S03 Tu punto de partida | Análisis, periodo observado, baseline, propuesta explicada por métrica | Usar este objetivo / Usar estos objetivos | Ajustar; Añadir otra métrica; Reintentar/Revisar acceso en vacío | S02/autorización; S05 cancelar/guardar borrador | S05 o S04 tras aceptación | Carga; suficiente; limitado; insuficiente; métrica sin datos; propuesta pendiente; error |
 | S04 Esta semana (Home) | Intervalo, estado por métrica, progreso, restante y días; sin reparto diario | Ajustar objetivo como acción disponible; consulta no exige CTA | Ajustes; Cómo interpretamos tu ritmo; resumen disponible | Aceptación, aperturas, widget/aviso, fin de edición | S05, S06, S07, S01 sin objetivos | Un/dos objetivos; estados diferentes; ritmo desconocido; completado; dato antiguo/desconocido; semana nueva; error |
-| S05 Ajustar objetivo (hoja) | Valor semanal, unidad, periodo de efecto explícito; baseline como contexto | Aplicar / Guardar cambios, según origen | Cancelar; Eliminar objetivo activo con confirmación | S03, S04, S06; configuración manual solo si D05 aprobado | Pantalla origen; S04 vacío tras última eliminación si D04 aprobado | Borrador; valor vacío/no válido; sin cambios; persistencia falla; confirmación eliminar; segunda métrica |
+| S05 Ajustar objetivo (hoja) | Valor semanal, unidad, periodo de efecto explícito; baseline como contexto | Aplicar / Guardar cambios, según origen | Cancelar; Eliminar objetivo activo con confirmación | S03, S04, S06; configuración manual solo si D05 aprobado | Pantalla origen; S04 vacío tras última eliminación con D04 confirmada | Borrador; valor vacío/no válido; sin cambios; persistencia falla; confirmación eliminar; segunda métrica |
 | S06 Tu semana | Fechas, resultado por objetivo, completo/parcial/desconocido; objetivo ya continúa automáticamente con igual valor | Ver esta semana | Ajustar | Resumen accesible desde Home tras fin de intervalo; no bloquea nueva semana | S04 actual o S05 | Ambos/uno/ninguno completos; dato incompleto; sin confirmación para continuar |
 | S07 Ajustes | Salud, privacidad, objetivos, bienestar; aviso opcional y estado real del permiso | Activar aviso (solicita permiso del sistema) | Desactivar; Revisar acceso; Volver | S04/S02 recuperación | Sistema o regreso a S04 | Aviso desactivado, solicitud, permitido, no permitido observado; sin datos; no hay selector de idioma aprobado |
 | X01 Autorización de Salud (sistema) | Panel nativo; no recrear controles propios | Acción del sistema | Acción del sistema | S02 | S03 o error S02 | Solicitud finalizada/cancelada/error según contrato técnico, sin concluir lectura |
@@ -79,12 +79,12 @@ Son dimensiones combinables por métrica, no un enum lineal. Baseline y patrón 
 | Datos temporalmente no actualizados | Snapshot previo actual + consulta fallida o criterio freshness explícito | Aviso «Mostramos la última información disponible», fecha original; ritmo «según estos datos» | Reintentar; conservar snapshot sin actualizar fecha ficticia |
 | Sin snapshot de semana actual | No hay acumulado válido de ese intervalo | «Todavía no hay información disponible de esta semana»; restante desconocido | Consultar; nunca usar acumulado de semana pasada |
 | Cero válido | Agregado cero con cobertura suficiente según contrato, no consulta vacía | 0 / objetivo y gap calculable | Actualización normal |
-| Ritmo conocido | Patrón apto y evaluación del motor por métrica | A tu ritmo / Por delante / Necesitas algo más de actividad | Explicación breve; no umbrales UI |
+| Ritmo conocido | Patrón apto y evaluación del motor por métrica | A tu ritmo / Por delante / Algo por debajo de tu ritmo habitual | Explicación breve; no umbrales UI |
 | Ritmo desconocido | Patrón insuficiente aunque progreso sea válido | Progreso y restante; «Todavía no podemos estimar tu ritmo habitual» | Consulta futura puede habilitar patrón |
 | Objetivo completado | Progreso válido ≥ objetivo | «Objetivo completado», restante 0; cifra real puede superar objetivo, barra limitada visualmente | Mantener hasta cierre; no aumentar objetivo |
 | Semana terminada | Intervalo terminó según calendario/zona confirmados | S06 por métrica, neutral si incompleto/desconocido | Continuación automática con igual valor; consultar resumen o ajustar, sin bloquear seguimiento |
 | Error recuperable | Error de solicitud, consulta, análisis o guardado | Aviso en contexto, sin borrar información aceptada | Reintentar misma operación; cancelar edición restaura origen |
-| Sin objetivos | Eliminación del último tras onboarding completo | S04 vacío propuesto; no métricas falsas | Elegir objetivo → selección reutilizada y propuesta, sin reiniciar onboarding; estado vacío/eliminación pendiente D04 |
+| Sin objetivos | Eliminación del último tras onboarding completo | S04 vacío propuesto; no métricas falsas | Elegir objetivo → selección reutilizada y propuesta, sin reiniciar onboarding; estado vacío/eliminación confirmado en #23 |
 
 Prioridad visual propuesta: integridad/edad del dato → completado si dato válido → ritmo conocido → ritmo desconocido. Un error de la segunda métrica no borra la primera. No hay estado global «A tu ritmo» si contradice una tarjeta. Home puede titular «Esta semana» y mostrar ambos estados.
 
@@ -125,7 +125,7 @@ Números, fechas, plurales y unidades deben formatearse según región; no conca
 | Salud | Tus datos permanecen en este dispositivo | Your data stays on this device |
 | Baseline | Media de las últimas 4 semanas: 38.500 pasos/semana | Average over the last 4 weeks: 38,500 steps/week |
 | Propuesta | Para empezar, te proponemos 40.000 pasos por semana. Puedes ajustarlo. | Start with 40,000 steps a week. You can adjust it. |
-| Ritmo | A tu ritmo / Por delante de tu ritmo habitual / Necesitas algo más de actividad | On track for your usual pace / Ahead of your usual pace / A little more activity would help |
+| Ritmo | A tu ritmo / Por delante de tu ritmo habitual / Algo por debajo de tu ritmo habitual | On track for your usual pace / Ahead of your usual pace / Slightly below your usual pace |
 | Sin patrón | Todavía no podemos estimar tu ritmo habitual | We can’t estimate your usual pace yet |
 | Restante | Te quedan 7.600 pasos esta semana | 7,600 steps left this week |
 | Explicación secundaria | Cómo interpretamos tu ritmo | How we interpret your pace |
@@ -143,16 +143,15 @@ No bloquean exploración reversible; sí impiden cerrar un handoff implementable
 | ID | Decisión pendiente | Recomendación y motivo | Responsable |
 | --- | --- | --- | --- |
 | D01 | Zona horaria, momento de corte semanal, día en curso y cambios de calendario | La primera semana desde lunes ya está confirmada; concretar los detalles temporales antes de validar cifras/días o programar aviso | Product + ingeniería |
-| D04 | Efecto de editar/eliminar en semana activa; último objetivo | Recomendar efecto explícito en semana actual sin alterar actividad observada; último eliminado devuelve vacío con Elegir objetivo; confirmar historia del resumen | Product |
 | D05 | Configuración manual sin baseline, no garantizada por scope | Permitir solo si progreso puede observarse; patrón desconocido. Sin datos actuales, no prometer seguimiento | Product |
 | D06 | Selección de idioma | Sistema y ajustes de idioma de iOS; sin selector propio, pendiente confirmación | Product |
 | D07 | Cuándo dato antiguo pierde estado de ritmo; etiquetas de consulta/dato | Marcar antigüedad y no presentar ritmo como actual; reglas freshness no son umbrales UX inventados | Product + ingeniería |
 | D08 | Baseline mínimo 4 semanas vs histórico limitado utilizable | Motor debe distinguir mínimo preferido, suficiencia real y patrón; no inventar porcentaje de subida ni asumir media aritmética | Product |
 | D09 | Horario del aviso y cierre visible con datos tardíos | Aviso opcional único sin datos; resumen reconoce datos incompletos y no cierra falsamente como éxito | Product + ingeniería |
 
-D10 resuelta: ocho semanas tentativas, sin compromiso rígido ni prisa. La revisión de Product del 4 de octubre confirma la fuente integrada; no se vuelve a solicitar confirmación del plazo. Product confirma también el onboarding solo hasta la primera aceptación, la reanudación de etapas pendientes y Home en aperturas posteriores. César confirma después D02 (semana actual completa desde lunes, sin prorrateo) y D03 (continuidad automática con igual valor y sin confirmación). D04–D05 siguen pendientes.
+D10 resuelta: ocho semanas tentativas, sin compromiso rígido ni prisa. La revisión de Product del 4 de octubre confirma la fuente integrada; no se vuelve a solicitar confirmación del plazo. Product confirma también el onboarding solo hasta la primera aceptación, la reanudación de etapas pendientes y Home en aperturas posteriores. César confirma después D02 (semana actual completa desde lunes, sin prorrateo) y D03 (continuidad automática con igual valor y sin confirmación). D04 queda confirmada por César en #23: edición en semana actual conservando actividad, eliminación con confirmación y Home vacío sin repetir onboarding. D05 sigue pendiente.
 
-Las consultas a César se secuencian: primero detalles de calendario/zona aún abiertos; después histórico insuficiente/objetivo y edición. Arranque D02 y continuidad D03 están cerrados. El inventario de pendientes conserva contexto, no es un cuestionario simultáneo.
+Las consultas a César se secuencian: primero detalles de calendario/zona aún abiertos; después histórico insuficiente/objetivo. Arranque D02 y continuidad D03 están cerrados. El inventario de pendientes conserva contexto, no es un cuestionario simultáneo.
 
 También queda por definir el rango permitido y tratamiento de decimales al editar energía activa. Los ejemplos 38.500→40.000 son demostraciones, no política de progresión aprobada.
 
@@ -166,11 +165,11 @@ Recorridos reproducibles con datos ficticios:
 4. Progreso apto sin patrón → restante visible, ritmo desconocido; no regla lineal.
 5. Consulta falla tras snapshot válido → dato anterior con fecha original; nueva semana sin snapshot → desconocido, no acumulado anterior.
 6. 40.600 / 40.000 → completado, restante 0 y cifra real preservada; sin badges ni aumento.
-7. Semana termina con objetivo parcial → nueva semana sigue automáticamente con el mismo objetivo → resumen neutral opcional → Ver esta semana/Ajustar. No pedir Mantener ni exigir abrir el resumen para seguir. La aplicación temporal de la edición sigue D04.
+7. Semana termina con objetivo parcial → nueva semana sigue automáticamente con el mismo objetivo → resumen neutral opcional → Ver esta semana/Ajustar. No pedir Mantener ni exigir abrir el resumen para seguir. Guardar cambios aplica en la semana actual y conserva la actividad registrada (D04 confirmada en #23).
 8. Revisar en ventana estrecha/paisaje/iPad y texto ampliado/EN: scroll, unidad legible, acciones accesibles. Figma ilustra composición, no valida runtime.
 9. Widget refleja uno/dos objetivos, antigüedad y ausencia de datos; pulsar vuelve Home. Aviso opt-in sin valores sensibles; desactivar cancela programación.
 
-Ejecutado: lectura de fuentes integradas, identidad App y Figma Full comprobadas, inspección de estructura de Figma y revisión visual según evidencia de entrega; `git diff --check` y checks documentales/kit se registrarán en PR. Pendiente: revisión César/Product, decisiones D01 y D04–D09, revisión independiente de SHA y CI. No aplicable a esta PR: compilación de app, permisos reales, VoiceOver/Dynamic Type ejecutados, Watch/background/widget real y TestFlight. No se declara resuelta la hipótesis por wireframes.
+Ejecutado: lectura de fuentes integradas, identidad App y Figma Full comprobadas, inspección de estructura de Figma y revisión visual según evidencia de entrega; `git diff --check` y checks documentales/kit se registrarán en PR. Pendiente: revisión César/Product, decisiones D01 y D05–D09, revisión independiente de SHA y CI. No aplicable a esta PR: compilación de app, permisos reales, VoiceOver/Dynamic Type ejecutados, Watch/background/widget real y TestFlight. No se declara resuelta la hipótesis por wireframes.
 
 ## 9. Enlaces de revisión y evidencia visual
 
@@ -196,6 +195,24 @@ Dirección general aprobada; seis ajustes completados antes de alta fidelidad: s
 
 El estado dual conserva la Home de un objetivo: la segunda métrica sigue optativa. [Home dual principal](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=4-123). Al confirmar el primer objetivo a mitad de semana, no se empieza un intervalo móvil de siete días ni se reduce la meta por los días restantes. D01 aún concreta zona horaria/cambio temporal y el motor define cómo obtiene datos aptos.
 
-Este cierre autoriza preparar la siguiente fase visual, sin aprobar algoritmos pendientes, implementación, merge o publicación. Los documentos fuente aún deben sincronizarse por Product con las decisiones recientes; el encargo directo de César prevalece sobre el anterior reparto Home y CTA Mantener. Ingeniería y Product han sido informados.
+Este cierre autoriza preparar la siguiente fase visual, sin aprobar algoritmos pendientes, implementación, merge o publicación. Las fuentes canónicas conservan el comportamiento vigente; la alta fidelidad no reabre estas decisiones.
 
 Validación del cierre: composiciones Figma principal, estados y flujo revisadas tras los ajustes; Home principal/dual y variantes sin texto diario. Composición principal final: 136 descendientes (10 frames, 102 textos, 24 instancias), SF Pro, sin imágenes; estado dual principal con CTA Ajustar objetivos y explicación secundaria. El detalle explicativo es una entrada contraída, no prototipo funcional. `git diff --check` ejecutado sin errores.
+
+
+## 11. Alta fidelidad del MVP — Issue #23
+
+Dirección visual S01–S04 aprobada por César. Figma es la fuente visual editable; esta sección enlaza la entrega y registra límites de interacción, sin duplicar valores de estilo. [Issue #23](https://github.com/cesarg88/HealthGoals/issues/23).
+
+- [Base y Home](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-2): SF Pro y Light/Dark; restante sobre acumulado, ritmo sin waveform, estado neutral y Ajustar como acción de texto.
+- [S05–S07 y widget](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=37-114): edición de propuesta, resultado completo/parcial, continuidad automática, ajustes básicos y widget mediano de uno/dos objetivos.
+- [Estados y aviso](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=54-166): resumen desconocido, widget completado/desconocido/dato antiguo, información expandida de Ajustes y copy final de aviso local.
+- [Edición activa y confirmación](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=55-186): guardar cambia la semana actual conservando actividad; Cancelar conserva origen. Eliminar requiere confirmación y no borra datos de Salud. La última eliminación deja Home sin objetivo; Elegir objetivo reutiliza selección/propuesta sin repetir onboarding ni permisos. Esta decisión de César resuelve D04.
+
+Desde S03, Aplicar vuelve a la propuesta sin activarla; desde Home, Guardar cambios aplica el objetivo activo. No se inventan rangos ni política de decimales. Errores de guardado conservan entrada y ofrecen reintento; valores vacíos/no válidos impiden guardar, según validación del motor. No se exige abrir S06 para continuar otra semana.
+
+Widget: tap abre Home, sin edición. Dato desconocido no muestra cero ni diagnostica permiso; dato antiguo marca la fecha original y no afirma ritmo actual. Una métrica desconocida no borra la otra. En texto ampliado se prioriza restante/unidad y antigüedad sobre ritmo; no se fuerza el contenido a caber reduciendo la tipografía. Dimensiones de Figma son referencias y se adaptan a la familia mediana del dispositivo.
+
+Aviso local opcional: «Así va tu semana» / «Mira cómo estás avanzando y qué te queda». Sin valores de salud; tap abre Home. La presentación y autorización pertenecen a iOS; horario y programación siguen D09.
+
+Las tarjetas/campos crecen con texto, acciones tienen área mínima de 44 pt y lectura semántica con unidad/estado; barras y símbolos decorativos no duplican VoiceOver. S05 debe permitir scroll con teclado sin ocultar Guardar/Aplicar. iPad/paisaje conservan orden y ancho legible. Se verifica editabilidad, fuente, contraste de la base y composición en Figma; Dynamic Type, VoiceOver, Reduce Motion, teclado y WidgetKit reales requieren validación en dispositivo. No se presenta el mockup como prototipo funcional ni como prueba de SwiftUI.
