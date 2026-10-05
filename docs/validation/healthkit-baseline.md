@@ -1,5 +1,7 @@
 # Validación de baseline real en iPhone
 
+> Guía histórica de su entrega. Para el onboarding vigente desde #29 (selección de una o ambas métricas, autorización solo de los tipos elegidos y just-in-time al añadir), usar [selección y autorización por métrica](metric-selection.md). Las observaciones físicas antiguas no acreditan un SHA posterior ni el nuevo recorrido; los casos de edición, eliminación y ritmo siguen siendo referencias de regresión.
+
 Esta guía comprueba la segunda vertical de [Issue #18](https://github.com/cesarg88/HealthGoals/issues/18): intención → autorización → lectura real → media semanal. CI y los fakes de tests no demuestran que Salud del dispositivo entregue datos accesibles. La aceptación física corresponde a César; no registrar cifras personales, capturas de Salud ni datos médicos en GitHub.
 
 ## Preparación

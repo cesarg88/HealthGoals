@@ -27,14 +27,13 @@ enum AuthorizationRequestState: Equatable { case idle, requesting, unavailable, 
 @MainActor
 @Observable
 final class OnboardingModel {
-    private(set) var intention: ActivityIntention?
+    private(set) var selectedMetrics: Set<ActivityMetric> = []
     private(set) var stage: OnboardingStage = .intention
     private(set) var requestState: AuthorizationRequestState = .idle
     private(set) var baselineStates: [ActivityMetric: BaselineState] = [:]
     private(set) var draftGoals: [ActivityMetric: WeeklyGoal] = [:]
     private(set) var activeGoals: [WeeklyGoal] = []
     private(set) var progressStates: [ActivityMetric: WeeklyProgressState] = [:]
-    private(set) var secondaryMetric: ActivityMetric?
     private(set) var hasCompletedOnboarding = false
     private(set) var activeWeek: ActiveWeek?
     private let progressReading: (any HealthProgressReading)?
@@ -43,6 +42,8 @@ final class OnboardingModel {
     private var progressTokens: [ActivityMetric: UUID] = [:]
     private var patterns: [ActivityMetric: HistoricalPattern] = [:]
     private var patternWindows: [ActivityMetric: PatternWindow] = [:]
+    private var authorizationTask: Task<Void, Error>?
+    private var preparedMetrics: Set<ActivityMetric> = []
     private let healthAuthorization: any HealthAuthorizing
     private let healthReading: any HealthReading
     private let now: () -> Date
@@ -54,7 +55,7 @@ final class OnboardingModel {
     private static let progressKey = "onboarding.progress"
 
     var canContinue: Bool {
-        intention != nil
+        !selectedMetrics.isEmpty
     }
 
     init(
@@ -74,16 +75,21 @@ final class OnboardingModel {
         self.healthAuthorization = healthAuthorization
         self.defaults = defaults
         let progress = defaults.dictionary(forKey: Self.progressKey)
-        intention = (progress?["intention"] as? String).flatMap(ActivityIntention.init(rawValue:))
+        if let records = progress?["selectedMetrics"] as? [String] {
+            selectedMetrics = Set(records.compactMap(ActivityMetric.init(rawValue:)))
+        } else if let legacy = (progress?["intention"] as? String).flatMap(ActivityIntention.init(rawValue:)) {
+            selectedMetrics = [legacy.metric]
+        }
         restore(progress)
+        if progress?["selectedMetrics"] == nil, !selectedMetrics.isEmpty { saveProgress() }
     }
 
     var baselineState: BaselineState {
-        intention.map { baselineState(for: $0.metric) } ?? .loading
+        proposalMetrics.first.map { baselineState(for: $0) } ?? .loading
     }
 
     var draftGoal: WeeklyGoal? {
-        intention.flatMap { draftGoals[$0.metric] }
+        proposalMetrics.first.flatMap { draftGoals[$0] }
     }
 
     var activeGoal: WeeklyGoal? {
@@ -95,8 +101,7 @@ final class OnboardingModel {
     }
 
     var proposalMetrics: [ActivityMetric] {
-        guard let metric = intention?.metric else { return [] }
-        return [metric] + (secondaryMetric.map { [$0] } ?? [])
+        ActivityMetric.allCases.filter { selectedMetrics.contains($0) }
     }
 
     var canAcceptGoals: Bool {
@@ -116,7 +121,7 @@ final class OnboardingModel {
 
     func select(_ intention: ActivityIntention) {
         guard stage == .intention else { return }
-        self.intention = intention
+        if !selectedMetrics.insert(intention.metric).inserted { selectedMetrics.remove(intention.metric) }
         saveProgress()
     }
 
@@ -142,7 +147,8 @@ final class OnboardingModel {
         }
         requestState = .requesting
         do {
-            try await healthAuthorization.requestReadAuthorization()
+            try await healthAuthorization.requestReadAuthorization(for: selectedMetrics)
+            preparedMetrics.formUnion(selectedMetrics)
             // Only the request finished. Read access and available data remain unknown.
             stage = .startingPoint
             requestState = .idle
@@ -152,24 +158,27 @@ final class OnboardingModel {
         }
     }
 
-    func addSecondaryMetric() {
-        guard stage == .startingPoint, secondaryMetric == nil, let primary = intention?.metric else { return }
-        secondaryMetric = primary == .steps ? .activeEnergy : .steps
+    func addMetric(_ metric: ActivityMetric) {
+        guard stage == .startingPoint, !selectedMetrics.contains(metric) else { return }
+        selectedMetrics.insert(metric)
+        saveProgress()
     }
 
-    func removeSecondaryMetric() {
-        guard let metric = secondaryMetric else { return }
-        secondaryMetric = nil
+    func removeMetric(_ metric: ActivityMetric) {
+        guard stage == .startingPoint else { return }
+        selectedMetrics.remove(metric)
+        preparedMetrics.remove(metric)
         baselineTokens[metric] = nil
         baselineTasks[metric] = nil
         baselineStates[metric] = nil
         draftGoals[metric] = nil
         loadedBaselines.remove(metric)
+        saveProgress()
     }
 
     @discardableResult
     func adjustDraft(to text: String, metric: ActivityMetric? = nil) -> Bool {
-        guard stage == .startingPoint, let metric = metric ?? intention?.metric,
+        guard stage == .startingPoint, let metric = metric ?? proposalMetrics.first,
               draftGoals[metric] != nil, let goal = parsedGoal(text, metric: metric)
         else { return false }
         draftGoals[metric] = goal
@@ -211,8 +220,7 @@ final class OnboardingModel {
     func chooseGoal() {
         guard stage == .completed, activeGoals.isEmpty else { return }
         stage = .intention
-        intention = nil
-        secondaryMetric = nil
+        selectedMetrics = []
         baselineStates = [:]
         draftGoals = [:]
         loadedBaselines = []
@@ -223,6 +231,8 @@ final class OnboardingModel {
 
     func cancelChoosingGoal() {
         guard hasCompletedOnboarding, stage != .completed else { return }
+        baselineTokens = [:]
+        baselineTasks = [:]
         stage = .completed
         saveProgress()
     }
@@ -251,8 +261,9 @@ final class OnboardingModel {
     }
 
     func loadBaseline(retry: Bool = false) async {
-        guard let metric = intention?.metric else { return }
-        await loadBaseline(for: metric, retry: retry)
+        for metric in proposalMetrics {
+            await loadBaseline(for: metric, retry: retry)
+        }
     }
 
     func loadBaseline(for metric: ActivityMetric, retry: Bool = false) async {
@@ -273,9 +284,11 @@ final class OnboardingModel {
 private extension OnboardingModel {
     func fetchBaseline(for metric: ActivityMetric, token: UUID) async {
         do {
+            try await prepareAuthorization(for: metric, token: token)
+            guard isCurrentBaseline(metric, token: token) else { return }
             let window = try BaselineWindow(now: now(), calendar: calendar())
             let totals = try await healthReading.weeklyTotals(for: metric, in: window)
-            guard baselineTokens[metric] == token, proposalMetrics.contains(metric) else { return }
+            guard isCurrentBaseline(metric, token: token) else { return }
             if let baseline = BaselineCalculator.calculate(metric: metric, weeklyTotals: totals) {
                 baselineStates[metric] = .available(baseline)
                 draftGoals[metric] = GoalEngine.propose(from: baseline)
@@ -283,11 +296,39 @@ private extension OnboardingModel {
                 baselineStates[metric] = .insufficient
             }
         } catch {
-            guard baselineTokens[metric] == token else { return }
+            guard isCurrentBaseline(metric, token: token) else { return }
             baselineStates[metric] = .failed
         }
         loadedBaselines.insert(metric)
     }
+
+    func isCurrentBaseline(_ metric: ActivityMetric, token: UUID) -> Bool {
+        stage == .startingPoint && baselineTokens[metric] == token && selectedMetrics.contains(metric)
+    }
+
+    func prepareAuthorization(for metric: ActivityMetric, token: UUID) async throws {
+        // Serialize native requests across independently loading cards, including removed/readded metrics.
+        while let task = authorizationTask {
+            try? await task.value
+            guard isCurrentBaseline(metric, token: token) else { return }
+        }
+        guard !preparedMetrics.contains(metric), isCurrentBaseline(metric, token: token) else { return }
+        let task = Task {
+            defer { authorizationTask = nil }
+            guard healthAuthorization.isAvailable else { throw AuthorizationFailure.unavailable }
+            let needsRequest = try await healthAuthorization.needsAuthorizationRequest(for: [metric])
+            guard isCurrentBaseline(metric, token: token) else { return }
+            if needsRequest {
+                try await healthAuthorization.requestReadAuthorization(for: [metric])
+            }
+            // Request presentation/completion conveys nothing about read access or data availability.
+            if isCurrentBaseline(metric, token: token) { preparedMetrics.insert(metric) }
+        }
+        authorizationTask = task
+        try await task.value
+    }
+
+    enum AuthorizationFailure: Error { case unavailable }
 
     func startProgress(for metric: ActivityMetric) {
         guard progressTasks[metric] == nil else { return }
@@ -399,14 +440,15 @@ private extension OnboardingModel {
                 else { continue }
                 activeGoals.append(goal)
             }
+            activeGoals = ActivityMetric.allCases.compactMap { metric in activeGoals.first { $0.metric == metric } }
             if savedStage == .completed {
                 stage = .completed
                 hasCompletedOnboarding = true
                 return
             }
-        } else if savedStage == .completed, let intention,
+        } else if savedStage == .completed,
                   let rawMetric = progress["goalMetric"] as? String,
-                  let metric = ActivityMetric(rawValue: rawMetric), metric == intention.metric,
+                  let metric = ActivityMetric(rawValue: rawMetric), selectedMetrics.contains(metric),
                   let value = progress["goalValue"] as? Int, let goal = WeeklyGoal(metric: metric, value: value)
         {
             activeGoals = [goal]
@@ -415,14 +457,14 @@ private extension OnboardingModel {
             saveProgress()
             return
         }
-        guard intention != nil || hasCompletedOnboarding else { return }
+        guard !selectedMetrics.isEmpty || hasCompletedOnboarding else { return }
         stage = savedStage == .completed ? .startingPoint : savedStage
-        if intention == nil { stage = .intention }
+        if selectedMetrics.isEmpty { stage = .intention }
     }
 
     func saveProgress() {
         var progress: [String: Any] = ["stage": stage.rawValue]
-        if let intention { progress["intention"] = intention.rawValue }
+        progress["selectedMetrics"] = proposalMetrics.map(\.rawValue)
         if hasCompletedOnboarding {
             progress["hasCompletedOnboarding"] = true
             progress["goals"] = activeGoals.map { ["metric": $0.metric.rawValue, "value": $0.value] }

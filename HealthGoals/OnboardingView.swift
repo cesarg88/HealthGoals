@@ -42,6 +42,7 @@ private extension OnboardingView {
                 Text("intention.promise")
             }
             Text("intention.question").font(.title2.bold())
+            Text("intention.selectionHelp").font(.subheadline).foregroundStyle(.secondary)
             ForEach(ActivityIntention.allCases) { intention in
                 intentionButton(intention)
             }
@@ -57,7 +58,7 @@ private extension OnboardingView {
     }
 
     func intentionButton(_ intention: ActivityIntention) -> some View {
-        let selected = model.intention == intention
+        let selected = model.selectedMetrics.contains(intention.metric)
         return Button {
             model.select(intention)
         } label: {
@@ -70,7 +71,7 @@ private extension OnboardingView {
                         .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 0)
-                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                Image(systemName: selected ? "checkmark.square.fill" : "square")
                     .accessibilityHidden(true)
             }
             .padding(Constants.optionSpacing)
@@ -88,7 +89,8 @@ private extension OnboardingView {
     var healthContent: some View {
         Group {
             heading("health.title", identifier: "onboarding.health.title")
-            Text("health.explanation")
+            Text(LocalizedStringKey(model.selectedMetrics == [.steps] ? "health.stepsExplanation" :
+                    model.selectedMetrics == [.activeEnergy] ? "health.activityExplanation" : "health.explanation"))
             Text("health.privacy")
             if model.requestState == .unavailable {
                 Text("health.unavailable").accessibilityIdentifier("onboarding.health.error")

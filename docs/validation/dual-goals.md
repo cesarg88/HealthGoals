@@ -1,5 +1,7 @@
 # Validación en dispositivo — dos objetivos y edición activa
 
+> Guía histórica de su entrega. Para el onboarding vigente desde #29 (selección de una o ambas métricas, autorización solo de los tipos elegidos y just-in-time al añadir), usar [selección y autorización por métrica](metric-selection.md). Las observaciones físicas antiguas no acreditan un SHA posterior ni el nuevo recorrido; los casos de edición, eliminación y ritmo siguen siendo referencias de regresión.
+
 Entrega de [Issue #22](https://github.com/cesarg88/HealthGoals/issues/22). César valida la integración real; tests y CI no sustituyen Salud, teclado, VoiceOver ni persistencia en una instalación anterior.
 
 ## Preparación

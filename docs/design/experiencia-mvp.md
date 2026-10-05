@@ -8,17 +8,17 @@ Estado: dirección UX aprobada por César y wireframes cerrados tras los ajustes
 
 El producto transforma actividad observada en un objetivo semanal controlado por la persona, interpreta el progreso respecto a su patrón histórico y traduce el restante. La unidad de éxito es una semana flexible y el regreso a otra semana. Diseñamos para personas con iPhone y Apple Watch, no para rendimiento deportivo. Sin registro manual de actividad, cuentas, coaching, streaks o nuevas métricas.
 
-Caminar más selecciona Pasos como principal; Moverme más selecciona Actividad, con kcal activas como unidad secundaria. Solo se añade la otra métrica por elección. La primera propuesta muestra un único objetivo. La Home prioriza estado por métrica, progreso y restante; la Home no muestra reparto lineal ni cuota diaria. La explicación del ritmo es secundaria y se abre a petición; el estado personal y el restante semanal siguen visibles.
+Caminar más selecciona Pasos; Moverme más selecciona Actividad, con kcal activas como unidad secundaria. Pueden elegirse una o ambas independientemente desde el comienzo, sin selección inicial; Continuar requiere al menos una. Solo se añade otra por elección explícita. La propuesta muestra las métricas elegidas en orden Pasos → Actividad. La Home prioriza estado por métrica, progreso y restante; la Home no muestra reparto lineal ni cuota diaria. La explicación del ritmo es secundaria y se abre a petición; el estado personal y el restante semanal siguen visibles.
 
 Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES. Documentación española; textos ingleses son contenido de interfaz para localización. Las ocho semanas son una referencia tentativa, sin compromiso rígido ni prisa, como recoge el producto integrado y confirma Product en su revisión del 4 de octubre. D10 queda resuelta; no se requiere otra confirmación ni se fija una fecha. La simplicidad sigue siendo un criterio de diseño.
 
 ## 2. Recorrido completo propuesto
 
-1. Primera apertura → S01 bienvenida e intención. Dos opciones excluyentes; continuar deshabilitado hasta seleccionar. Volver permite cambiar sin guardar un objetivo.
-2. S02 contexto HealthKit → CTA Conectar con Salud → autorización nativa. Solicitar lectura de pasos y energía activa; explicar uso y almacenamiento local. La autorización del sistema no es una pantalla propia rediseñada.
+1. Primera apertura → Qué quieres mejorar (referencia histórica S01): dos opciones independientes; ninguna inicial y Continuar deshabilitado hasta elegir una o ambas. Volver conserva la selección sin guardar un objetivo.
+2. S02 contexto HealthKit → CTA Conectar con Salud → autorización nativa. Solicitar lectura únicamente de las métricas elegidas, pasos y/o energía activa; explicar uso y almacenamiento local. La autorización del sistema no es una pantalla propia rediseñada.
 3. Al regresar → S03 análisis: carga indeterminada, sin porcentaje ni promesa de duración. Solicitud completada no equivale a permiso de lectura concedido.
 4. Consulta con información apta → S03 baseline y propuesta juntos: periodo real, estimación semanal, explicación y objetivo editable. Ajustar abre S05; aceptar activa únicamente los objetivos elegidos. Antes de aceptar se explica que la primera semana es la semana actual completa, contando la actividad accesible desde el lunes y sin prorratear el objetivo (D02 confirmada).
-5. Opcional Añadir Actividad/Pasos → segunda sección en S03 o S05, con su propio historial/propuesta/estado. No repetir onboarding ni activar automáticamente.
+5. Opcional Añadir Actividad/Pasos si aún no fue elegida → segunda sección en Tu punto de partida, con su propio historial/propuesta/estado. Comprobar necesidad de solicitud nativa del nuevo tipo, solicitar cuando corresponda y después consultar. No repetir bienvenida ni activar objetivos automáticamente.
 6. Primera aceptación → onboarding completado → S04 Home. Las aperturas posteriores van a Home, no reinician la bienvenida ni la autorización. Consultas posteriores actualizan los datos locales; el objetivo no aumenta solo.
 7. Durante la semana → S04 permanece como destino de apertura, widget y notificación. Ajustar abre S05. Explicación del ritmo se expande en la tarjeta, sin pantalla analítica adicional.
 8. Al terminar el intervalo semanal → el objetivo continúa automáticamente con el mismo valor para la nueva semana, sin confirmación ni incremento. S06 es un resumen no bloqueante con resultados por métrica, incluidos parciales/desconocidos; su CTA principal es Ver esta semana y el secundario Ajustar. El resumen no es un paso necesario para activar el seguimiento de la nueva semana (D03 confirmada). Guardar cambios aplica en la semana actual y conserva la actividad registrada (D04 confirmada en #23).
@@ -32,11 +32,11 @@ Compatibilidad aprobada: iOS/iPadOS 26, iPhone/iPad y todas orientaciones, EN/ES
 - No hay datos accesibles → S03 explica que puede faltar información o acceso y ofrece Revisar acceso y Reintentar. Nunca afirma «denegaste el permiso».
 - Histórico reducido pero utilizable según motor → S03 indica periodo real. Si no permite patrón, S04 conserva progreso/gap y dice «Todavía no podemos estimar tu ritmo habitual».
 - Sin baseline apto → S03 sin número recomendado. Configurar manualmente es una alternativa pendiente D05; si se aprueba, reutiliza S05 y no pide registros de actividad.
-- Datos de una métrica solamente → avanzar con la métrica disponible si elegida; no sustituir la intención principal silenciosamente. Si principal no disponible y otra sí, ofrecer cambio explícito a la otra intención.
+- Datos de una métrica solamente → conservar su propuesta y mantener la otra elegida visible con insuficiencia y recuperación neutral. Avanzar con la apta solo después de retirar voluntariamente la insuficiente; no retirar ni sustituir silenciosamente. Ambas insuficientes impiden aceptar.
 - Posible actividad incompleta → texto sobre disponibilidad de la métrica; no inferir ausencia de Watch. Los pasos pueden seguir disponibles.
 - Error durante semana activa → S04 mantiene snapshot de la misma semana con aviso/fecha. Sin snapshot de esa semana, muestra desconocido. Reintentar no rejuvenece el timestamp.
 - Cerrar durante onboarding → retomar la etapa pendiente. Product confirma este comportamiento: no repetir etapas completadas ni crear un objetivo por reabrir. Ingeniería debe preservarlo o escalar una limitación real; no es una alternativa de UX pendiente.
-- Eliminar el último objetivo → D04 confirmada en #23: Home sin objetivo y CTA Elegir objetivo. Reutilizar solo la selección de intención de S01 y la propuesta S03; no reiniciar el onboarding completo, repetir bienvenida ni volver a pedir autorización por eliminar un objetivo. La recuperación de acceso, si procede por su estado observado, es independiente. No mostrar un cero de progreso ni una propuesta automática nueva.
+- Eliminar el último objetivo → D04 confirmada en #23: Home sin objetivo y CTA Elegir objetivo. Reutilizar solo la selección de intención de S01 y la propuesta S03; no reiniciar el onboarding completo ni repetir bienvenida. La nueva selección comprueba la necesidad de autorización por los tipos elegidos antes de consultar; eliminar por sí solo no solicita permisos. No mostrar un cero de progreso ni una propuesta automática nueva.
 
 ## 3. Inventario cerrado de superficies
 
@@ -44,7 +44,7 @@ Siete superficies propias, una autorización del sistema, un widget y una notifi
 
 | ID y nombre | Propósito e información principal | CTA principal | CTA secundaria | Entrada | Salida | Estados especiales |
 | --- | --- | --- | --- | --- | --- | --- |
-| S01 Bienvenida e intención | Promesa breve, semana flexible; Caminar más/Pasos o Moverme más/Actividad | Continuar | Ninguna | Primera apertura; etapa pendiente; solo selección al elegir objetivo tras eliminar último (D04) | S02 durante onboarding; S03 al elegir otro objetivo con contexto ya completado | Sin selección; selección única; variante sin bienvenida/permisos para usuario con onboarding completado |
+| S01 Bienvenida e intención | Promesa breve, semana flexible; Caminar más/Pasos o Moverme más/Actividad | Continuar | Ninguna | Primera apertura; etapa pendiente; solo selección al elegir objetivo tras eliminar último (D04) | S02 durante onboarding; S03 al elegir otro objetivo con contexto ya completado | Sin selección; una o ambas independientes; variante sin bienvenida para usuario con onboarding completado |
 | S02 Conectar con Salud | Qué lee, para qué, solo lectura y dispositivo | Conectar con Salud; Reintentar si capacidad/error | Volver; Revisar acceso cuando pertinente | S01; recuperación desde S03/S07 | Autorización nativa → S03; volver S01 | Disponible; no disponible observado; solicitud en curso/error; sin afirmar acceso concedido |
 | S03 Tu punto de partida | Análisis, periodo observado, baseline, propuesta explicada por métrica | Usar este objetivo / Usar estos objetivos | Ajustar; Añadir otra métrica; Reintentar/Revisar acceso en vacío | S02/autorización; S05 cancelar/guardar borrador | S05 o S04 tras aceptación | Carga; suficiente; limitado; insuficiente; métrica sin datos; propuesta pendiente; error |
 | S04 Esta semana (Home) | Intervalo, estado por métrica, progreso, restante y días; sin reparto diario | Ajustar objetivo como acción disponible; consulta no exige CTA | Ajustes; Cómo interpretamos tu ritmo; resumen disponible | Aceptación, aperturas, widget/aviso, fin de edición | S05, S06, S07, S01 sin objetivos | Un/dos objetivos; estados diferentes; ritmo desconocido; completado; dato antiguo/desconocido; semana nueva; error |
@@ -74,7 +74,7 @@ Son dimensiones combinables por métrica, no un enum lineal. Baseline y patrón 
 | Baseline calculado | Valor, métrica, periodo y explicación del motor | S03 actividad reciente; estimación, no cifra clínica | Propuesta pendiente/lista |
 | Propuesta pendiente | No hay valor de propuesta todavía | Carga o insuficiencia, no CTA de aceptar activo | Resultado → propuesta lista; fallo → error |
 | Propuesta lista | Valor válido y origen explicado | S03 aceptar, ajustar y añadir otra métrica | Aceptar → activo; ajustar → borrador |
-| Objetivo activo | Valor aceptado persistido y ámbito semanal | S04; métrica principal primero | Consulta/edición/fin de semana |
+| Objetivo activo | Valor aceptado persistido y ámbito semanal | S04; orden Pasos → Actividad | Consulta/edición/fin de semana |
 | Datos recientes | Snapshot válido del intervalo actual, según política pendiente | Progreso/restante; actualización neutral | Nuevos datos recalculan; no tiempo real prometido |
 | Datos temporalmente no actualizados | Snapshot previo actual + consulta fallida o criterio freshness explícito | Aviso «Mostramos la última información disponible», fecha original; ritmo «según estos datos» | Reintentar; conservar snapshot sin actualizar fecha ficticia |
 | Sin snapshot de semana actual | No hay acumulado válido de ese intervalo | «Todavía no hay información disponible de esta semana»; restante desconocido | Consultar; nunca usar acumulado de semana pasada |
@@ -159,8 +159,8 @@ También queda por definir el rango permitido y tratamiento de decimales al edit
 
 Recorridos reproducibles con datos ficticios:
 
-1. Caminar → Salud → 4 semanas aptas → 38.500 baseline / 40.000 propuesta → editar → cancelar → aceptar → Home de Pasos. Verificar principal y no activar Actividad.
-2. Moverme → Actividad principal → añadir Pasos → Home con estados distintos. Verificar que cabecera no declara ambos «A tu ritmo».
+1. Caminar → Salud → 4 semanas aptas → 38.500 baseline / 40.000 propuesta → editar → cancelar → aceptar → Home de Pasos. Verificar única elección y no activar Actividad.
+2. Moverme → Actividad → añadir Pasos → Home con estados distintos. Verificar que cabecera no declara ambos «A tu ritmo».
 3. Consulta vacía → mensaje sin datos accesibles, sin permiso denegado ni cero. Reintento no reinicia onboarding.
 4. Progreso apto sin patrón → restante visible, ritmo desconocido; no regla lineal.
 5. Consulta falla tras snapshot válido → dato anterior con fecha original; nueva semana sin snapshot → desconocido, no acumulado anterior.
@@ -232,3 +232,12 @@ S05 distingue Aplicar borrador y Guardar cambios del objetivo activo. D04 aplica
 
 
 Corrección tras recorrido físico de #22: Product aprueba ayuda neutral por métrica en insuficiencia («puede faltar historial o acceso», revisar Salud y volver a Reintentar); no se diagnostica denegación ni se vuelve a solicitar autorización automáticamente. El error técnico mantiene su copy de lectura fallida. El indicador de consulta de Home conserva su lugar en la cabecera para evitar desplazamientos al actualizar, sin alterar estado/lecturas/cálculos. Aplicar sigue guardando borrador, con aceptación conjunta en S03; no se añade estado Aceptado por métrica. [Decisión de Product](https://github.com/cesarg88/HealthGoals/issues/22#issuecomment-5993502663) y [revalidación física](../validation/dual-goals.md) conservan alcance y evidencia pendiente.
+
+
+## 14. Selección independiente y autorización por métrica — Issue #29
+
+La [Issue #29](https://github.com/cesarg88/HealthGoals/issues/29) reemplaza la exclusividad inicial de las entregas históricas #16/#22: Qué quieres mejorar permite seleccionar/deseleccionar Pasos y Actividad independientemente. Casillas con marca y estado accesible, ninguna selección inicial y Continuar deshabilitado con cero. La ayuda «Puedes elegir una o las dos» aclara la interacción sin reabrir dirección visual. [Estados Figma](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=64-208), [Claro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-6) y [Oscuro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-178) mantienen la composición aprobada, con [evidencia de Design](https://github.com/cesarg88/HealthGoals/issues/29#issuecomment-5995411129). Se usan nombres humanos de superficies; los códigos anteriores se conservan como referencias históricas/Figma.
+
+Conectar con Salud explica solo los tipos elegidos y solicita su lectura sin escritura. Añadir una métrica comprueba con HealthKit si corresponde presentar una solicitud, la completa cuando sea necesario y solo entonces consulta su baseline. La necesidad de solicitud y su finalización no revelan acceso READ. Tu punto de partida muestra cada métrica elegida incluso si es insuficiente: Reintentar vuelve a consultar, la ayuda neutral explica cómo revisar acceso en Salud y Retirar Pasos/Actividad cambia la selección únicamente por acción del usuario. No se acepta una propuesta mientras siga seleccionada otra sin propuesta apta; retirarla permite aceptar la apta. Ambas insuficientes o cero selecciones impiden aceptar. Ajustar conserva borradores independientes y no acepta por métrica.
+
+Volver/restaurar conserva una o ambas elecciones; se migra la intención singular sin modificar definiciones ya aceptadas. Home vacío reutiliza la elección y autorización just-in-time por necesidad del sistema; Home con objetivos activos no vuelve a solicitar por relanzar. La [guía de validación](../validation/metric-selection.md) distingue panel nuevo según iOS, ausencia accesible y errores no reproducibles. Las descripciones de comportamiento exclusivo o sin autorización just-in-time de las secciones históricas conservan el contexto anterior y quedan reemplazadas por este contrato.

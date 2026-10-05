@@ -21,7 +21,10 @@ final class BootstrapTests: XCTestCase {
         XCTAssertFalse(continueButton.isEnabled)
         capture(app)
         app.buttons["onboarding.intention.walking"].tap()
+        app.buttons["onboarding.intention.activity"].tap()
         XCTAssertTrue(continueButton.isEnabled)
+        XCTAssertTrue(app.buttons["onboarding.intention.walking"].isSelected)
+        XCTAssertTrue(app.buttons["onboarding.intention.activity"].isSelected)
         continueButton.tap()
         XCTAssertTrue(app.staticTexts["onboarding.health.title"].waitForExistence(timeout: Constants.waitTimeout))
         capture(app)
@@ -29,6 +32,13 @@ final class BootstrapTests: XCTestCase {
         XCTAssertTrue(continueButton.waitForExistence(timeout: Constants.waitTimeout))
         XCTAssertTrue(continueButton.isEnabled)
         XCTAssertTrue(app.buttons["onboarding.intention.walking"].isSelected)
+        XCTAssertTrue(app.buttons["onboarding.intention.activity"].isSelected)
+        app.buttons["onboarding.intention.walking"].tap()
+        XCTAssertFalse(app.buttons["onboarding.intention.walking"].isSelected)
+        XCTAssertTrue(app.buttons["onboarding.intention.activity"].isSelected)
+        XCTAssertTrue(continueButton.isEnabled)
+        app.buttons["onboarding.intention.activity"].tap()
+        XCTAssertFalse(continueButton.isEnabled)
     }
 
     @MainActor

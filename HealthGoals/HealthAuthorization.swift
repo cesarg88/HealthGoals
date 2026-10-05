@@ -4,7 +4,9 @@ import HealthKit
 protocol HealthAuthorizing {
     var isAvailable: Bool { get }
     /// Completes the request without exposing read authorization status.
-    func requestReadAuthorization() async throws
+    func requestReadAuthorization(for metrics: Set<ActivityMetric>) async throws
+    /// Whether a request may need presentation; never reveals granted/denied read access.
+    func needsAuthorizationRequest(for metrics: Set<ActivityMetric>) async throws -> Bool
 }
 
 @MainActor
@@ -30,14 +32,23 @@ final class HealthAuthorization: HealthAuthorizing, HealthReading, HealthProgres
 
     private var store: HKHealthStore?
 
-    func requestReadAuthorization() async throws {
+    func requestReadAuthorization(for metrics: Set<ActivityMetric>) async throws {
         guard isAvailable else { throw HKError(.errorHealthDataUnavailable) }
         let store = try availableStore()
-        let readTypes: Set<HKObjectType> = [
-            HKQuantityType(.stepCount), HKQuantityType(.activeEnergyBurned),
-        ]
+        let readTypes = Set<HKObjectType>(metrics.map(\.quantityType))
         // The async API throws if the request does not finish. It exposes no read permission status.
         try await store.requestAuthorization(toShare: [], read: readTypes)
+    }
+
+    func needsAuthorizationRequest(for metrics: Set<ActivityMetric>) async throws -> Bool {
+        let store = try availableStore()
+        let readTypes = Set<HKObjectType>(metrics.map(\.quantityType))
+        switch try await store.statusForAuthorizationRequest(toShare: [], read: readTypes) {
+            case .shouldRequest: return true
+            case .unnecessary: return false
+            case .unknown: throw Failure.requestStatusUnknown
+            @unknown default: throw Failure.requestStatusUnknown
+        }
     }
 
     func progress(for metric: ActivityMetric, in week: ActiveWeek) async throws -> Double? {
@@ -71,7 +82,7 @@ private extension HealthAuthorization {
         static let daysPerBlock = 7
     }
 
-    enum Failure: Error { case invalidIntervals }
+    enum Failure: Error { case invalidIntervals, requestStatusUnknown }
 
     func quantities(
         for metric: ActivityMetric,

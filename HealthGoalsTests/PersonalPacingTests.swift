@@ -201,7 +201,7 @@ struct PersonalPacingModelTests {
         #expect(reader.patternMetrics == [intention.metric, intention.metric])
         #expect(reader.authorizationRequests == 0)
         #expect(try Set(#require(defaults.dictionary(forKey: "onboarding.progress")).keys) ==
-            ["intention", "stage", "goals", "hasCompletedOnboarding"])
+            ["selectedMetrics", "stage", "goals", "hasCompletedOnboarding"])
     }
 
     @Test func patternFailureOrAbsencePreservesGapAndRetries() async throws {
@@ -376,7 +376,11 @@ private final class PacingHealth: HealthAuthorizing, HealthReading, HealthProgre
     var progressMetrics: [ActivityMetric] = []
     var windows: [PatternWindow] = []
 
-    func requestReadAuthorization() async throws {
+    func needsAuthorizationRequest(for _: Set<ActivityMetric>) async throws -> Bool {
+        false
+    }
+
+    func requestReadAuthorization(for _: Set<ActivityMetric>) async throws {
         authorizationRequests += 1
     }
 
