@@ -63,6 +63,7 @@ struct WeeklyProgress: Equatable {
     let value: Double
     let week: ActiveWeek
     let queriedAt: Date
+    var pace: PaceState = .unknown
 
     var gap: Double {
         max(0, Double(goal.value) - value)
