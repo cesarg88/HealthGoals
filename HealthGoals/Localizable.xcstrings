@@ -24,13 +24,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A goal for your week. Your days can be different."
+            "value": "Goals for your week. Your days can be different."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Un objetivo para tu semana. Tus días pueden ser diferentes."
+            "value": "Objetivos para tu semana. Tus días pueden ser diferentes."
           }
         }
       }
@@ -1392,6 +1392,91 @@
           "stringUnit": {
             "state": "translated",
             "value": "Puede faltar historial o acceso a los datos. Revisa el acceso de HealthGoals a Actividad en la app Salud y, después, vuelve aquí y pulsa Reintentar."
+          }
+        }
+      }
+    },
+    "health.stepsExplanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We use your steps to understand your recent activity and follow your weekly goal."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilizamos tus pasos para entender tu actividad reciente y seguir tu objetivo semanal."
+          }
+        }
+      }
+    },
+    "health.activityExplanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We use your active energy to understand your recent activity and follow your weekly goal."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilizamos tu energía activa para entender tu actividad reciente y seguir tu objetivo semanal."
+          }
+        }
+      }
+    },
+    "goal.removeSteps": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Steps"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirar Pasos"
+          }
+        }
+      }
+    },
+    "goal.removeActivity": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Activity"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirar Actividad"
+          }
+        }
+      }
+    },
+    "intention.selectionHelp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can choose one or both."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes elegir una o las dos."
           }
         }
       }

@@ -152,7 +152,7 @@ struct BaselineModelTests {
         await model.loadBaseline()
         #expect(reader.metrics == [intention.metric])
         #expect(model.baselineState == .available(RecentBaseline(metric: intention.metric, weeklyAverage: 38500)))
-        #expect(model.intention == intention)
+        #expect(model.selectedMetrics == [intention.metric])
         #expect(model.stage == .startingPoint)
         #expect(reader.windows.first?.intervals.last?.end == Date(timeIntervalSince1970: 0))
     }
@@ -173,7 +173,7 @@ struct BaselineModelTests {
         reader.shouldFail = true
         await model.loadBaseline()
         #expect(model.baselineState == .failed)
-        #expect(model.intention == .walking)
+        #expect(model.selectedMetrics == [.steps])
         #expect(model.stage == .startingPoint)
         reader.shouldFail = false
         await model.loadBaseline(retry: true)
@@ -212,17 +212,17 @@ struct BaselineModelTests {
 
     @Test func restorationQueriesAgainWithoutAuthorizationOrHealthPersistence() async throws {
         let (model, reader, defaults) = try setup(restored: true)
-        let before = defaults.dictionary(forKey: "onboarding.progress") as? [String: String]
+        let before = defaults.dictionary(forKey: "onboarding.progress") as NSDictionary?
         await model.loadBaseline()
-        #expect(defaults.dictionary(forKey: "onboarding.progress") as? [String: String] == before)
-        #expect(before == ["intention": "walking", "stage": "startingPoint"])
+        #expect(defaults.dictionary(forKey: "onboarding.progress") as NSDictionary? == before)
+        #expect(before == ["selectedMetrics": ["steps"], "stage": "startingPoint"])
         let authorization = BaselineAuthorization()
         let restored = OnboardingModel(healthAuthorization: authorization, healthReading: reader, defaults: defaults)
         #expect(restored.baselineState == .loading)
         await restored.loadBaseline()
         #expect(authorization.requests == 0)
         #expect(reader.metrics.count == 2)
-        #expect(restored.intention == .walking)
+        #expect(restored.selectedMetrics == [.steps])
         #expect(restored.stage == .startingPoint)
     }
 
@@ -331,7 +331,11 @@ private final class BaselineAuthorization: HealthAuthorizing {
     let isAvailable = true
     var requests = 0
 
-    func requestReadAuthorization() async throws {
+    func needsAuthorizationRequest(for _: Set<ActivityMetric>) async throws -> Bool {
+        false
+    }
+
+    func requestReadAuthorization(for _: Set<ActivityMetric>) async throws {
         requests += 1
     }
 }

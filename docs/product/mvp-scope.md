@@ -49,10 +49,10 @@ Durante onboarding, el usuario podrá indicar qué quiere mejorar.
 
 Opciones iniciales:
 
-- **Caminar más** → objetivo principal de pasos semanales.
-- **Moverme más** → objetivo principal de actividad semanal, medida en energía activa.
+- **Caminar más** → objetivo de pasos semanales.
+- **Moverme más** → objetivo de actividad semanal, medida en energía activa.
 
-Después, el usuario puede añadir un objetivo de la otra métrica, hasta un máximo de dos. La selección cambia realmente la propuesta; la constancia es un resultado esperado del uso.
+Ninguna opción se selecciona inicialmente. El usuario puede seleccionar o deseleccionar cada una de forma independiente y elegir una o ambas, como máximo dos y una por métrica; Continuar se habilita con al menos una. Después puede añadir la otra métrica explícitamente. La selección cambia realmente las propuestas; la constancia es un resultado esperado del uso.
 
 Las etiquetas de intención y métrica semanal son propuestas de wording, no literales obligatorios.
 
@@ -121,14 +121,11 @@ Antes de solicitar permisos explicaremos:
 
 Solicitaremos acceso de lectura únicamente a los datos necesarios para el MVP.
 
-Inicialmente:
-
-- pasos;
-- energía activa.
+Los tipos son pasos y energía activa, pero la primera solicitud contiene únicamente los elegidos: Pasos, Actividad o ambos. Al añadir una nueva métrica en Tu punto de partida o al elegir desde Home vacío, comprobar con HealthKit si corresponde otra solicitud y completarla antes de consultar sus datos. Esto informa sobre necesidad de solicitud, nunca sobre permiso de lectura concedido o denegado. Las aperturas de Home con objetivos aceptados no solicitan autorización automáticamente.
 
 Debemos soportar correctamente:
 
-- autorización completa;
+- solicitud finalizada, sin conocer el estado de lectura;
 - histórico limitado;
 - datos insuficientes;
 - ausencia de Apple Watch;
@@ -169,7 +166,7 @@ A partir del baseline, HealthGoals propondrá como máximo:
 
 > **dos objetivos semanales.**
 
-La intención determina la métrica principal; la segunda es opcional y se añade por elección del usuario. Si elige ambas, Home muestra los dos objetivos simultáneamente.
+Las intenciones seleccionan una o ambas métricas por elección explícita, desde el inicio o añadiendo otra después. Si elige ambas, propuestas y Home mantienen orden Pasos → Actividad. Cada propuesta/estado es independiente. Una métrica insuficiente permanece visible con Reintentar, ayuda neutral para revisar acceso y retirada voluntaria; no se puede aceptar solo la apta hasta retirar explícitamente la otra. Sin propuestas aptas, no se permite aceptar.
 
 Ejemplo:
 

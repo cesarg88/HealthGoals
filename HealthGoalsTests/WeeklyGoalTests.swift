@@ -117,7 +117,7 @@ struct WeeklyGoalModelTests {
         else { Issue.record("Expected available progress"); return }
         #expect(progress.gap == 450)
         let persisted = try #require(defaults.dictionary(forKey: "onboarding.progress"))
-        #expect(Set(persisted.keys) == ["intention", "stage", "goals", "hasCompletedOnboarding"])
+        #expect(Set(persisted.keys) == ["selectedMetrics", "stage", "goals", "hasCompletedOnboarding"])
         let restored = modelInstance(health: health, defaults: defaults, clock: clock)
         #expect(restored.stage == .completed)
         #expect(restored.activeGoal == model.activeGoal)
@@ -313,7 +313,11 @@ private final class GoalHealth: HealthAuthorizing, HealthReading, HealthProgress
     var suspend = false
     var continuation: CheckedContinuation<Void, Never>?
 
-    func requestReadAuthorization() async throws {
+    func needsAuthorizationRequest(for _: Set<ActivityMetric>) async throws -> Bool {
+        false
+    }
+
+    func requestReadAuthorization(for _: Set<ActivityMetric>) async throws {
         authorizationRequests += 1
     }
 

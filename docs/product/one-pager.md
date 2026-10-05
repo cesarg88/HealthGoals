@@ -36,12 +36,12 @@ Por ejemplo:
 
 > “Quiero caminar más.”
 
-La intención determina el objetivo principal:
+Cada intención selecciona su métrica:
 
 - **Caminar más** → pasos semanales.
 - **Moverme más** → actividad semanal, medida en energía activa.
 
-El usuario puede añadir después el objetivo de la otra métrica, hasta un máximo de dos. La segunda métrica es opcional; si elige ambas, Home muestra los dos objetivos simultáneamente. Las etiquetas de intención y métrica semanal son propuestas de wording, no literales obligatorios. La constancia es un resultado que buscamos, no una intención adicional del onboarding.
+El usuario puede elegir una o ambas métricas explícitamente desde el comienzo, sin selección inicial. También puede añadir después la otra, hasta un máximo de dos. Con ambas, el orden es Pasos y Actividad y Home muestra los objetivos simultáneamente. La autorización de lectura se solicita solo para las métricas elegidas; añadir otra comprueba si corresponde una solicitud nativa antes de consultar su histórico, sin inferir acceso de lectura. Las etiquetas de intención y métrica semanal son propuestas de wording, no literales obligatorios. La constancia es un resultado que buscamos, no una intención adicional del onboarding.
 
 Con permiso del usuario, HealthGoals analiza su historial reciente de HealthKit para entender cuál es su nivel de actividad habitual.
 
@@ -511,7 +511,7 @@ El usuario elige:
 
 > **Quiero moverme más.**
 
-Su objetivo principal será Actividad. En este ejemplo también añade Pasos.
+Elige Actividad y, en este ejemplo, también Pasos. Podría seleccionar ambas desde el comienzo.
 
 HealthGoals analiza cuatro semanas.
 

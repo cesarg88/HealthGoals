@@ -13,30 +13,30 @@ struct DualGoalTests {
         await model.connectHealth()
         await model.loadBaseline()
         #expect(reader.baselineMetrics == [intention.metric])
-        let primary = try #require(model.draftGoal)
-        #expect(model.secondaryMetric == nil)
-        model.addSecondaryMetric()
-        model.addSecondaryMetric()
-        let secondary = try #require(model.secondaryMetric)
+        let primary = try #require(model.draftGoals[intention.metric])
+        #expect(model.proposalMetrics == [intention.metric])
+        model.addMetric(intention.metric == .steps ? .activeEnergy : .steps)
+        model.addMetric(intention.metric == .steps ? .activeEnergy : .steps)
+        let secondary: ActivityMetric = intention.metric == .steps ? .activeEnergy : .steps
         #expect(secondary != intention.metric)
         #expect(reader.baselineMetrics == [intention.metric])
         #expect(!model.canAcceptGoals)
         await model.loadBaseline(for: secondary)
         #expect(reader.baselineMetrics == [intention.metric, secondary])
-        #expect(model.draftGoal == primary)
+        #expect(model.draftGoals[intention.metric] == primary)
         let average = try #require(reader.baselines[secondary]?.first.flatMap { $0 })
         #expect(model.draftGoals[secondary] == GoalEngine.propose(from: RecentBaseline(
             metric: secondary,
             weeklyAverage: average
         )))
         #expect(model.adjustDraft(to: "250", metric: secondary))
-        #expect(model.draftGoal == primary)
+        #expect(model.draftGoals[intention.metric] == primary)
         model.acceptGoal()
         #expect(model.stage == .completed)
         #expect(model.activeGoals.count == 2)
         #expect(Set(model.activeGoals.map(\.metric)).count == 2)
         model.acceptGoal()
-        model.addSecondaryMetric()
+        model.addMetric(intention.metric == .steps ? .activeEnergy : .steps)
         #expect(model.activeGoals.count == 2)
     }
 
@@ -46,13 +46,13 @@ struct DualGoalTests {
         await beginProposal(model)
         let draft = model.draftGoal
         reader.baselines[.activeEnergy] = [nil, nil, nil, nil]
-        model.addSecondaryMetric()
+        model.addMetric(.activeEnergy)
         await model.loadBaseline(for: .activeEnergy)
         #expect(model.baselineState(for: .activeEnergy) == .insufficient)
         #expect(model.draftGoal == draft)
         model.acceptGoal()
         #expect(model.stage == .startingPoint)
-        model.removeSecondaryMetric()
+        model.removeMetric(.activeEnergy)
         #expect(model.canAcceptGoals)
         model.acceptGoal()
         #expect(model.activeGoals == [draft].compactMap { $0 })
@@ -106,7 +106,7 @@ struct DualGoalTests {
         #expect(try progress(restored, .steps).goal.value == 2000)
         #expect(reader.authorizationRequests == 0)
         let saved = try #require(defaults.dictionary(forKey: "onboarding.progress"))
-        #expect(Set(saved.keys) == ["intention", "stage", "goals", "hasCompletedOnboarding"])
+        #expect(Set(saved.keys) == ["selectedMetrics", "stage", "goals", "hasCompletedOnboarding"])
         let records = try #require(saved["goals"] as? [[String: Any]])
         #expect(records.allSatisfy { Set($0.keys) == ["metric", "value"] })
     }
@@ -169,13 +169,13 @@ struct DualGoalTests {
         defer { defaults.removePersistentDomain(forName: clock.suite) }
         await beginProposal(model)
         let primary = model.draftGoal
-        model.addSecondaryMetric()
+        model.addMetric(.activeEnergy)
         reader.suspendedBaseline = .activeEnergy
         let task = Task { await model.loadBaseline(for: .activeEnergy) }
         while reader.baselineContinuation == nil {
             await Task.yield()
         }
-        model.removeSecondaryMetric()
+        model.removeMetric(.activeEnergy)
         reader.baselineContinuation?.resume()
         await task.value
         #expect(model.draftGoal == primary)
@@ -213,7 +213,7 @@ struct DualGoalTests {
         #expect(restored.activeGoals.isEmpty)
         restored.chooseGoal()
         #expect(restored.hasCompletedOnboarding)
-        #expect(restored.intention == nil)
+        #expect(restored.selectedMetrics.isEmpty)
         #expect(!restored.canContinue)
         restored.select(.activity)
         restored.continueToHealth()
@@ -394,7 +394,11 @@ private extension DualClock {
     var suspendedPattern: ActivityMetric?
     var patternContinuation: CheckedContinuation<Void, Never>?
 
-    func requestReadAuthorization() async throws {
+    func needsAuthorizationRequest(for _: Set<ActivityMetric>) async throws -> Bool {
+        false
+    }
+
+    func requestReadAuthorization(for _: Set<ActivityMetric>) async throws {
         authorizationRequests += 1
     }
 

@@ -1,5 +1,7 @@
 # Validación en dispositivo — ritmo personal semanal
 
+> Guía histórica de su entrega. Para el onboarding vigente desde #29 (selección de una o ambas métricas, autorización solo de los tipos elegidos y just-in-time al añadir), usar [selección y autorización por métrica](metric-selection.md). Las observaciones físicas antiguas no acreditan un SHA posterior ni el nuevo recorrido; los casos de edición, eliminación y ritmo siguen siendo referencias de regresión.
+
 Entrega: [Issue #21](https://github.com/cesarg88/HealthGoals/issues/21). Complementa la [guía de objetivo y Home](weekly-goal-home.md). La evidencia automática valida cálculo/estados; la consulta real y la comprensión requieren el iPhone de César.
 
 ## Preparación

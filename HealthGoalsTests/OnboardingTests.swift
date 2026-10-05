@@ -6,21 +6,24 @@ import Testing
 struct OnboardingTests {
     @Test func initialStateCannotContinue() throws {
         let (model, _, _) = try setup()
-        #expect(model.intention == nil)
+        #expect(model.selectedMetrics.isEmpty)
         #expect(model.stage == .intention)
         #expect(!model.canContinue)
         model.continueToHealth()
         #expect(model.stage == .intention)
     }
 
-    @Test func intentionIsExclusiveAndIndependentOfCopy() throws {
+    @Test func selectionsAreIndependentOfCopyAndEachOther() throws {
         let (model, _, _) = try setup()
         model.select(.walking)
         #expect(model.canContinue)
-        #expect(model.intention?.metric == .steps)
+        #expect(model.selectedMetrics == [.steps])
         model.select(.activity)
-        #expect(model.intention == .activity)
-        #expect(model.intention?.metric == .activeEnergy)
+        #expect(model.selectedMetrics == [.steps, .activeEnergy])
+        model.select(.walking)
+        #expect(model.selectedMetrics == [.activeEnergy])
+        model.select(.activity)
+        #expect(!model.canContinue)
     }
 
     @Test func continueAndBackPreserveSelection() throws {
@@ -30,7 +33,7 @@ struct OnboardingTests {
         #expect(model.stage == .connectHealth)
         model.backToIntention()
         #expect(model.stage == .intention)
-        #expect(model.intention == .walking)
+        #expect(model.selectedMetrics == [.steps])
         #expect(model.canContinue)
     }
 
@@ -42,7 +45,7 @@ struct OnboardingTests {
         await model.connectHealth()
         #expect(model.stage == .connectHealth)
         #expect(model.requestState == .failed)
-        #expect(model.intention == .activity)
+        #expect(model.selectedMetrics == [.activeEnergy])
         service.shouldFail = false
         await model.connectHealth()
         #expect(model.stage == .startingPoint)
@@ -57,7 +60,7 @@ struct OnboardingTests {
         await model.connectHealth()
         #expect(model.requestState == .unavailable)
         #expect(model.stage == .connectHealth)
-        #expect(model.intention == .walking)
+        #expect(model.selectedMetrics == [.steps])
         #expect(service.requests == 0)
         service.isAvailable = true
         await model.connectHealth()
@@ -86,7 +89,7 @@ struct OnboardingTests {
         let (model, service, defaults) = try setup()
         model.select(.walking)
         #expect(OnboardingModel(healthAuthorization: service, healthReading: FakeHealthReader(), defaults: defaults)
-            .intention == .walking)
+            .selectedMetrics == [.steps])
         model.continueToHealth()
         #expect(OnboardingModel(healthAuthorization: service, healthReading: FakeHealthReader(), defaults: defaults)
             .stage == .connectHealth)
@@ -97,7 +100,7 @@ struct OnboardingTests {
             defaults: defaults
         )
         #expect(restored.stage == .intention)
-        #expect(restored.intention == .walking)
+        #expect(restored.selectedMetrics == [.steps])
     }
 
     @Test func restorationOfCompletedRequestIsOnlyAStage() async throws {
@@ -111,7 +114,7 @@ struct OnboardingTests {
             defaults: defaults
         )
         #expect(restored.stage == .startingPoint)
-        #expect(restored.intention == .activity)
+        #expect(restored.selectedMetrics == [.activeEnergy])
         #expect(restored.requestState == .idle)
         #expect(defaults.dictionary(forKey: "onboarding.progress")?.count == 2)
     }
@@ -125,7 +128,7 @@ struct OnboardingTests {
             defaults: defaults
         )
         #expect(restored.stage == .intention)
-        #expect(restored.intention == nil)
+        #expect(restored.selectedMetrics.isEmpty)
     }
 
     @Test func interruptedRequestRestoresS02AndCannotDuplicate() async throws {
@@ -149,7 +152,7 @@ struct OnboardingTests {
         )
         #expect(restored.stage == .connectHealth)
         #expect(restored.requestState == .idle)
-        #expect(restored.intention == .walking)
+        #expect(restored.selectedMetrics == [.steps])
         service.continuation?.resume()
         await task.value
         #expect(model.stage == .startingPoint)
@@ -177,7 +180,11 @@ private final class FakeHealthAuthorization: HealthAuthorizing {
     var continuation: CheckedContinuation<Void, Never>?
     enum Failure: Error { case technical }
 
-    func requestReadAuthorization() async throws {
+    func needsAuthorizationRequest(for _: Set<ActivityMetric>) async throws -> Bool {
+        false
+    }
+
+    func requestReadAuthorization(for _: Set<ActivityMetric>) async throws {
         requests += 1
         if suspendRequest {
             await withCheckedContinuation { continuation = $0 }

@@ -10,21 +10,16 @@ struct BaselineView: View {
             ForEach(model.proposalMetrics) { metric in
                 BaselineMetricView(metric: metric, model: model)
             }
-            if model.secondaryMetric == nil, let primary = model.intention?.metric {
-                Button(
-                    LocalizedStringKey(primary == .steps ? "goal.addActivity" : "goal.addSteps"),
-                    action: model.addSecondaryMetric
-                )
+            ForEach(ActivityMetric.allCases.filter { !model.selectedMetrics.contains($0) }) { metric in
+                Button(LocalizedStringKey(metric == .steps ? "goal.addSteps" : "goal.addActivity")) {
+                    model.addMetric(metric)
+                }
                 .frame(minHeight: Constants.minimumTouchHeight)
-                .accessibilityIdentifier("goal.addSecondary")
-            } else if model.secondaryMetric != nil {
-                Button("goal.removeSecondary", action: model.removeSecondaryMetric)
-                    .frame(minHeight: Constants.minimumTouchHeight)
-                    .accessibilityIdentifier("goal.removeSecondary")
+                .accessibilityIdentifier("goal.add.\(metric.rawValue)")
             }
             Text("goal.firstWeek").font(.footnote).foregroundStyle(Color("BaselineSecondary"))
             Button(action: model.acceptGoal) {
-                Text(LocalizedStringKey(model.secondaryMetric == nil ? "goal.accept" : "goal.acceptBoth"))
+                Text(LocalizedStringKey(model.proposalMetrics.count == 1 ? "goal.accept" : "goal.acceptBoth"))
                     .foregroundStyle(Color("GoalOnAccent")).frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent).controlSize(.large)
@@ -83,6 +78,11 @@ struct BaselineMetricView: View {
                 case .failed:
                     recoveryContent("baseline.error", identifier: "baseline.error")
             }
+            Button(LocalizedStringKey(metric == .steps ? "goal.removeSteps" : "goal.removeActivity")) {
+                model.removeMetric(metric)
+            }
+            .frame(minHeight: Constants.minimumTouchHeight)
+            .accessibilityIdentifier("goal.remove.\(metric.rawValue)")
             Text("baseline.windowExplanation")
                 .font(.footnote)
                 .foregroundStyle(Color("BaselineSecondary"))

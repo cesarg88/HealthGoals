@@ -1,5 +1,7 @@
 # Validación de propuesta y primera Home semanal
 
+> Guía histórica de su entrega. Para el onboarding vigente desde #29 (selección de una o ambas métricas, autorización solo de los tipos elegidos y just-in-time al añadir), usar [selección y autorización por métrica](metric-selection.md). Las observaciones físicas antiguas no acreditan un SHA posterior ni el nuevo recorrido; los casos de edición, eliminación y ritmo siguen siendo referencias de regresión.
+
 [Issue #20](https://github.com/cesarg88/HealthGoals/issues/20). Esta guía valida la propuesta, el ajuste del borrador y el progreso real de un único objetivo. No valida ritmo personal, segunda métrica, resumen, edición activa ni funciones de #21.
 
 ## Preparación
