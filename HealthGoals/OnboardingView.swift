@@ -10,13 +10,15 @@ struct OnboardingView: View {
                     case .intention: intentionContent
                     case .connectHealth: healthContent
                     case .startingPoint: BaselineView(model: model)
+                    case .completed: HomeView(model: model)
                 }
             }
             .frame(maxWidth: Constants.maximumContentWidth, alignment: .leading)
             .padding(Constants.contentPadding)
             .frame(maxWidth: .infinity, alignment: .top)
         }
-        .background(model.stage == .startingPoint ? Color("BaselineBackground") : Color(uiColor: .systemBackground))
+        .background((model.stage == .startingPoint || model.stage == .completed) ? Color("BaselineBackground") :
+            Color(uiColor: .systemBackground))
     }
 }
 

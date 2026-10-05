@@ -203,7 +203,7 @@ El usuario podrá:
 
 HealthGoals nunca incrementará automáticamente un objetivo.
 
-La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes (D01) siguen pendientes de decisión. Guardar un objetivo editado cambia su valor en la semana actual sin alterar la actividad registrada. Eliminar un objetivo activo requiere confirmación; eliminar el último deja Home sin objetivo y permite elegir uno sin repetir onboarding.
+La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. [Issue #20](https://github.com/cesarg88/HealthGoals/issues/20) concreta D01 v1: lunes 00:00 a lunes siguiente 00:00 con Calendar y zona local actual; los viajes recalculan límites sin reconciliar histórico. Guardar un objetivo editado cambia su valor en la semana actual sin alterar la actividad registrada. Eliminar un objetivo activo requiere confirmación; eliminar el último deja Home sin objetivo y permite elegir uno sin repetir onboarding.
 
 ---
 

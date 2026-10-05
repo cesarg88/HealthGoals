@@ -171,7 +171,7 @@ Si el sábado el usuario camina mucho más de lo habitual, lo que necesita duran
 
 Al comenzar una nueva semana, los objetivos continúan automáticamente con el mismo valor, sin incremento automático ni confirmación obligatoria para empezar. El resumen permite revisar y ajustar.
 
-La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. Las reglas de zona horaria, cambios de hora y viajes siguen pendientes de decisión. El comportamiento de edición y eliminación se define en el [MVP Scope](mvp-scope.md#8-control-del-usuario).
+La primera semana utiliza la semana actual completa, con datos desde el lunes, sin prorratear el objetivo. [Issue #20](https://github.com/cesarg88/HealthGoals/issues/20) concreta D01 v1: lunes 00:00 a lunes siguiente 00:00 con Calendar y zona local actual; los viajes recalculan límites sin reconciliar histórico. El comportamiento de edición y eliminación se define en el [MVP Scope](mvp-scope.md#8-control-del-usuario).
 
 ---
 

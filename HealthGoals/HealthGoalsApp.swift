@@ -14,6 +14,11 @@ struct HealthGoalsApp: App {
 private extension HealthGoalsApp {
     static func makeOnboarding() -> OnboardingModel {
         let health = HealthAuthorization()
-        return OnboardingModel(healthAuthorization: health, healthReading: health, defaults: .standard)
+        return OnboardingModel(
+            healthAuthorization: health,
+            healthReading: health,
+            progressReading: health,
+            defaults: .standard
+        )
     }
 }

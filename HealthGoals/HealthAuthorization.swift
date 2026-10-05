@@ -13,7 +13,12 @@ protocol HealthReading {
 }
 
 @MainActor
-final class HealthAuthorization: HealthAuthorizing, HealthReading {
+protocol HealthProgressReading {
+    func progress(for metric: ActivityMetric, in week: ActiveWeek) async throws -> Double?
+}
+
+@MainActor
+final class HealthAuthorization: HealthAuthorizing, HealthReading, HealthProgressReading {
     var isAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
@@ -28,6 +33,18 @@ final class HealthAuthorization: HealthAuthorizing, HealthReading {
         ]
         // The async API throws if the request does not finish. It exposes no read permission status.
         try await store.requestAuthorization(toShare: [], read: readTypes)
+    }
+
+    func progress(for metric: ActivityMetric, in week: ActiveWeek) async throws -> Double? {
+        let store = try availableStore()
+        let predicate = HKQuery.predicateForSamples(withStart: week.interval.start, end: week.queryEnd)
+        let query = HKStatisticsQueryDescriptor(
+            predicate: .quantitySample(type: metric.quantityType, predicate: predicate),
+            options: .cumulativeSum
+        )
+        let statistics = try await query.result(for: store)
+        // Native aggregation preserves source merging; absence remains unknown rather than zero.
+        return metric.value(from: statistics?.sumQuantity())
     }
 
     func weeklyTotals(for metric: ActivityMetric, in window: BaselineWindow) async throws -> [Double?] {

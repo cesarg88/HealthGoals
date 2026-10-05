@@ -142,7 +142,7 @@ No bloquean exploración reversible; sí impiden cerrar un handoff implementable
 
 | ID | Decisión pendiente | Recomendación y motivo | Responsable |
 | --- | --- | --- | --- |
-| D01 | Zona horaria, momento de corte semanal, día en curso y cambios de calendario | La primera semana desde lunes ya está confirmada; concretar los detalles temporales antes de validar cifras/días o programar aviso | Product + ingeniería |
+| D01 | Resuelta para semana activa v1 por [#20](https://github.com/cesarg88/HealthGoals/issues/20) | Lunes 00:00 a lunes siguiente 00:00, Calendar/zona local actual; días inclusivos, sin reconciliación histórica de viajes | Product + ingeniería |
 | D05 | Configuración manual sin baseline, no garantizada por scope | Permitir solo si progreso puede observarse; patrón desconocido. Sin datos actuales, no prometer seguimiento | Product |
 | D06 | Selección de idioma | Sistema y ajustes de idioma de iOS; sin selector propio, pendiente confirmación | Product |
 | D07 | Cuándo dato antiguo pierde estado de ritmo; etiquetas de consulta/dato | Marcar antigüedad y no presentar ritmo como actual; reglas freshness no son umbrales UX inventados | Product + ingeniería |
@@ -216,3 +216,9 @@ Widget: tap abre Home, sin edición. Dato desconocido no muestra cero ni diagnos
 Aviso local opcional: «Así va tu semana» / «Mira cómo estás avanzando y qué te queda». Sin valores de salud; tap abre Home. La presentación y autorización pertenecen a iOS; horario y programación siguen D09.
 
 Las tarjetas/campos crecen con texto, acciones tienen área mínima de 44 pt y lectura semántica con unidad/estado; barras y símbolos decorativos no duplican VoiceOver. S05 debe permitir scroll con teclado sin ocultar Guardar/Aplicar. iPad/paisaje conservan orden y ancho legible. Se verifica editabilidad, fuente, contraste de la base y composición en Figma; Dynamic Type, VoiceOver, Reduce Motion, teclado y WidgetKit reales requieren validación en dispositivo. No se presenta el mockup como prototipo funcional ni como prueba de SwiftUI.
+
+## 12. Primera Home funcional — Issue #20
+
+La implementación acotada de [#20](https://github.com/cesarg88/HealthGoals/issues/20) añade propuesta 5 %, redondeo de centena de pasos/decena de kcal y ajuste entero positivo solo del borrador. Aceptación lleva a Home y futuras aperturas recuperan objetivo con consulta nueva. Home prioriza restante, acumulado/objetivo y fecha de consulta; omite ritmo, explicación del ritmo, segunda métrica, ajustes activos y Ajustes hasta sus entregas. No se implementan acciones ficticias de Figma.
+
+D01 queda resuelta para semana activa v1: lunes 00:00–lunes siguiente 00:00 con Calendar/zona local actual y días restantes incluyendo hoy. Primera semana completa sin prorrateo; mismo valor en la siguiente. Viajes recalculan límites locales sin reconciliar histórico. Las menciones previas de D01 pendiente conservan contexto de las propuestas históricas y quedan reemplazadas para esta implementación. D05–D09 no se resuelven por esta vertical.
