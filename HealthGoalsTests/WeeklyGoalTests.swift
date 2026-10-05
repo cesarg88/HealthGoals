@@ -117,7 +117,7 @@ struct WeeklyGoalModelTests {
         else { Issue.record("Expected available progress"); return }
         #expect(progress.gap == 450)
         let persisted = try #require(defaults.dictionary(forKey: "onboarding.progress"))
-        #expect(Set(persisted.keys) == ["intention", "stage", "goalMetric", "goalValue"])
+        #expect(Set(persisted.keys) == ["intention", "stage", "goals", "hasCompletedOnboarding"])
         let restored = modelInstance(health: health, defaults: defaults, clock: clock)
         #expect(restored.stage == .completed)
         #expect(restored.activeGoal == model.activeGoal)

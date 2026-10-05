@@ -14,7 +14,13 @@ enum ActivityIntention: String, CaseIterable, Identifiable {
     }
 }
 
-enum ActivityMetric: String { case steps, activeEnergy }
+enum ActivityMetric: String, CaseIterable, Identifiable {
+    case steps, activeEnergy
+    var id: Self {
+        self
+    }
+}
+
 enum OnboardingStage: String { case intention, connectHealth, startingPoint, completed }
 enum AuthorizationRequestState: Equatable { case idle, requesting, unavailable, failed }
 
@@ -24,20 +30,26 @@ final class OnboardingModel {
     private(set) var intention: ActivityIntention?
     private(set) var stage: OnboardingStage = .intention
     private(set) var requestState: AuthorizationRequestState = .idle
-    private(set) var baselineState: BaselineState = .loading
-    private(set) var draftGoal: WeeklyGoal?
-    private(set) var activeGoal: WeeklyGoal?
-    private(set) var progressState: WeeklyProgressState = .loading
+    private(set) var baselineStates: [ActivityMetric: BaselineState] = [:]
+    private(set) var draftGoals: [ActivityMetric: WeeklyGoal] = [:]
+    private(set) var activeGoals: [WeeklyGoal] = []
+    private(set) var progressStates: [ActivityMetric: WeeklyProgressState] = [:]
+    private(set) var secondaryMetric: ActivityMetric?
+    private(set) var hasCompletedOnboarding = false
     private(set) var activeWeek: ActiveWeek?
     private let progressReading: (any HealthProgressReading)?
     private let patternReading: (any HealthPatternReading)?
-    private var progressTask: Task<Void, Never>?
+    private var progressTasks: [ActivityMetric: Task<Void, Never>] = [:]
+    private var progressTokens: [ActivityMetric: UUID] = [:]
+    private var patterns: [ActivityMetric: HistoricalPattern] = [:]
+    private var patternWindows: [ActivityMetric: PatternWindow] = [:]
     private let healthAuthorization: any HealthAuthorizing
     private let healthReading: any HealthReading
     private let now: () -> Date
     private let calendar: () -> Calendar
-    private var baselineTask: Task<Void, Never>?
-    private var hasLoadedBaseline = false
+    private var baselineTasks: [ActivityMetric: Task<Void, Never>] = [:]
+    private var baselineTokens: [ActivityMetric: UUID] = [:]
+    private var loadedBaselines: Set<ActivityMetric> = []
     private let defaults: UserDefaults
     private static let progressKey = "onboarding.progress"
 
@@ -63,25 +75,43 @@ final class OnboardingModel {
         self.defaults = defaults
         let progress = defaults.dictionary(forKey: Self.progressKey)
         intention = (progress?["intention"] as? String).flatMap(ActivityIntention.init(rawValue:))
-        // A saved stage never skips S01 without a valid intention.
-        if intention != nil, let rawStage = progress?["stage"] as? String,
-           let savedStage = OnboardingStage(rawValue: rawStage)
-        {
-            if savedStage == .completed {
-                if let rawMetric = progress?["goalMetric"] as? String,
-                   let metric = ActivityMetric(rawValue: rawMetric), metric == intention?.metric,
-                   let value = progress?["goalValue"] as? Int,
-                   let goal = WeeklyGoal(metric: metric, value: value)
-                {
-                    activeGoal = goal
-                    stage = .completed
-                } else {
-                    stage = .startingPoint
-                }
-            } else {
-                stage = savedStage
-            }
+        restore(progress)
+    }
+
+    var baselineState: BaselineState {
+        intention.map { baselineState(for: $0.metric) } ?? .loading
+    }
+
+    var draftGoal: WeeklyGoal? {
+        intention.flatMap { draftGoals[$0.metric] }
+    }
+
+    var activeGoal: WeeklyGoal? {
+        activeGoals.first
+    }
+
+    var progressState: WeeklyProgressState {
+        activeGoal.map { progressState(for: $0.metric) } ?? .loading
+    }
+
+    var proposalMetrics: [ActivityMetric] {
+        guard let metric = intention?.metric else { return [] }
+        return [metric] + (secondaryMetric.map { [$0] } ?? [])
+    }
+
+    var canAcceptGoals: Bool {
+        stage == .startingPoint && !proposalMetrics.isEmpty && proposalMetrics.allSatisfy {
+            if case .available = baselineState(for: $0) { return draftGoals[$0] != nil }
+            return false
         }
+    }
+
+    func baselineState(for metric: ActivityMetric) -> BaselineState {
+        baselineStates[metric] ?? .loading
+    }
+
+    func progressState(for metric: ActivityMetric) -> WeeklyProgressState {
+        progressStates[metric] ?? .loading
     }
 
     func select(_ intention: ActivityIntention) {
@@ -92,7 +122,7 @@ final class OnboardingModel {
 
     func continueToHealth() {
         guard stage == .intention, canContinue else { return }
-        stage = .connectHealth
+        stage = hasCompletedOnboarding ? .startingPoint : .connectHealth
         requestState = .idle
         saveProgress()
     }
@@ -122,111 +152,213 @@ final class OnboardingModel {
         }
     }
 
+    func addSecondaryMetric() {
+        guard stage == .startingPoint, secondaryMetric == nil, let primary = intention?.metric else { return }
+        secondaryMetric = primary == .steps ? .activeEnergy : .steps
+    }
+
+    func removeSecondaryMetric() {
+        guard let metric = secondaryMetric else { return }
+        secondaryMetric = nil
+        baselineTokens[metric] = nil
+        baselineTasks[metric] = nil
+        baselineStates[metric] = nil
+        draftGoals[metric] = nil
+        loadedBaselines.remove(metric)
+    }
+
     @discardableResult
-    func adjustDraft(to text: String) -> Bool {
-        guard stage == .startingPoint, let draftGoal,
-              let value = Int(text.trimmingCharacters(in: .whitespacesAndNewlines)),
-              let adjusted = WeeklyGoal(metric: draftGoal.metric, value: value)
+    func adjustDraft(to text: String, metric: ActivityMetric? = nil) -> Bool {
+        guard stage == .startingPoint, let metric = metric ?? intention?.metric,
+              draftGoals[metric] != nil, let goal = parsedGoal(text, metric: metric)
         else { return false }
-        self.draftGoal = adjusted
+        draftGoals[metric] = goal
         return true
     }
 
     func acceptGoal() {
-        guard stage == .startingPoint, case .available = baselineState, let draftGoal else { return }
-        activeGoal = draftGoal
+        guard canAcceptGoals else { return }
+        activeGoals = proposalMetrics.compactMap { draftGoals[$0] }
+        stage = .completed
+        hasCompletedOnboarding = true
+        saveProgress()
+    }
+
+    @discardableResult
+    func editGoal(metric: ActivityMetric, to text: String) -> Bool {
+        guard stage == .completed, let index = activeGoals.firstIndex(where: { $0.metric == metric }),
+              let goal = parsedGoal(text, metric: metric)
+        else { return false }
+        activeGoals[index] = goal
+        if case let .available(progress) = progressState(for: metric) {
+            publishProgress(goal: goal, value: progress.value, week: progress.week, queriedAt: progress.queriedAt)
+        }
+        saveProgress()
+        return true
+    }
+
+    func deleteGoal(metric: ActivityMetric) {
+        guard stage == .completed else { return }
+        activeGoals.removeAll { $0.metric == metric }
+        progressTokens[metric] = nil
+        progressTasks[metric] = nil
+        progressStates[metric] = nil
+        patterns[metric] = nil
+        patternWindows[metric] = nil
+        saveProgress()
+    }
+
+    func chooseGoal() {
+        guard stage == .completed, activeGoals.isEmpty else { return }
+        stage = .intention
+        intention = nil
+        secondaryMetric = nil
+        baselineStates = [:]
+        draftGoals = [:]
+        loadedBaselines = []
+        baselineTokens = [:]
+        baselineTasks = [:]
+        saveProgress()
+    }
+
+    func cancelChoosingGoal() {
+        guard hasCompletedOnboarding, stage != .completed else { return }
         stage = .completed
         saveProgress()
     }
 
     func loadProgress() async {
-        guard stage == .completed, let activeGoal, !Task.isCancelled else { return }
-        if let progressTask {
-            await progressTask.value
-            return
+        guard stage == .completed, !Task.isCancelled else { return }
+        // Independent finite tasks let a slow/erroring metric coexist with the other card.
+        for goal in activeGoals {
+            startProgress(for: goal.metric)
         }
-        progressState = .loading
-        let task = Task { await fetchProgress(for: activeGoal) }
-        progressTask = task
-        await task.value
-        progressTask = nil
+        let tasks = Array(progressTasks.values)
+        for task in tasks {
+            await task.value
+        }
+    }
+
+    func loadProgress(for metric: ActivityMetric) async {
+        guard stage == .completed, activeGoals.contains(where: { $0.metric == metric }),
+              !Task.isCancelled else { return }
+        startProgress(for: metric)
+        await progressTasks[metric]?.value
+    }
+
+    func isRefreshing(_ metric: ActivityMetric) -> Bool {
+        progressTasks[metric] != nil
     }
 
     func loadBaseline(retry: Bool = false) async {
-        guard stage == .startingPoint, let intention else { return }
-        if let baselineTask {
-            await baselineTask.value
-            return
-        }
-        guard retry || !hasLoadedBaseline, !Task.isCancelled else { return }
-        baselineState = .loading
-        draftGoal = nil
-        // The model owns this finite query; disappearing SwiftUI tasks must not strand S03 in loading.
-        let task = Task { await fetchBaseline(for: intention.metric) }
-        baselineTask = task
+        guard let metric = intention?.metric else { return }
+        await loadBaseline(for: metric, retry: retry)
+    }
+
+    func loadBaseline(for metric: ActivityMetric, retry: Bool = false) async {
+        guard stage == .startingPoint, proposalMetrics.contains(metric), !Task.isCancelled else { return }
+        if let task = baselineTasks[metric] { await task.value; return }
+        guard retry || !loadedBaselines.contains(metric) else { return }
+        baselineStates[metric] = .loading
+        draftGoals[metric] = nil
+        let token = UUID()
+        baselineTokens[metric] = token
+        let task = Task { await fetchBaseline(for: metric, token: token) }
+        baselineTasks[metric] = task
         await task.value
-        baselineTask = nil
+        if baselineTokens[metric] == token { baselineTasks[metric] = nil }
     }
 }
 
 private extension OnboardingModel {
-    func fetchBaseline(for metric: ActivityMetric) async {
+    func fetchBaseline(for metric: ActivityMetric, token: UUID) async {
         do {
             let window = try BaselineWindow(now: now(), calendar: calendar())
             let totals = try await healthReading.weeklyTotals(for: metric, in: window)
+            guard baselineTokens[metric] == token, proposalMetrics.contains(metric) else { return }
             if let baseline = BaselineCalculator.calculate(metric: metric, weeklyTotals: totals) {
-                baselineState = .available(baseline)
-                draftGoal = GoalEngine.propose(from: baseline)
+                baselineStates[metric] = .available(baseline)
+                draftGoals[metric] = GoalEngine.propose(from: baseline)
             } else {
-                baselineState = .insufficient
+                baselineStates[metric] = .insufficient
             }
         } catch {
-            baselineState = .failed
+            guard baselineTokens[metric] == token else { return }
+            baselineStates[metric] = .failed
         }
-        hasLoadedBaseline = true
+        loadedBaselines.insert(metric)
     }
 
-    func fetchProgress(for goal: WeeklyGoal) async {
+    func startProgress(for metric: ActivityMetric) {
+        guard progressTasks[metric] == nil else { return }
+        let currentWeek = try? ActiveWeek(now: now(), calendar: calendar())
+        // Keep a valid current-week observation during refresh so active editing preserves it immediately.
+        if case let .available(progress) = progressState(for: metric),
+           progress.week.interval == currentWeek?.interval, progress.week.timeZone == currentWeek?.timeZone
+        {
+            // The card still identifies the original query time while the new query is in flight.
+        } else {
+            progressStates[metric] = .loading
+            patterns[metric] = nil
+            patternWindows[metric] = nil
+        }
+        let token = UUID()
+        progressTokens[metric] = token
+        progressTasks[metric] = Task {
+            await fetchProgress(for: metric, token: token)
+            if progressTokens[metric] == token { progressTasks[metric] = nil }
+        }
+    }
+
+    func fetchProgress(for metric: ActivityMetric, token: UUID) async {
         do {
             guard let progressReading else { throw ProgressFailure.readerUnavailable }
-            while true {
+            while progressTokens[metric] == token {
                 let queryCalendar = calendar()
                 let queriedAt = now()
                 let week = try ActiveWeek(now: queriedAt, calendar: queryCalendar)
                 let window = try PatternWindow(now: queriedAt, calendar: queryCalendar)
                 activeWeek = week
-                let value = try await progressReading.progress(for: goal.metric, in: week)
+                let value = try await progressReading.progress(for: metric, in: week)
+                guard progressTokens[metric] == token else { return }
                 if try !isCurrent(week: week, window: window) { continue }
                 guard let value, value.isFinite, value >= 0 else {
-                    progressState = .insufficient
+                    progressStates[metric] = .insufficient
                     return
                 }
-                let progress = WeeklyProgress(
-                    goal: goal, value: value, week: week, queriedAt: now(),
-                    pace: value >= Double(goal.value) ? .completed : .unknown
-                )
-                // Progress/gap is useful independently of historical pattern availability or errors.
-                progressState = .available(progress)
-                let pattern = await fetchPattern(for: goal.metric, in: window)
+                guard let goal = activeGoals.first(where: { $0.metric == metric }) else { return }
+                let finishedAt = now()
+                // Use the current goal after every await; editing must not restore an older value.
+                publishProgress(goal: goal, value: value, week: week, queriedAt: finishedAt)
+                let pattern = await fetchPattern(for: metric, in: window)
+                guard progressTokens[metric] == token else { return }
                 if try !isCurrent(week: week, window: window) {
-                    progressState = .loading
+                    progressStates[metric] = .loading
                     continue
                 }
-                let pace = PaceCalculator.state(
-                    for: progress,
-                    pattern: pattern,
-                    day: window.today,
-                    calendar: queryCalendar
-                )
-                progressState = .available(WeeklyProgress(
-                    goal: goal, value: value, week: week, queriedAt: progress.queriedAt, pace: pace
-                ))
+                patterns[metric] = pattern
+                patternWindows[metric] = window
+                guard let currentGoal = activeGoals.first(where: { $0.metric == metric }) else { return }
+                publishProgress(goal: currentGoal, value: value, week: week, queriedAt: finishedAt)
                 activeWeek = try ActiveWeek(now: now(), calendar: calendar())
                 return
             }
         } catch {
-            progressState = .failed
+            guard progressTokens[metric] == token else { return }
+            progressStates[metric] = .failed
         }
+    }
+
+    func publishProgress(goal: WeeklyGoal, value: Double, week: ActiveWeek, queriedAt: Date) {
+        let progress = WeeklyProgress(goal: goal, value: value, week: week, queriedAt: queriedAt)
+        let window = patternWindows[goal.metric]
+        let currentCalendar = calendar()
+        let today = currentCalendar.startOfDay(for: now())
+        let pattern = window?.today == today && window?.calendar == currentCalendar ? patterns[goal.metric] : nil
+        let pace = PaceCalculator.state(for: progress, pattern: pattern, day: today, calendar: currentCalendar)
+        progressStates[goal.metric] = .available(WeeklyProgress(
+            goal: goal, value: value, week: week, queriedAt: queriedAt, pace: pace
+        ))
     }
 
     func fetchPattern(for metric: ActivityMetric, in window: PatternWindow) async -> HistoricalPattern? {
@@ -249,13 +381,51 @@ private extension OnboardingModel {
 
     enum ProgressFailure: Error { case readerUnavailable }
 
+    func parsedGoal(_ text: String, metric: ActivityMetric) -> WeeklyGoal? {
+        guard let value = Int(text.trimmingCharacters(in: .whitespacesAndNewlines)) else { return nil }
+        return WeeklyGoal(metric: metric, value: value)
+    }
+
+    func restore(_ progress: [String: Any]?) {
+        guard let progress, let rawStage = progress["stage"] as? String,
+              let savedStage = OnboardingStage(rawValue: rawStage)
+        else { return }
+        hasCompletedOnboarding = progress["hasCompletedOnboarding"] as? Bool ?? false
+        if let records = progress["goals"] as? [[String: Any]] {
+            for record in records {
+                guard let rawMetric = record["metric"] as? String, let metric = ActivityMetric(rawValue: rawMetric),
+                      let value = record["value"] as? Int, let goal = WeeklyGoal(metric: metric, value: value),
+                      !activeGoals.contains(where: { $0.metric == metric })
+                else { continue }
+                activeGoals.append(goal)
+            }
+            if savedStage == .completed {
+                stage = .completed
+                hasCompletedOnboarding = true
+                return
+            }
+        } else if savedStage == .completed, let intention,
+                  let rawMetric = progress["goalMetric"] as? String,
+                  let metric = ActivityMetric(rawValue: rawMetric), metric == intention.metric,
+                  let value = progress["goalValue"] as? Int, let goal = WeeklyGoal(metric: metric, value: value)
+        {
+            activeGoals = [goal]
+            stage = .completed
+            hasCompletedOnboarding = true
+            saveProgress()
+            return
+        }
+        guard intention != nil || hasCompletedOnboarding else { return }
+        stage = savedStage == .completed ? .startingPoint : savedStage
+        if intention == nil { stage = .intention }
+    }
+
     func saveProgress() {
-        guard let intention else { return }
-        // Persist S02 before requesting authorization; never persist an in-flight operation.
-        var progress: [String: Any] = ["intention": intention.rawValue, "stage": stage.rawValue]
-        if let activeGoal {
-            progress["goalMetric"] = activeGoal.metric.rawValue
-            progress["goalValue"] = activeGoal.value
+        var progress: [String: Any] = ["stage": stage.rawValue]
+        if let intention { progress["intention"] = intention.rawValue }
+        if hasCompletedOnboarding {
+            progress["hasCompletedOnboarding"] = true
+            progress["goals"] = activeGoals.map { ["metric": $0.metric.rawValue, "value": $0.value] }
         }
         defaults.set(progress, forKey: Self.progressKey)
     }

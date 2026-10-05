@@ -2,24 +2,70 @@ import SwiftUI
 
 struct BaselineView: View {
     let model: OnboardingModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
+            Text("startingPoint.title").font(.largeTitle.bold()).accessibilityAddTraits(.isHeader)
+                .accessibilityIdentifier("onboarding.startingPoint.title")
+            ForEach(model.proposalMetrics) { metric in
+                BaselineMetricView(metric: metric, model: model)
+            }
+            if model.secondaryMetric == nil, let primary = model.intention?.metric {
+                Button(
+                    LocalizedStringKey(primary == .steps ? "goal.addActivity" : "goal.addSteps"),
+                    action: model.addSecondaryMetric
+                )
+                .frame(minHeight: Constants.minimumTouchHeight)
+                .accessibilityIdentifier("goal.addSecondary")
+            } else if model.secondaryMetric != nil {
+                Button("goal.removeSecondary", action: model.removeSecondaryMetric)
+                    .frame(minHeight: Constants.minimumTouchHeight)
+                    .accessibilityIdentifier("goal.removeSecondary")
+            }
+            Text("goal.firstWeek").font(.footnote).foregroundStyle(Color("BaselineSecondary"))
+            Button(action: model.acceptGoal) {
+                Text(LocalizedStringKey(model.secondaryMetric == nil ? "goal.accept" : "goal.acceptBoth"))
+                    .foregroundStyle(Color("GoalOnAccent")).frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent).controlSize(.large)
+            .disabled(!model.canAcceptGoals)
+            .accessibilityIdentifier("goal.accept")
+            if model.hasCompletedOnboarding {
+                Button("common.cancel", action: model.cancelChoosingGoal)
+                    .frame(minHeight: Constants.minimumTouchHeight)
+            }
+        }
+        .foregroundStyle(Color("BaselineText"))
+        .tint(Color("GoalAccent"))
+    }
+}
+
+private extension BaselineView {
+    enum Constants {
+        static let sectionSpacing: CGFloat = 16
+        static let minimumTouchHeight: CGFloat = 44
+    }
+}
+
+struct BaselineMetricView: View {
+    let metric: ActivityMetric
+    let model: OnboardingModel
     @Environment(\.locale) private var locale
     @State private var isAdjusting = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
-            Text("startingPoint.title")
-                .font(.largeTitle.bold())
-                .accessibilityAddTraits(.isHeader)
-                .accessibilityIdentifier("onboarding.startingPoint.title")
-            switch model.baselineState {
+            Text(LocalizedStringKey(metric == .steps ? "metric.steps" : "metric.activity"))
+                .font(.title3.weight(.semibold))
+            switch model.baselineState(for: metric) {
                 case .loading:
                     ProgressView("baseline.loading")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("baseline.loading")
                 case let .available(baseline):
                     activityCard(baseline)
-                    if model.draftGoal != nil {
-                        Text(model.draftGoal == GoalEngine
+                    if model.draftGoals[metric] != nil {
+                        Text(model.draftGoals[metric] == GoalEngine
                             .propose(from: baseline) ? "goal.explanation" : "goal.adjustedExplanation")
                             .font(.subheadline).foregroundStyle(Color("BaselineSecondary"))
                         Button { isAdjusting = true } label: {
@@ -28,18 +74,12 @@ struct BaselineView: View {
                         .buttonStyle(.bordered).controlSize(.large)
                         .frame(maxWidth: .infinity, minHeight: Constants.minimumTouchHeight)
                         .accessibilityIdentifier("goal.adjust")
-                        Text("goal.firstWeek").font(.footnote).foregroundStyle(Color("BaselineSecondary"))
-                        Button(action: model.acceptGoal) {
-                            Text("goal.accept").foregroundStyle(Color("GoalOnAccent")).frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.borderedProminent).controlSize(.large)
-                        .frame(maxWidth: .infinity, minHeight: Constants.minimumTouchHeight)
-                        .accessibilityIdentifier("goal.accept")
+
                     } else {
                         Text("goal.unavailable").font(.subheadline)
                     }
                 case .insufficient:
-                    recoveryContent("baseline.insufficient", identifier: "baseline.insufficient")
+                    recoveryContent("baseline.insufficient", identifier: "baseline.insufficient", showAccessHelp: true)
                 case .failed:
                     recoveryContent("baseline.error", identifier: "baseline.error")
             }
@@ -49,14 +89,14 @@ struct BaselineView: View {
         }
         .foregroundStyle(Color("BaselineText"))
         .tint(Color("GoalAccent"))
-        .task { await model.loadBaseline() }
+        .task { await model.loadBaseline(for: metric) }
         .sheet(isPresented: $isAdjusting) {
-            if let goal = model.draftGoal { GoalAdjustmentView(model: model, goal: goal) }
+            if let goal = model.draftGoals[metric] { GoalAdjustmentView(model: model, goal: goal) }
         }
     }
 }
 
-private extension BaselineView {
+private extension BaselineMetricView {
     enum Constants {
         static let sectionSpacing: CGFloat = 12
         static let cardSpacing: CGFloat = 4
@@ -77,7 +117,7 @@ private extension BaselineView {
                 .foregroundStyle(Color("BaselineSecondary"))
                 .accessibilityIdentifier("baseline.value")
 
-            if let goal = model.draftGoal {
+            if let goal = model.draftGoals[metric] {
                 Image(systemName: "arrow.down").foregroundStyle(Color("GoalAccent")).accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: Constants.cardSpacing) {
                     Text(goal == GoalEngine.propose(from: baseline) ? "goal.proposal" : "goal.draftHeadline")
@@ -115,11 +155,18 @@ private extension BaselineView {
         return value
     }
 
-    func recoveryContent(_ key: LocalizedStringKey, identifier: String) -> some View {
+    func recoveryContent(_ key: LocalizedStringKey, identifier: String, showAccessHelp: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             Text(key).accessibilityIdentifier(identifier)
+            if showAccessHelp {
+                Text(LocalizedStringKey(metric == .steps ? "baseline.stepsAccessHelp" : "baseline.activityAccessHelp"))
+                    .font(.subheadline)
+                    .foregroundStyle(Color("BaselineSecondary"))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("baseline.accessHelp")
+            }
             Button("common.retry") {
-                Task { await model.loadBaseline(retry: true) }
+                Task { await model.loadBaseline(for: metric, retry: true) }
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
