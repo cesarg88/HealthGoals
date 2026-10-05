@@ -30,6 +30,7 @@ final class OnboardingModel {
     private(set) var progressState: WeeklyProgressState = .loading
     private(set) var activeWeek: ActiveWeek?
     private let progressReading: (any HealthProgressReading)?
+    private let patternReading: (any HealthPatternReading)?
     private var progressTask: Task<Void, Never>?
     private let healthAuthorization: any HealthAuthorizing
     private let healthReading: any HealthReading
@@ -48,11 +49,13 @@ final class OnboardingModel {
         healthAuthorization: any HealthAuthorizing,
         healthReading: any HealthReading,
         progressReading: (any HealthProgressReading)? = nil,
+        patternReading: (any HealthPatternReading)? = nil,
         defaults: UserDefaults,
         now: @escaping () -> Date = Date.init,
         calendar: @escaping () -> Calendar = { .current }
     ) {
         self.progressReading = progressReading
+        self.patternReading = patternReading
         self.healthReading = healthReading
         self.now = now
         self.calendar = calendar
@@ -186,33 +189,62 @@ private extension OnboardingModel {
     func fetchProgress(for goal: WeeklyGoal) async {
         do {
             guard let progressReading else { throw ProgressFailure.readerUnavailable }
-            var week = try ActiveWeek(now: now(), calendar: calendar())
             while true {
+                let queryCalendar = calendar()
+                let queriedAt = now()
+                let week = try ActiveWeek(now: queriedAt, calendar: queryCalendar)
+                let window = try PatternWindow(now: queriedAt, calendar: queryCalendar)
                 activeWeek = week
                 let value = try await progressReading.progress(for: goal.metric, in: week)
-                let completedAt = now()
-                let currentWeek = try ActiveWeek(now: completedAt, calendar: calendar())
-                // A query finishing across a week/time-zone change must not display the previous interval.
-                if week.interval != currentWeek.interval || week.timeZone != currentWeek.timeZone {
-                    week = currentWeek
+                if try !isCurrent(week: week, window: window) { continue }
+                guard let value, value.isFinite, value >= 0 else {
+                    progressState = .insufficient
+                    return
+                }
+                let progress = WeeklyProgress(
+                    goal: goal, value: value, week: week, queriedAt: now(),
+                    pace: value >= Double(goal.value) ? .completed : .unknown
+                )
+                // Progress/gap is useful independently of historical pattern availability or errors.
+                progressState = .available(progress)
+                let pattern = await fetchPattern(for: goal.metric, in: window)
+                if try !isCurrent(week: week, window: window) {
+                    progressState = .loading
                     continue
                 }
-                activeWeek = currentWeek
-                if let value, value.isFinite, value >= 0 {
-                    progressState = .available(WeeklyProgress(
-                        goal: goal,
-                        value: value,
-                        week: week,
-                        queriedAt: completedAt
-                    ))
-                } else {
-                    progressState = .insufficient
-                }
+                let pace = PaceCalculator.state(
+                    for: progress,
+                    pattern: pattern,
+                    day: window.today,
+                    calendar: queryCalendar
+                )
+                progressState = .available(WeeklyProgress(
+                    goal: goal, value: value, week: week, queriedAt: progress.queriedAt, pace: pace
+                ))
+                activeWeek = try ActiveWeek(now: now(), calendar: calendar())
                 return
             }
         } catch {
             progressState = .failed
         }
+    }
+
+    func fetchPattern(for metric: ActivityMetric, in window: PatternWindow) async -> HistoricalPattern? {
+        guard let patternReading else { return nil }
+        do {
+            let totals = try await patternReading.dailyTotals(for: metric, in: window)
+            return PatternCalculator.calculate(metric: metric, dailyTotals: totals, in: window)
+        } catch {
+            return nil
+        }
+    }
+
+    func isCurrent(week: ActiveWeek, window: PatternWindow) throws -> Bool {
+        let currentCalendar = calendar()
+        let currentDate = now()
+        let currentWeek = try ActiveWeek(now: currentDate, calendar: currentCalendar)
+        return week.interval == currentWeek.interval && window.calendar == currentCalendar
+            && window.today == currentCalendar.startOfDay(for: currentDate)
     }
 
     enum ProgressFailure: Error { case readerUnavailable }

@@ -18,7 +18,12 @@ protocol HealthProgressReading {
 }
 
 @MainActor
-final class HealthAuthorization: HealthAuthorizing, HealthReading, HealthProgressReading {
+protocol HealthPatternReading {
+    func dailyTotals(for metric: ActivityMetric, in window: PatternWindow) async throws -> [Double?]
+}
+
+@MainActor
+final class HealthAuthorization: HealthAuthorizing, HealthReading, HealthProgressReading, HealthPatternReading {
     var isAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
@@ -48,31 +53,16 @@ final class HealthAuthorization: HealthAuthorizing, HealthReading, HealthProgres
     }
 
     func weeklyTotals(for metric: ActivityMetric, in window: BaselineWindow) async throws -> [Double?] {
-        let store = try availableStore()
-        guard let first = window.intervals.first, let last = window.intervals.last else {
-            throw Failure.invalidIntervals
-        }
-        let predicate = HKQuery.predicateForSamples(withStart: first.start, end: last.end)
-        let query = HKStatisticsCollectionQueryDescriptor(
-            predicate: .quantitySample(type: metric.quantityType, predicate: predicate),
-            options: .cumulativeSum,
-            anchorDate: first.start,
-            intervalComponents: DateComponents(
-                calendar: window.calendar,
-                timeZone: window.calendar.timeZone,
-                day: Constants.daysPerBlock
-            )
+        try await quantities(
+            for: metric,
+            intervals: window.intervals,
+            calendar: window.calendar,
+            days: Constants.daysPerBlock
         )
-        let collection = try await query.result(for: store)
-        return try window.intervals.map { interval in
-            guard let statistics = collection.statistics(for: interval.start) else { return nil }
-            // Do not silently accept an interval shifted by a calendar or time-zone mismatch.
-            guard statistics.startDate == interval.start, statistics.endDate == interval.end else {
-                throw Failure.invalidIntervals
-            }
-            // Missing quantity is unknown; a present quantity may explicitly contain zero.
-            return metric.value(from: statistics.sumQuantity())
-        }
+    }
+
+    func dailyTotals(for metric: ActivityMetric, in window: PatternWindow) async throws -> [Double?] {
+        try await quantities(for: metric, intervals: window.intervals, calendar: window.calendar, days: 1)
     }
 }
 
@@ -82,6 +72,31 @@ private extension HealthAuthorization {
     }
 
     enum Failure: Error { case invalidIntervals }
+
+    func quantities(
+        for metric: ActivityMetric,
+        intervals: [DateInterval],
+        calendar: Calendar,
+        days: Int
+    ) async throws -> [Double?] {
+        let store = try availableStore()
+        guard let first = intervals.first, let last = intervals.last else { throw Failure.invalidIntervals }
+        let predicate = HKQuery.predicateForSamples(withStart: first.start, end: last.end)
+        let query = HKStatisticsCollectionQueryDescriptor(
+            predicate: .quantitySample(type: metric.quantityType, predicate: predicate),
+            options: .cumulativeSum,
+            anchorDate: first.start,
+            intervalComponents: DateComponents(calendar: calendar, timeZone: calendar.timeZone, day: days)
+        )
+        let collection = try await query.result(for: store)
+        return try intervals.map { interval in
+            guard let statistics = collection.statistics(for: interval.start) else { return nil }
+            guard statistics.startDate == interval.start,
+                  statistics.endDate == interval.end else { throw Failure.invalidIntervals }
+            // No samples produces nil; a present sum quantity can explicitly contain zero.
+            return metric.value(from: statistics.sumQuantity())
+        }
+    }
 
     func availableStore() throws -> HKHealthStore {
         guard isAvailable else { throw HKError(.errorHealthDataUnavailable) }

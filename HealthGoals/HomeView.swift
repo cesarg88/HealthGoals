@@ -4,6 +4,7 @@ struct HomeView: View {
     let model: OnboardingModel
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.locale) private var locale
+    @State private var isPaceExplanationExpanded = false
     @ScaledMetric(relativeTo: .largeTitle) private var remainingSize = Constants.remainingSize
 
     var body: some View {
@@ -35,6 +36,16 @@ struct HomeView: View {
                 .padding(Constants.cardPadding)
                 .background(Color("BaselineSurface"), in: RoundedRectangle(cornerRadius: Constants.cardRadius))
             }
+            DisclosureGroup(isExpanded: $isPaceExplanationExpanded) {
+                Text("pace.explanation")
+                    .font(.subheadline).foregroundStyle(Color("BaselineSecondary"))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("pace.explanation")
+            } label: {
+                Text("pace.explanationTitle").font(.subheadline)
+                    .frame(minHeight: Constants.minimumTouchHeight, alignment: .leading)
+            }
+            .accessibilityIdentifier("pace.explanationToggle")
             Button("home.refresh") { Task { await model.loadProgress() } }
                 .buttonStyle(.bordered).controlSize(.large)
                 .disabled(model.progressState == .loading)
@@ -56,6 +67,7 @@ private extension HomeView {
         static let cardPadding: CGFloat = 16
         static let cardRadius: CGFloat = 24
         static let remainingSize: CGFloat = 42
+        static let minimumTouchHeight: CGFloat = 44
     }
 
     var retryButton: some View {
@@ -89,6 +101,10 @@ private extension HomeView {
         Text(formattedRemaining(progress))
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityIdentifier("home.gap")
+        let paceKey = "pace.\(progress.pace.rawValue)"
+        Text(LocalizedStringKey(paceKey))
+            .font(.subheadline).fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("pace.state")
         if progress.goal.metric == .steps {
             Text("home.stepsProgress \(progress.value) \(progress.goal.value)")
                 .font(.subheadline).foregroundStyle(Color("BaselineSecondary"))

@@ -18,6 +18,7 @@ private extension HealthGoalsApp {
             healthAuthorization: health,
             healthReading: health,
             progressReading: health,
+            patternReading: health,
             defaults: .standard
         )
     }

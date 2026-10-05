@@ -1004,6 +1004,125 @@
           }
         }
       }
+    },
+    "pace.completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal completed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objetivo completado"
+          }
+        }
+      }
+    },
+    "pace.ahead": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahead of your usual pace"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por delante de tu ritmo habitual"
+          }
+        }
+      }
+    },
+    "pace.onTrack": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On track for your usual pace"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tu ritmo"
+          }
+        }
+      }
+    },
+    "pace.belowPace": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slightly below your usual pace"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un poco por debajo de tu ritmo habitual"
+          }
+        }
+      }
+    },
+    "pace.unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We can’t estimate your usual pace yet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todavía no podemos estimar tu ritmo habitual"
+          }
+        }
+      }
+    },
+    "pace.explanationTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How we interpret your pace"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cómo interpretamos tu ritmo"
+          }
+        }
+      }
+    },
+    "pace.explanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We compare your progress with how you usually distribute your activity throughout the week. We don’t expect all your days to be the same."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparamos tu progreso con cómo sueles distribuir tu actividad durante la semana. No esperamos que todos tus días sean iguales."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
