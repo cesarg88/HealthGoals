@@ -1361,6 +1361,40 @@
           }
         }
       }
+    },
+    "baseline.stepsAccessHelp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There may not be enough history or access to the data. Review HealthGoals’ access to Steps in the Health app, then return here and tap Retry."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puede faltar historial o acceso a los datos. Revisa el acceso de HealthGoals a Pasos en la app Salud y, después, vuelve aquí y pulsa Reintentar."
+          }
+        }
+      }
+    },
+    "baseline.activityAccessHelp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There may not be enough history or access to the data. Review HealthGoals’ access to Activity in the Health app, then return here and tap Retry."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puede faltar historial o acceso a los datos. Revisa el acceso de HealthGoals a Actividad en la app Salud y, después, vuelve aquí y pulsa Reintentar."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

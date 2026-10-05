@@ -60,14 +60,22 @@ struct GoalProgressCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             VStack(alignment: .leading, spacing: Constants.cardSpacing) {
-                Text(LocalizedStringKey(goal.metric == .steps ? "metric.steps" : "metric.activity"))
-                    .font(.title3.weight(.semibold))
+                HStack {
+                    Text(LocalizedStringKey(goal.metric == .steps ? "metric.steps" : "metric.activity"))
+                        .font(.title3.weight(.semibold))
+                    Spacer(minLength: 0)
+                    // Keep the refresh indicator in the hierarchy so its visibility cannot move the card.
+                    ProgressView()
+                        .opacity(model.isRefreshing(goal.metric) ? 1 : 0)
+                        .accessibilityLabel("home.loading")
+                        .accessibilityHidden(!model.isRefreshing(goal.metric))
+                        .accessibilityIdentifier("home.refreshing")
+                }
                 switch model.progressState(for: goal.metric) {
                     case .loading:
                         ProgressView("home.loading").accessibilityIdentifier("home.loading")
                     case let .available(progress):
                         availableContent(progress)
-                        if model.isRefreshing(goal.metric) { ProgressView("home.loading") }
                     case .insufficient:
                         Text("home.insufficient").accessibilityIdentifier("home.insufficient")
                         retryButton

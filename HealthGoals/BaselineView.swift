@@ -79,7 +79,7 @@ struct BaselineMetricView: View {
                         Text("goal.unavailable").font(.subheadline)
                     }
                 case .insufficient:
-                    recoveryContent("baseline.insufficient", identifier: "baseline.insufficient")
+                    recoveryContent("baseline.insufficient", identifier: "baseline.insufficient", showAccessHelp: true)
                 case .failed:
                     recoveryContent("baseline.error", identifier: "baseline.error")
             }
@@ -155,9 +155,16 @@ private extension BaselineMetricView {
         return value
     }
 
-    func recoveryContent(_ key: LocalizedStringKey, identifier: String) -> some View {
+    func recoveryContent(_ key: LocalizedStringKey, identifier: String, showAccessHelp: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             Text(key).accessibilityIdentifier(identifier)
+            if showAccessHelp {
+                Text(LocalizedStringKey(metric == .steps ? "baseline.stepsAccessHelp" : "baseline.activityAccessHelp"))
+                    .font(.subheadline)
+                    .foregroundStyle(Color("BaselineSecondary"))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("baseline.accessHelp")
+            }
             Button("common.retry") {
                 Task { await model.loadBaseline(for: metric, retry: true) }
             }

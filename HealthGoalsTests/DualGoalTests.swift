@@ -291,6 +291,8 @@ struct DualGoalTests {
                 "goal.deleteStepsTitle",
                 "goal.deleteActivityTitle",
                 "goal.deleteExplanation",
+                "baseline.stepsAccessHelp",
+                "baseline.activityAccessHelp",
                 "home.empty",
                 "home.chooseGoal",
             ] {
