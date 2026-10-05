@@ -201,7 +201,7 @@ struct PersonalPacingModelTests {
         #expect(reader.patternMetrics == [intention.metric, intention.metric])
         #expect(reader.authorizationRequests == 0)
         #expect(try Set(#require(defaults.dictionary(forKey: "onboarding.progress")).keys) ==
-            ["intention", "stage", "goalMetric", "goalValue"])
+            ["intention", "stage", "goals", "hasCompletedOnboarding"])
     }
 
     @Test func patternFailureOrAbsencePreservesGapAndRetries() async throws {

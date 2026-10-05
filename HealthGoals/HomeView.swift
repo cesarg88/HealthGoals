@@ -3,56 +3,39 @@ import SwiftUI
 struct HomeView: View {
     let model: OnboardingModel
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.locale) private var locale
     @State private var isPaceExplanationExpanded = false
-    @ScaledMetric(relativeTo: .largeTitle) private var remainingSize = Constants.remainingSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
             Text("HealthGoals").font(.headline).foregroundStyle(Color("GoalAccent"))
             Text("home.title").font(.largeTitle.bold()).accessibilityAddTraits(.isHeader)
                 .accessibilityIdentifier("home.title")
-            if let week = model.activeWeek {
-                Text("home.days \(week.daysRemaining)").foregroundStyle(Color("BaselineSecondary"))
-            }
-            if let goal = model.activeGoal {
-                VStack(alignment: .leading, spacing: Constants.cardSpacing) {
-                    Text(LocalizedStringKey(goal.metric == .steps ? "metric.steps" : "metric.activity"))
-                        .font(.title3.weight(.semibold))
-                    switch model.progressState {
-                        case .loading:
-                            ProgressView("home.loading").accessibilityIdentifier("home.loading")
-                        case let .available(progress):
-                            availableContent(progress)
-                        case .insufficient:
-                            Text("home.insufficient").accessibilityIdentifier("home.insufficient")
-                            retryButton
-                        case .failed:
-                            Text("home.error").accessibilityIdentifier("home.error")
-                            retryButton
-                    }
+            if model.activeGoals.isEmpty {
+                Text("home.empty").accessibilityIdentifier("home.empty")
+                Button("home.chooseGoal", action: model.chooseGoal)
+                    .buttonStyle(.borderedProminent).controlSize(.large)
+                    .accessibilityIdentifier("home.chooseGoal")
+            } else {
+                if let week = model.activeWeek {
+                    Text("home.days \(week.daysRemaining)").foregroundStyle(Color("BaselineSecondary"))
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(Constants.cardPadding)
-                .background(Color("BaselineSurface"), in: RoundedRectangle(cornerRadius: Constants.cardRadius))
+                ForEach(model.activeGoals, id: \.metric) { goal in
+                    GoalProgressCard(goal: goal, model: model)
+                }
+                DisclosureGroup(isExpanded: $isPaceExplanationExpanded) {
+                    Text("pace.explanation").font(.subheadline).foregroundStyle(Color("BaselineSecondary"))
+                        .fixedSize(horizontal: false, vertical: true).accessibilityIdentifier("pace.explanation")
+                } label: {
+                    Text("pace.explanationTitle").font(.subheadline)
+                        .frame(minHeight: Constants.minimumTouchHeight, alignment: .leading)
+                }
+                .accessibilityIdentifier("pace.explanationToggle")
+                Button("home.refresh") { Task { await model.loadProgress() } }
+                    .buttonStyle(.bordered).controlSize(.large)
+                    .accessibilityIdentifier("home.refresh")
             }
-            DisclosureGroup(isExpanded: $isPaceExplanationExpanded) {
-                Text("pace.explanation")
-                    .font(.subheadline).foregroundStyle(Color("BaselineSecondary"))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityIdentifier("pace.explanation")
-            } label: {
-                Text("pace.explanationTitle").font(.subheadline)
-                    .frame(minHeight: Constants.minimumTouchHeight, alignment: .leading)
-            }
-            .accessibilityIdentifier("pace.explanationToggle")
-            Button("home.refresh") { Task { await model.loadProgress() } }
-                .buttonStyle(.bordered).controlSize(.large)
-                .disabled(model.progressState == .loading)
-                .accessibilityIdentifier("home.refresh")
         }
-        .foregroundStyle(Color("BaselineText"))
-        .tint(Color("GoalAccent"))
+        .foregroundStyle(Color("BaselineText")).tint(Color("GoalAccent"))
         .task { await model.loadProgress() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await model.loadProgress() } }
@@ -63,6 +46,56 @@ struct HomeView: View {
 private extension HomeView {
     enum Constants {
         static let sectionSpacing: CGFloat = 16
+        static let minimumTouchHeight: CGFloat = 44
+    }
+}
+
+struct GoalProgressCard: View {
+    let goal: WeeklyGoal
+    let model: OnboardingModel
+    @Environment(\.locale) private var locale
+    @State private var isAdjusting = false
+    @ScaledMetric(relativeTo: .largeTitle) private var remainingSize = Constants.remainingSize
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Constants.sectionSpacing) {
+            VStack(alignment: .leading, spacing: Constants.cardSpacing) {
+                Text(LocalizedStringKey(goal.metric == .steps ? "metric.steps" : "metric.activity"))
+                    .font(.title3.weight(.semibold))
+                switch model.progressState(for: goal.metric) {
+                    case .loading:
+                        ProgressView("home.loading").accessibilityIdentifier("home.loading")
+                    case let .available(progress):
+                        availableContent(progress)
+                        if model.isRefreshing(goal.metric) { ProgressView("home.loading") }
+                    case .insufficient:
+                        Text("home.insufficient").accessibilityIdentifier("home.insufficient")
+                        retryButton
+                    case .failed:
+                        Text("home.error").accessibilityIdentifier("home.error")
+                        retryButton
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Constants.cardPadding)
+            .background(Color("BaselineSurface"), in: RoundedRectangle(cornerRadius: Constants.cardRadius))
+            Button("goal.adjust") { isAdjusting = true }
+                .frame(minHeight: Constants.minimumTouchHeight)
+                .accessibilityIdentifier("home.adjust.\(goal.metric.rawValue)")
+                .accessibilityLabel(Text(LocalizedStringKey(goal
+                        .metric == .steps ? "goal.adjustSteps" : "goal.adjustActivity")))
+        }
+        .foregroundStyle(Color("BaselineText"))
+        .tint(Color("GoalAccent"))
+        .sheet(isPresented: $isAdjusting) {
+            GoalAdjustmentView(model: model, goal: goal, isActive: true)
+        }
+    }
+}
+
+private extension GoalProgressCard {
+    enum Constants {
+        static let sectionSpacing: CGFloat = 16
         static let cardSpacing: CGFloat = 4
         static let cardPadding: CGFloat = 16
         static let cardRadius: CGFloat = 24
@@ -71,7 +104,7 @@ private extension HomeView {
     }
 
     var retryButton: some View {
-        Button { Task { await model.loadProgress() } } label: {
+        Button { Task { await model.loadProgress(for: goal.metric) } } label: {
             Text("common.retry").foregroundStyle(Color("GoalOnAccent"))
         }
         .buttonStyle(.borderedProminent).controlSize(.large)

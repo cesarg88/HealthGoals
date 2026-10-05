@@ -35,8 +35,12 @@ private extension OnboardingView {
 
     var intentionContent: some View {
         Group {
-            heading("intention.title", identifier: "onboarding.intention.title")
-            Text("intention.promise")
+            if model.hasCompletedOnboarding {
+                heading("home.chooseGoal", identifier: "goal.choose.title")
+            } else {
+                heading("intention.title", identifier: "onboarding.intention.title")
+                Text("intention.promise")
+            }
             Text("intention.question").font(.title2.bold())
             ForEach(ActivityIntention.allCases) { intention in
                 intentionButton(intention)
@@ -46,6 +50,9 @@ private extension OnboardingView {
                 .controlSize(.large)
                 .disabled(!model.canContinue)
                 .accessibilityIdentifier("onboarding.continue")
+            if model.hasCompletedOnboarding {
+                Button("common.cancel", action: model.cancelChoosingGoal)
+            }
         }
     }
 
