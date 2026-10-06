@@ -7,7 +7,7 @@ Esta guía comprueba la segunda vertical de [Issue #18](https://github.com/cesar
 ## Preparación
 
 - Usar el checkout y SHA del candidato indicado en la PR, abrir `HealthGoals.xcodeproj` y elegir scheme `HealthGoals`.
-- En Signing & Capabilities seleccionar `Cesar Gonzalez (Personal Team)`, bundle `com.example.HealthGoals` y signing automático, según la [guía de onboarding](onboarding-healthkit.md). Mantener únicamente la capacidad HealthKit básica; no activar background ni permisos de escritura.
+- El proyecto ya configura Team `4A669F9FP4`, bundle `com.example.HealthGoals` y firma automática; comprobar acceso de la cuenta local según la [guía de onboarding](onboarding-healthkit.md). Mantener únicamente la capacidad HealthKit básica; no activar background ni permisos de escritura.
 - Conectar un iPhone con iOS 26 o posterior y ejecutar. No copiar certificados/perfiles al repositorio.
 - Para elegir de nuevo intención, eliminar y reinstalar la app. Esto reinicia las preferencias de onboarding, pero iOS puede conservar decisiones previas de autorización: no esperar necesariamente otro panel nativo. No existe reset oculto ni inyección de datos ficticios en producción.
 - Para obtener baseline hacen falta cantidades accesibles de la métrica en cada uno de los cuatro períodos de siete días. Tener alguna actividad no garantiza que los cuatro estén disponibles. No crear registros personales o fixtures dentro de Salud para demostrar aceptación.

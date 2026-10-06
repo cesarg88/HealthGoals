@@ -7,7 +7,7 @@ Entrega: [Issue #21](https://github.com/cesarg88/HealthGoals/issues/21). Complem
 ## Preparación
 
 1. Abrir `HealthGoals.xcodeproj` en `/Users/cesargonzalez/Documents/HealthGoals`, checkout principal y rama candidata `feature/21-personal-pacing`. Registrar el SHA indicado en la PR antes de probar. No crear otro worktree.
-2. Seleccionar scheme `HealthGoals`, el iPhone y `Cesar Gonzalez (Personal Team)` en Signing & Capabilities. Mantener bundle `com.example.HealthGoals`. La firma es configuración local; no incluir certificados/perfiles ni cambios de Team en la PR.
+2. Seleccionar scheme `HealthGoals` y el iPhone. Team `4A669F9FP4` y firma automática ya están configurados en el proyecto; mantener bundle `com.example.HealthGoals`. La cuenta, certificados y perfiles se gestionan localmente según la [guía de onboarding](onboarding-healthkit.md); no incluir credenciales en la PR.
 3. Ejecutar desde Xcode. Para conservar el objetivo de la entrega anterior, instalar sobre la app existente. Para cambiar la intención principal durante estas pruebas, eliminar/reinstalar y recorrer onboarding; esta entrega no añade edición activa ni segunda métrica.
 4. Cuando iOS permita limitar el histórico a los últimos 30 días, esa opción puede cubrir la ventana de 28 días completos, pero no garantiza cantidades utilizables para cada día. La app no conoce el estado READ ni debe deducirlo.
 

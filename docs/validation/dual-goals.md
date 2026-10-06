@@ -7,7 +7,7 @@ Entrega de [Issue #22](https://github.com/cesarg88/HealthGoals/issues/22). Césa
 ## Preparación
 
 - Abrir `HealthGoals.xcodeproj` en `/Users/cesargonzalez/Documents/HealthGoals`, rama `feature/22-dual-goals`, scheme `HealthGoals`. No hay worktree adicional.
-- Seleccionar el iPhone y configurar localmente Team `Cesar Gonzalez (Personal Team)` y bundle ID `com.example.HealthGoals`. No incorporar cambios locales de signing ni datos personales a la PR.
+- Seleccionar el iPhone; el proyecto ya configura Team `4A669F9FP4`, firma automática y bundle ID `com.example.HealthGoals`. Mantener cuenta, certificados y perfiles locales según la [guía de onboarding](onboarding-healthkit.md); no incorporar credenciales ni datos personales a la PR.
 - Para migración, primero instalar sobre la versión anterior con objetivo aceptado, sin borrar la app. Para onboarding limpio, eliminar/reinstalar después; esto borra únicamente preferencias de la app, no datos de Salud.
 - Disponer de información accesible de las métricas que se quieran probar. Autorizar ambas lecturas no garantiza que haya cuatro acumulados semanales o 28 diarios utilizables. El intervalo elegido en el panel nativo puede limitar el histórico.
 - No publicar valores, capturas con datos personales ni modificar Salud o el reloj para forzar un estado.
