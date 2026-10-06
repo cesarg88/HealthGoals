@@ -2,7 +2,7 @@
 
 Entrega de Fase 1 para César/Product, 6 de octubre de 2026. **Exploración pendiente de selección**, sin aprobación de identidad ni autorización para Figma. [Issue #41](https://github.com/montunolabs/HealthGoals/issues/41) define el alcance; #30 continúa bloqueada. Ninguna imagen representa una pantalla terminada.
 
-La entrega reúne esta exploración principal y un [suplemento independiente de Design](suplemento/README.md), integrado tras la autorización de César para coordinar y reunir los dos chats. El conjunto conserva **ocho moodboards, veinticuatro conceptos de firma y dos estudios de tres familias cromáticas**, con materiales y motion de ambas propuestas. Papel y tejido comparten territorio; impresión y mosaico amplían la divergencia. Los códigos del suplemento son locales a su dossier: «suplemento C02» no es «principal C02». Sus recomendaciones se conservan junto a las de esta exploración. La selección conjunta de Design está al final del test conceptual; César/Product mantiene la decisión.
+La entrega reúne esta exploración principal y un [suplemento independiente de Design](suplemento/README.md), integrado tras la autorización de César para coordinar y reunir los dos chats. El conjunto conserva **ocho moodboards, veinticuatro conceptos de firma y dos estudios de tres familias cromáticas**, con materiales y motion de ambas propuestas. Papel y tejido comparten territorio; impresión y mosaico amplían la divergencia. Los códigos del suplemento son locales a su dossier: «suplemento C02» no es «principal C02». Sus recomendaciones se conservan junto a las de esta exploración. La selección conjunta de Design está al final del test conceptual; César/Product mantiene la decisión. Después de esa selección se añade una [candidata adicional, 05 · Marcas](#candidata-adicional--05--marcas-tú-y-tu-ritmo), con render propio en lugar de imagen generada, incorporada a petición de César.
 
 ## Punto de partida
 
@@ -170,11 +170,63 @@ Tras reunir las dos exploraciones, la terna que mejor combina legibilidad potenc
 | 2 | **Suplemento: Agregar + C02 Mosaico + F3 Baya / Sol** | Frente y soporte estable ofrecen una alternativa a fibras y partículas dispersas. Reconstruir áreas equivalentes, separar habitual del frente y usar un pigmento por métrica. No convertir teselas en cuotas ni anillos. |
 | 3 | **Suplemento: Imprimir + B01 Doble impresión + F2 Violeta / Mandarina** | La huella y el registro aportan un lenguaje plano de impresión que contrasta con ambas materias. Unificar escala, reducir grano y agresividad tipográfica; evitar interpretar huellas como pasos literales. |
 
-Las ocho respuestas de T01 están en la matriz anterior; las de C02 y B01 están en la [matriz del suplemento](suplemento/README.md#ocho-preguntas-para-las-candidatas). Ambas forman parte de la entrega de #41. Las ternas de cada exploración permanecen para comparar alternativas, pero esta es la recomendación conjunta de las tres mejores combinaciones. Pliegue/P01 y Campo/C01 quedan como reservas, por ambigüedad de perspectiva o borde. Product puede seleccionar otras combinaciones del conjunto o ninguna.
+Las ocho respuestas de T01 están en la matriz anterior; las de C02 y B01 están en la [matriz del suplemento](suplemento/README.md#ocho-preguntas-para-las-candidatas). Ambas forman parte de la entrega de #41. Las ternas de cada exploración permanecen para comparar alternativas, pero esta es la recomendación conjunta de las tres mejores combinaciones. Pliegue/P01 y Campo/C01 quedan como reservas, por ambigüedad de perspectiva o borde. La [candidata 05 · Marcas](#candidata-adicional--05--marcas-tú-y-tu-ritmo) se añade después de esta terna y no la reordena. Product puede seleccionar otras combinaciones del conjunto o ninguna.
+
+## Candidata adicional · 05 · Marcas: Tú y tu ritmo
+
+Propuesta incorporada el 6 de octubre de 2026 a petición de César, elaborada por el agente de este chat tras leer #38, #39, #41 y este dossier. A diferencia de las láminas anteriores, no es una imagen generada: es un render propio en HTML/SVG, con la fuente reproducible en [candidata-05-tu-y-tu-ritmo.html](candidata-05-tu-y-tu-ritmo.html) y dos láminas exportadas con Chrome headless a escala 2x. Las cifras y posiciones del render siguen los datos comunes con exactitud porque se calculan, no se dibujan. Sigue siendo una propuesta conceptual de Fase 1: no es una pantalla terminada, no valida accesibilidad y no autoriza Figma.
+
+**Idea.** Una cinta abierta por métrica y dos marcas sobre ella: un punto de tinta que es «tú» y un anillo del color de la métrica que es «tu ritmo» habitual a estas alturas de la semana. La distancia entre las dos marcas es la firma. La cifra protagonista de cada métrica es el restante, no el porcentaje. Pone la identidad en la relación entre las dos referencias, que es la diferenciación funcional del producto, y no en un material.
+
+### Gramática con los datos comunes
+
+| Referencia | Elemento | Posición con Pasos 24.000 / 21.500 / 40.000 |
+| --- | --- | --- |
+| Actual | Tramo sólido de la cinta y punto de tinta «tú» | 60 % |
+| Habitual ahora | Anillo «tu ritmo», siempre visible delante del sólido | 53,75 % |
+| Por delante | Tramo del tono claro de la métrica entre el anillo y el punto, con etiqueta +2.500 | 53,75 % → 60 % |
+| Por debajo | Tramo translúcido del mismo tono entre el punto y el anillo, con etiqueta de diferencia | actual → habitual |
+| Meta | Marca abierta al final de la cinta, sin contenedor cerrado | 100 % |
+| Restante | Tramo discontinuo de bajo contraste hasta la meta; cifra exacta 16.000 | 60 % → 100 % |
+| Ritmo desconocido | La cinta no cambia; desaparece el anillo | sin anillo |
+| Completado | Cinta cerrada hasta la meta; el excedente se dice con número («41.200 de 40.000») sin agrandar la meta | 100 % |
+
+El estado se deriva con la misma tolerancia que `PaceCalculator`, 5 % de la meta. El tono de cada métrica no cambia con el estado; cambian el orden de las marcas y el tramo entre ellas. No hay rojo ni verde, días, ticks ni siete casillas. Cada métrica lleva su propio titular; no se inventa un estado global.
+
+**Familia cromática.** Reutiliza F1 Tinta eléctrica para que Product compare esta firma con Trama T01 cambiando una sola variable. En Dark los tonos de métrica se aclaran (`#6B86FF`, `#FFA06A`) para mantener contraste sobre tinta; es un ajuste de exploración, no un token.
+
+**Capas iOS 26.** Cinta, marcas y cifras son contenido opaco. Los únicos controles con material son Ajustar junto a cada métrica y Ajustes en la barra. No hay cristal sobre el dato.
+
+**Motion.** Sigue el storyboard anterior: el frente y el punto avanzan 180–240 ms entre dos valores conocidos; el tramo claro aparece cuando «tú» adelanta al anillo; al completar, la cinta se cierra y la cifra pasa a «de 40.000». Con Reduce Motion todo cambia de forma inmediata y el objeto significa lo mismo quieto.
+
+![Candidata 05: Home en Light y Dark con dos métricas y controles nativos](candidata-05-home.png)
+
+![Candidata 05: el objeto en seis estados y el widget](candidata-05-estados.png)
+
+### Ocho preguntas para la candidata 05
+
+| Pregunta | Marcas · Tú y tu ritmo · F1 |
+| --- | --- |
+| ¿Dónde estoy ahora? | Punto de tinta y fin del tramo sólido: 24.000 / 60 %. |
+| ¿Dónde estaría normalmente? | Anillo sobre la misma cinta: 21.500 / 53,75 %. Visible también cuando queda dentro del sólido. |
+| ¿Dónde termina el objetivo? | Marca abierta al final de la cinta: 40.000 / 100 %. |
+| ¿Cuánto me queda? | Tramo discontinuo y cifra protagonista: 16.000 / 40 %. |
+| ¿Sugiere cuota diaria? | No. Sin divisiones ni calendario; el anillo se mueve por el patrón propio. Riesgo: que «tu ritmo» se lea como mínimo exigido; el titular y la explicación secundaria forman parte del diseño. |
+| ¿Funciona en Actividad/kcal? | Sí: misma cinta, tono tangerina, unidad explícita. La cinta es abstracta, sin huellas ni caminos. |
+| ¿Dos veces sin dashboard? | Sí: dos cintas a toda anchura separadas por aire, sin marcos de tarjeta. El widget muestra la misma cinta sin etiquetas. |
+| ¿Reconocible sin logo? | El par punto de tinta + anillo de color sobre una cinta abierta es la firma; ningún competidor dibuja «tu ritmo». |
+
+### Riesgos y límites de la candidata 05
+
+- Que la curva ascendente sugiera dificultad. La cinta puede ser recta sin perder la firma.
+- Que a 320 pt el tramo entre marcas sea demasiado fino; la cifra de diferencia haría el trabajo.
+- La etiqueta con signo junto al tramo («+2.500», «−175») puede leerse como deuda cuando se va por debajo. Es una decisión de wording pendiente de Product: cifra con signo, frase sin signo o ninguna etiqueta. La fuente deja la función preparada para cambiarla.
+- Se parece más a una barra que las materias de las láminas anteriores. La apuesta es que la firma esté en las dos marcas y no en la forma; si Product no la reconoce como propia, la candidata no cumple.
+- Render con tipografía del sistema de macOS en Chrome; no acredita SF Pro en iOS, Dynamic Type, VoiceOver, contraste final ni comportamiento nativo del material.
 
 ## Evidencia, límites y gate
 
-La entrega conserva copias íntegras de las imágenes finales generadas con la herramienta integrada `image_gen.imagegen` y los prompts completos en [prompts.json](prompts.json), incluida la edición semántica del storyboard. Los originales iniciales y editados permanecen preservados. El inventario [manifest.json](manifest.json) identifica los doce archivos principales, dimensiones y SHA-256; enlaza al [inventario de los once PNG del suplemento](suplemento/manifest.json). No contiene credenciales, datos personales ni imágenes tomadas de otras apps.
+La entrega conserva copias íntegras de las imágenes finales generadas con la herramienta integrada `image_gen.imagegen` y los prompts completos en [prompts.json](prompts.json), incluida la edición semántica del storyboard. Los originales iniciales y editados permanecen preservados. El inventario [manifest.json](manifest.json) identifica los doce archivos principales, dimensiones y SHA-256; enlaza al [inventario de los once PNG del suplemento](suplemento/manifest.json) y registra bajo `candidata_05` la fuente HTML y las dos láminas renderizadas de la candidata adicional. No contiene credenciales, datos personales ni imágenes tomadas de otras apps.
 
 Se comprueba cobertura de cuatro moodboards, doce conceptos, tres familias, capas, cinco secuencias con Reduce Motion y ocho preguntas por candidata. La comprobación cuantitativa se hace sobre el contrato escrito; no se presenta la perspectiva generada como escala exacta. Checks pertinentes: kit/helper/whitespace y enlaces/archivos del dossier. Swift, build local, simuladores y `make verify` no aplican a un cambio de documentación y artefactos visuales; CI clasificará imágenes/JSON como no exclusivamente Markdown y puede ejecutar el pipeline iOS existente.
 

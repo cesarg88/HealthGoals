@@ -122,5 +122,35 @@
     "imagenes": 11,
     "conceptos": 12,
     "autoría": "Chat Implementar la Issue 41 · 01a111b2-a828-7a93-9b98-6166c4538592"
+  },
+  "candidata_05": {
+    "nombre": "05 · Marcas: Tú y tu ritmo",
+    "origen": "Render propio en HTML/SVG con Chrome headless a escala 2x; no procede de image_gen ni de otra app",
+    "familia": "F1 Tinta eléctrica reutilizada; en Dark los tonos de métrica se aclaran (#6B86FF, #FFA06A) para contraste sobre tinta",
+    "autoría": "Propuesta del agente a petición de César en este chat, 6 de octubre de 2026",
+    "archivos": [
+      {
+        "archivo": "candidata-05-tu-y-tu-ritmo.html",
+        "bytes": 26852,
+        "sha256": "1fe6c6b293550f610f41cf103737063a47698650253817ed0b61b1a4c1ee9904",
+        "tipo": "fuente HTML/SVG reproducible"
+      },
+      {
+        "archivo": "candidata-05-home.png",
+        "bytes": 367192,
+        "sha256": "3d7c1f4ea6ae9e8b52561d17c21f1ec6616dae332297073b3182bf409773b9f0",
+        "ancho": 2240,
+        "alto": 2800,
+        "tipo": "lámina renderizada"
+      },
+      {
+        "archivo": "candidata-05-estados.png",
+        "bytes": 313521,
+        "sha256": "9eb088b76140686e6d9df7019d1a579da20897d6523934f1352a177cfb4cd6c0",
+        "ancho": 2240,
+        "alto": 2800,
+        "tipo": "lámina renderizada"
+      }
+    ]
   }
 }

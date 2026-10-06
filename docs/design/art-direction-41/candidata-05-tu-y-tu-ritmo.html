@@ -1,0 +1,400 @@
+<title>Tú y tu ritmo</title>
+<style>
+/* Layout: an editorial dossier. Two phone frames (Light / Dark) carry the proposal; below, the signature object
+   isolated in every pace state, the widget, and a short rationale. Everything derives from the tokens below. */
+:root {
+  --bg: #F7F8FC;            /* frío, F1 Tinta eléctrica */
+  --fg: #12162E;
+  --muted: #5B6180;
+  --hair: #D9DCEB;
+  --panel: #FFFFFF;
+  --steps: #304FFE;         /* Pasos · ultramar */
+  --steps-soft: #B9C4FF;
+  --activity: #FF8A42;      /* Actividad · tangerina */
+  --activity-soft: #FFCDAE;
+  --lilac: #B8AFF2;         /* acento independiente */
+  --glass: rgba(255,255,255,.55);
+  --glass-edge: rgba(18,22,46,.10);
+  --font-ui: -apple-system, "SF Pro Text", "SF Pro Display", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-num: -apple-system, "SF Pro Display", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12162E; --fg: #F2F3FA; --muted: #A5ABCB; --hair: #2A3052; --panel: #1A1F3C;
+    --steps: #6B86FF; --steps-soft: #2E3D8F; --activity: #FFA06A; --activity-soft: #7A4324;
+    --lilac: #C9C1FF; --glass: rgba(26,31,60,.55); --glass-edge: rgba(255,255,255,.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12162E; --fg: #F2F3FA; --muted: #A5ABCB; --hair: #2A3052; --panel: #1A1F3C;
+  --steps: #6B86FF; --steps-soft: #2E3D8F; --activity: #FFA06A; --activity-soft: #7A4324;
+  --lilac: #C9C1FF; --glass: rgba(26,31,60,.55); --glass-edge: rgba(255,255,255,.14);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); line-height: 1.45; margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 40px 72px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 5vw, 3.1rem); letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: 1.35rem; letter-spacing: -0.01em; margin-block: 56px 16px; }
+h3 { font-size: 1rem; }
+p { max-width: 62ch; margin: 0; }
+.eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 600; }
+.lede { color: var(--muted); font-size: 1.05rem; margin-top: 12px; max-width: 58ch; }
+.hdr { display: grid; gap: 10px; }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* ---------- Phones ---------- */
+.phones { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 28px; align-items: flex-start; }
+.phone {
+  width: 360px; max-width: 100%; border-radius: 44px; padding: 14px; background: var(--fg);
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.45);
+}
+.screen {
+  background: var(--bg); color: var(--fg); border-radius: 32px; overflow: hidden; min-height: 740px;
+  display: flex; flex-direction: column; position: relative;
+}
+.phone.light { --bg:#F7F8FC; --fg:#12162E; --muted:#5B6180; --hair:#D9DCEB; --panel:#FFFFFF; --steps:#304FFE; --steps-soft:#B9C4FF; --activity:#FF8A42; --activity-soft:#FFCDAE; --lilac:#B8AFF2; --glass:rgba(255,255,255,.55); --glass-edge:rgba(18,22,46,.10); background:#12162E; }
+.phone.dark  { --bg:#12162E; --fg:#F2F3FA; --muted:#A5ABCB; --hair:#2A3052; --panel:#1A1F3C; --steps:#6B86FF; --steps-soft:#2E3D8F; --activity:#FFA06A; --activity-soft:#7A4324; --lilac:#C9C1FF; --glass:rgba(26,31,60,.55); --glass-edge:rgba(255,255,255,.14); background:#000; }
+.status { display:flex; justify-content:space-between; padding: 14px 26px 0; font-size:.8rem; font-weight:600; }
+.nav { display:flex; justify-content:space-between; align-items:flex-end; padding: 22px 22px 0; }
+.nav .title { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+.nav .sub { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.glass {
+  display:inline-flex; align-items:center; gap:6px; padding: 8px 12px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--glass-edge); backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); font-size:.8rem; font-weight:600; color: var(--fg);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.glass.icon { width: 38px; height: 38px; padding: 0; justify-content: center; }
+.content { padding: 18px 22px 24px; display: grid; gap: 22px; flex: 1; }
+.metric { display: grid; gap: 6px; }
+.metric .row { display:flex; justify-content:space-between; align-items:center; }
+.metric .name { font-size: .95rem; font-weight: 700; display:flex; align-items:center; gap:8px; }
+.metric .name i { width: 10px; height: 10px; border-radius: 50%; display:inline-block; }
+.metric.steps .name i { background: var(--steps); }
+.metric.activity .name i { background: var(--activity); }
+.state { font-size: .82rem; color: var(--muted); }
+.hero { display:flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+.hero .big { font-size: 2.75rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.hero .unit { font-size: .95rem; color: var(--muted); }
+.ribbon { width: 100%; height: auto; display:block; margin-top: 6px; }
+.refs { display:flex; gap: 14px; font-size: .78rem; color: var(--muted); flex-wrap: wrap; }
+.refs b { color: var(--fg); font-weight: 600; }
+.foot { margin-top: auto; display:flex; justify-content:space-between; align-items:center; font-size:.78rem; color: var(--muted); border-top: 1px solid var(--hair); padding-top: 12px; }
+.foot a { color: var(--steps); text-decoration: none; font-weight: 600; }
+.homebar { width: 120px; height: 5px; border-radius: 3px; background: var(--fg); opacity:.35; margin: 8px auto 6px; }
+.caption { font-size: .8rem; color: var(--muted); margin-top: 10px; max-width: 360px; }
+
+/* ---------- State gallery ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.tile { background: var(--panel); border: 1px solid var(--hair); border-radius: 18px; padding: 18px; display:grid; gap: 8px; }
+.tile .state { font-weight: 600; color: var(--fg); font-size: .9rem; }
+.tile .big { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+.tile .why { font-size: .8rem; color: var(--muted); }
+
+/* ---------- Widget ---------- */
+.widgets { display:flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+.widget { width: 338px; max-width: 100%; background: var(--panel); border: 1px solid var(--hair); border-radius: 26px; padding: 16px 18px; display:grid; gap: 10px; }
+.widget .line { display:flex; justify-content:space-between; align-items:baseline; }
+.widget .line .big { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+.widget .line .lbl { font-size: .8rem; color: var(--muted); }
+.widget .ribbon { margin-top: -2px; }
+
+/* ---------- Rationale ---------- */
+.cols { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px 40px; }
+.cols h3 { margin-bottom: 8px; }
+ul { margin: 0; padding-left: 18px; }
+li { margin-bottom: 6px; max-width: 60ch; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: left; padding: 10px 10px 10px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+.tablewrap { overflow-x: auto; }
+.legend { display:flex; gap: 18px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin-top: 10px; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.sw { width: 26px; height: 10px; border-radius: 5px; display:inline-block; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display:inline-block; }
+.swatches { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.swatch { display:grid; gap: 4px; font-size: .72rem; color: var(--muted); font-family: var(--font-mono); }
+.swatch i { display:block; width: 64px; height: 40px; border-radius: 10px; border: 1px solid var(--hair); }
+small.note { display:block; color: var(--muted); font-size: .8rem; margin-top: 18px; max-width: 70ch; }
+:focus-visible { outline: 2px solid var(--lilac); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .ribbon .fill { transition: stroke-dasharray 220ms ease-out; }
+}
+</style>
+
+<div class="wrap">
+  <header class="hdr">
+    <span class="eyebrow">HealthGoals · propuesta de diseño · Issue 41 · datos ficticios</span>
+    <h1>Tú y tu ritmo</h1>
+    <p class="lede">Una cinta abierta por métrica y dos marcas sobre ella: dónde estás tú y dónde estaría tu ritmo habitual a estas alturas de la semana. La distancia entre las dos marcas es la firma. El restante es la cifra que manda.</p>
+    <div class="legend">
+      <span><i class="sw" style="background: var(--steps)"></i> realizado</span>
+      <span><i class="sw" style="background: var(--steps-soft)"></i> por delante de tu ritmo</span>
+      <span><i class="dot" style="background: var(--fg); box-shadow: 0 0 0 2px var(--bg)"></i> tú</span>
+      <span><i class="dot" style="border: 2.5px solid var(--steps); background: var(--bg)"></i> tu ritmo</span>
+      <span><i class="sw" style="background: repeating-linear-gradient(90deg, var(--hair) 0 4px, transparent 4px 8px)"></i> restante hasta la meta</span>
+    </div>
+  </header>
+
+  <h2>Home · dos métricas, mismo jueves</h2>
+  <div class="phones">
+    <div class="phone light">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span>●●● ⌔ ▮</span></div>
+        <div class="nav">
+          <div><div class="title">Esta semana</div><div class="sub">6–12 de octubre · quedan 4 días</div></div>
+          <button class="glass icon" aria-label="Ajustes">⚙︎</button>
+        </div>
+        <div class="content">
+          <section class="metric steps">
+            <div class="row"><span class="name"><i></i>Pasos</span><button class="glass">Ajustar</button></div>
+            <div class="state">Vas por delante de tu ritmo</div>
+            <div class="hero"><span class="big num">16.000</span><span class="unit">pasos te quedan</span></div>
+            <svg class="ribbon" data-ribbon='{"actual":24000,"habitual":21500,"goal":40000,"hue":"steps"}' viewBox="0 0 320 96" role="img" aria-label="Pasos: llevas 24.000, tu ritmo habitual ahora sería 21.500, meta 40.000"></svg>
+            <div class="refs num"><span>Tú <b>24.000</b></span><span>Tu ritmo <b>21.500</b></span><span>Meta <b>40.000</b></span></div>
+          </section>
+          <section class="metric activity">
+            <div class="row"><span class="name"><i></i>Actividad</span><button class="glass">Ajustar</button></div>
+            <div class="state">Un poco por debajo de tu ritmo</div>
+            <div class="hero"><span class="big num">1.100</span><span class="unit">kcal activas te quedan</span></div>
+            <svg class="ribbon" data-ribbon='{"actual":900,"habitual":1075,"goal":2000,"hue":"activity"}' viewBox="0 0 320 96" role="img" aria-label="Actividad: llevas 900 kcal, tu ritmo habitual ahora sería 1.075, meta 2.000"></svg>
+            <div class="refs num"><span>Tú <b>900</b></span><span>Tu ritmo <b>1.075</b></span><span>Meta <b>2.000 kcal</b></span></div>
+          </section>
+          <div class="foot"><span>Actualizado 18:42</span><a href="#ritmo">¿Cómo calculamos tu ritmo?</a></div>
+        </div>
+        <div class="homebar"></div>
+      </div>
+    </div>
+
+    <div class="phone dark">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span>●●● ⌔ ▮</span></div>
+        <div class="nav">
+          <div><div class="title">Esta semana</div><div class="sub">6–12 de octubre · quedan 4 días</div></div>
+          <button class="glass icon" aria-label="Ajustes">⚙︎</button>
+        </div>
+        <div class="content">
+          <section class="metric steps">
+            <div class="row"><span class="name"><i></i>Pasos</span><button class="glass">Ajustar</button></div>
+            <div class="state">Vas a tu ritmo</div>
+            <div class="hero"><span class="big num">16.000</span><span class="unit">pasos te quedan</span></div>
+            <svg class="ribbon" data-ribbon='{"actual":24000,"habitual":24000,"goal":40000,"hue":"steps"}' viewBox="0 0 320 96" role="img" aria-label="Pasos: llevas 24.000, igual que tu ritmo habitual, meta 40.000"></svg>
+            <div class="refs num"><span>Tú <b>24.000</b></span><span>Tu ritmo <b>24.000</b></span><span>Meta <b>40.000</b></span></div>
+          </section>
+          <section class="metric activity">
+            <div class="row"><span class="name"><i></i>Actividad</span><button class="glass">Ajustar</button></div>
+            <div class="state">Objetivo completado</div>
+            <div class="hero"><span class="big num">2.140</span><span class="unit">de 2.000 kcal activas</span></div>
+            <svg class="ribbon" data-ribbon='{"actual":2140,"habitual":1075,"goal":2000,"hue":"activity"}' viewBox="0 0 320 96" role="img" aria-label="Actividad: 2.140 de 2.000 kcal, objetivo completado"></svg>
+            <div class="refs num"><span>Tú <b>2.140</b></span><span>Tu ritmo <b>1.075</b></span><span>Meta <b>2.000 kcal</b></span></div>
+          </section>
+          <div class="foot"><span>Actualizado 18:42</span><a href="#ritmo">¿Cómo calculamos tu ritmo?</a></div>
+        </div>
+        <div class="homebar"></div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">Los controles con material (Ajustar, Ajustes) son la capa de UI nativa. La cinta, las marcas y las cifras son contenido opaco. Nada de cristal sobre el dato.</p>
+
+  <h2 id="estados">El objeto en cada estado · Pasos, mismos datos</h2>
+  <div class="grid" id="states"></div>
+  <small class="note">El tono del color no cambia con el estado. Lo que cambia es el orden de las dos marcas y el tramo que queda entre ellas. No hay rojo ni verde, no hay días, no hay siete casillas. Cuando no hay historial suficiente, la marca de ritmo desaparece en lugar de fingir un cero.</small>
+
+  <h2>Widget · responde sin abrir la app</h2>
+  <div class="widgets">
+    <div class="widget">
+      <div class="line"><span class="eyebrow">Te queda · 4 días</span></div>
+      <div class="line"><span class="big num">16.000</span><span class="lbl">pasos</span></div>
+      <svg class="ribbon" data-ribbon='{"actual":24000,"habitual":21500,"goal":40000,"hue":"steps","compact":true}' viewBox="0 0 320 44" role="img" aria-label="Pasos 24.000 de 40.000"></svg>
+      <div class="line"><span class="big num">1.100</span><span class="lbl">kcal activas</span></div>
+      <svg class="ribbon" data-ribbon='{"actual":900,"habitual":1075,"goal":2000,"hue":"activity","compact":true}' viewBox="0 0 320 44" role="img" aria-label="Actividad 900 de 2.000 kcal"></svg>
+    </div>
+    <p class="caption">La misma cinta, sin etiquetas. Las dos marcas siguen leyéndose a tamaño widget porque son el único elemento gráfico.</p>
+  </div>
+
+  <h2 id="ritmo">Por qué encaja con el producto</h2>
+  <div class="cols">
+    <div>
+      <h3>Lo que el producto promete</h3>
+      <ul>
+        <li><b>Sé cómo voy.</b> El titular de cada métrica es el estado respecto a tu ritmo, no un porcentaje.</li>
+        <li><b>Sé qué me queda.</b> La cifra grande es el restante exacto. El porcentaje no aparece en Home.</li>
+        <li><b>Mis días pueden ser diferentes.</b> La cinta no tiene días. Tu ritmo se mueve según tu patrón, no a razón de un séptimo diario.</li>
+        <li><b>Progreso, no perfección.</b> Ir por debajo se dibuja como un hueco corto con el mismo color. No hay semáforo.</li>
+        <li><b>Mide actividad, no prescribe.</b> La cinta es abstracta. Vale para pasos y para kcal sin aludir a caminar.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Lo que la diferencia de una barra</h3>
+      <ul>
+        <li>Una barra codifica una relación: hecho frente a meta. Esta cinta codifica dos: hecho frente a meta y hecho frente a <em>tu propio ritmo</em>. La segunda es la que ningún competidor muestra.</li>
+        <li>La identidad está en las <b>dos marcas</b>. Sin logo y sin texto, un punto de tinta y un anillo de color sobre una cinta abierta ya se reconocen.</li>
+        <li>La cinta termina en una marca de meta abierta, no en un contenedor cerrado. Lo pendiente se lee como camino, no como vacío.</li>
+        <li>Dos métricas son dos cintas independientes, Pasos primero. No se promedian ni se apilan en tarjetas.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Motion, solo con datos reales</h3>
+      <ul>
+        <li><b>Lectura nueva:</b> el frente y la marca «tú» avanzan 180–240 ms entre dos valores conocidos. El restante cambia a la vez.</li>
+        <li><b>Cambio de tramo:</b> cuando tú adelantas a tu ritmo, el tramo claro aparece entre las marcas. Sin brillo ni confeti.</li>
+        <li><b>Completado:</b> la cinta se cierra hasta la meta y la cifra pasa a «de 2.000». El excedente sigue visible.</li>
+        <li><b>Reduce Motion:</b> todo cambia de forma inmediata. El objeto significa lo mismo quieto.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Riesgos que debe comprobar Product</h3>
+      <ul>
+        <li>Que «tu ritmo» se lea como mínimo exigido. La explicación secundaria y el tono del titular son parte del diseño, no un extra.</li>
+        <li>Que la curva ascendente sugiera dificultad. Si ocurre, la cinta puede ser recta sin perder la firma: las marcas siguen ahí.</li>
+        <li>Que a 320 pt de ancho el tramo entre marcas sea demasiado fino para verse. En ese caso la cifra de diferencia hace el trabajo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Las ocho preguntas de la Issue 41</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Pregunta</th><th>Respuesta en este objeto</th></tr></thead>
+    <tbody>
+      <tr><td>¿Dónde estoy ahora?</td><td>Marca llena «tú» y fin del tramo sólido. 24.000.</td></tr>
+      <tr><td>¿Dónde estaría normalmente?</td><td>Anillo «tu ritmo» sobre la misma cinta. 21.500.</td></tr>
+      <tr><td>¿Dónde termina mi objetivo?</td><td>Marca de meta al final de la cinta abierta. 40.000.</td></tr>
+      <tr><td>¿Cuánto me queda?</td><td>Tramo discontinuo y cifra protagonista. 16.000.</td></tr>
+      <tr><td>¿Sugiere cuota diaria?</td><td>No. No hay divisiones, ni días, ni ticks. El anillo se mueve por tu patrón, no por el calendario.</td></tr>
+      <tr><td>¿Funciona para Actividad?</td><td>Sí. Misma cinta, otro tono, unidad kcal explícita. No hay huellas ni caminos.</td></tr>
+      <tr><td>¿Dos veces sin dashboard?</td><td>Sí. Dos cintas a toda anchura separadas por aire, sin marcos de tarjeta.</td></tr>
+      <tr><td>¿Reconocible sin logo?</td><td>El par punto lleno + anillo sobre cinta abierta es la firma. Nadie más dibuja «tu ritmo».</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Color · F1 Tinta eléctrica, de la exploración existente</h2>
+  <p>Reutilizo la familia que Design ya recomendó para que Product compare esta propuesta con Trama T01 sin cambiar dos variables a la vez. En Dark los tonos se aclaran para mantener contraste sobre tinta.</p>
+  <div class="swatches">
+    <div class="swatch"><i style="background:#304FFE"></i>Pasos #304FFE</div>
+    <div class="swatch"><i style="background:#FF8A42"></i>Actividad #FF8A42</div>
+    <div class="swatch"><i style="background:#F7F8FC"></i>Light #F7F8FC</div>
+    <div class="swatch"><i style="background:#12162E"></i>Dark #12162E</div>
+    <div class="swatch"><i style="background:#B8AFF2"></i>Acento #B8AFF2</div>
+  </div>
+  <small class="note">Propuesta conceptual para la fase 1 de la Issue 41. No es una pantalla terminada, no valida contraste, Dynamic Type ni VoiceOver, y no autoriza pasar a Figma. Datos ficticios: Pasos 24.000 / 21.500 / 40.000; Actividad 1.200 / 1.075 / 2.000 y variantes para mostrar estados.</small>
+</div>
+
+<script>
+(function () {
+  const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  // Pace state derived with the same spirit as PaceCalculator: a tolerance of 5% of the goal.
+  function paceState(d) {
+    if (d.actual >= d.goal) return 'completed';
+    if (d.habitual == null) return 'unknown';
+    const tol = d.goal * 0.05;
+    if (d.actual - d.habitual > tol) return 'ahead';
+    if (d.habitual - d.actual > tol) return 'behind';
+    return 'onPace';
+  }
+
+  // Copy proposals, aligned with the MVP scope wording. Product owns the final literals.
+  const HEADLINE = {
+    ahead: 'Vas por delante de tu ritmo',
+    onPace: 'Vas a tu ritmo',
+    behind: 'Un poco por debajo de tu ritmo',
+    unknown: 'Aún no conocemos tu ritmo',
+    completed: 'Objetivo completado',
+  };
+
+  // Label beside the lead/lag segment between the two marks. Wording is a pending Product decision:
+  // signed figure (current), short phrase without sign, or no label. Return null to hide it.
+  function deltaLabel(delta, unit, state) {
+    if (state === 'ahead') return '+' + fmt(delta);
+    if (state === 'behind') return '−' + fmt(Math.abs(delta));
+    return null;
+  }
+
+  // The ribbon: one gentle rising curve. pathLength=100 lets every segment be expressed in percent of the goal.
+  function ribbon(svg) {
+    const d = JSON.parse(svg.dataset.ribbon);
+    const compact = !!d.compact;
+    const W = 320, H = compact ? 44 : 96;
+    const y0 = compact ? 30 : 64, y1 = compact ? 14 : 30;
+    const path = `M 10 ${y0} C 120 ${y0}, 200 ${y1}, 310 ${y1}`;
+    const hue = d.hue === 'activity' ? 'var(--activity)' : 'var(--steps)';
+    const soft = d.hue === 'activity' ? 'var(--activity-soft)' : 'var(--steps-soft)';
+    const state = paceState(d);
+    const pct = v => Math.max(0, Math.min(100, v / d.goal * 100));
+    const a = pct(d.actual), h = d.habitual == null ? null : pct(d.habitual);
+    const sw = compact ? 10 : 18;
+    const unit = d.hue === 'activity' ? 'kcal' : 'pasos';
+
+    const parts = [];
+    // remaining: open, dashed, low contrast
+    parts.push(`<path d="${path}" pathLength="100" fill="none" stroke="var(--hair)" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="1.2 2.2" />`);
+    // realized: solid
+    parts.push(`<path class="fill" d="${path}" pathLength="100" fill="none" stroke="${hue}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${a} 100" />`);
+    // lead segment (ahead): lighter tint between habitual and actual
+    if (state === 'ahead') {
+      parts.push(`<path d="${path}" pathLength="100" fill="none" stroke="${soft}" stroke-width="${sw}" stroke-linecap="butt" stroke-dasharray="${a - h} 100" stroke-dashoffset="${-h}" />`);
+    }
+    // lag segment (behind): translucent stroke of the same hue between actual and habitual
+    if (state === 'behind') {
+      parts.push(`<path d="${path}" pathLength="100" fill="none" stroke="${hue}" stroke-opacity=".35" stroke-width="${sw}" stroke-linecap="butt" stroke-dasharray="${h - a} 100" stroke-dashoffset="${-a}" />`);
+    }
+    // goal terminus: open tick
+    parts.push(`<g data-at="100" data-kind="goal"></g>`);
+    // marks
+    if (h != null && state !== 'completed') parts.push(`<g data-at="${h}" data-kind="ritmo"></g>`);
+    parts.push(`<g data-at="${Math.min(a, 100)}" data-kind="tu"></g>`);
+    if (!compact) {
+      const lbl = deltaLabel(d.actual - (d.habitual ?? d.actual), unit, state);
+      if (lbl) parts.push(`<g data-at="${(a + h) / 2}" data-kind="delta" data-text="${lbl}"></g>`);
+    }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = parts.join('');
+
+    // place marks along the curve
+    const ref = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    ref.setAttribute('d', path); svg.appendChild(ref);
+    const L = ref.getTotalLength();
+    const at = p => ref.getPointAtLength(L * p / 100);
+    svg.querySelectorAll('g[data-at]').forEach(g => {
+      const p = at(+g.dataset.at); const k = g.dataset.kind; const r = compact ? 4.5 : 7;
+      if (k === 'tu') g.innerHTML = `<circle cx="${p.x}" cy="${p.y}" r="${r + 2.5}" fill="var(--bg)" /><circle cx="${p.x}" cy="${p.y}" r="${r}" fill="var(--fg)" />`;
+      if (k === 'ritmo') g.innerHTML = `<circle cx="${p.x}" cy="${p.y}" r="${r + 1}" fill="var(--bg)" stroke="${hue}" stroke-width="${compact ? 2 : 2.5}" />`;
+      if (k === 'goal') g.innerHTML = `<line x1="${p.x + 6}" y1="${p.y - sw * 0.9}" x2="${p.x + 6}" y2="${p.y + sw * 0.9}" stroke="${hue}" stroke-width="2.5" stroke-linecap="round" />`;
+      if (k === 'delta') g.innerHTML = `<text x="${p.x}" y="${p.y - sw * 0.9 - 6}" text-anchor="middle" font-size="11" font-weight="600" fill="${hue}" style="font-variant-numeric: tabular-nums">${g.dataset.text}</text>`;
+    });
+    svg.removeChild(ref);
+    return state;
+  }
+
+  document.querySelectorAll('svg[data-ribbon]').forEach(ribbon);
+
+  // State gallery
+  const cases = [
+    { title: 'Por delante', d: { actual: 24000, habitual: 21500, goal: 40000, hue: 'steps' }, why: 'Tú adelantas al anillo. El tramo claro entre ambos mide 2.500.' },
+    { title: 'A tu ritmo', d: { actual: 24000, habitual: 24000, goal: 40000, hue: 'steps' }, why: 'El anillo rodea a tu marca. Dentro de la tolerancia también se dibuja así.' },
+    { title: 'Por debajo', d: { actual: 24000, habitual: 27000, goal: 40000, hue: 'steps' }, why: 'El anillo va por delante. El hueco entre ambos es del mismo color, nunca rojo.' },
+    { title: 'Ritmo desconocido', d: { actual: 24000, habitual: null, goal: 40000, hue: 'steps' }, why: 'Sin historial suficiente no hay anillo. El progreso y el restante siguen siendo ciertos.' },
+    { title: 'Estás cerca', d: { actual: 38400, habitual: 33000, goal: 40000, hue: 'steps' }, why: 'Mismo objeto. Lo que cambia es la cifra: te quedan 1.600.' },
+    { title: 'Semana completada', d: { actual: 41200, habitual: 36000, goal: 40000, hue: 'steps' }, why: 'La cinta se cierra hasta la meta. El excedente se dice con número, no agrandando la meta.' },
+  ];
+  const grid = document.getElementById('states');
+  cases.forEach((c, i) => {
+    const st = paceState(c.d);
+    const remaining = Math.max(0, c.d.goal - c.d.actual);
+    const tile = document.createElement('div'); tile.className = 'tile';
+    tile.innerHTML = `
+      <span class="state">${c.title}</span>
+      <span class="eyebrow">${HEADLINE[st]}</span>
+      <span class="big num">${st === 'completed' ? fmt(c.d.actual) + ' <span style="font-size:.9rem;color:var(--muted);font-weight:500">de ' + fmt(c.d.goal) + '</span>' : fmt(remaining) + ' <span style="font-size:.9rem;color:var(--muted);font-weight:500">te quedan</span>'}</span>
+      <svg class="ribbon" id="case-${i}" data-ribbon='${JSON.stringify(c.d)}' viewBox="0 0 320 96" role="img" aria-label="${c.title}"></svg>
+      <span class="why">${c.why}</span>`;
+    grid.appendChild(tile);
+    ribbon(tile.querySelector('svg'));
+  });
+})();
+</script>
