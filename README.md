@@ -34,6 +34,8 @@ El líder técnico coordina las asignaciones y revisiones con Product, Design e 
 
 ### Validación automática en cada PR
 
+Si el diff completo de la PR solo contiene archivos `.md`, `ios-build-test` termina correctamente con una nota de «no aplica»: no instala herramientas Swift, no arranca simuladores ni ejecuta tests iOS, análisis o build. `whitespace` y `agent-kit` mantienen sus comprobaciones ligeras, incluidos los tests Python del helper y del filtro. El workflow siempre se inicia para no dejar pendiente el check obligatorio. La comparación usa base y head explícitos y el historial completo; cualquier otro archivo, diff vacío o comparación incierta requiere CI iOS completa. Los renombrados se examinan como borrado y alta para que renombrar código a Markdown no oculte cambios.
+
 El check `ios-build-test` ejecuta formato/lint de código con versiones fijadas, tests aislados de onboarding, fechas y baseline y una prueba de lanzamiento en **un iPhone 17 Pro / iOS 26.5**, análisis estático y build **Release para iOS sin signing**. No ejecuta rotación ni iPad en cada PR. `xcodebuild test` construye app y runner sin build Debug previo. Preparación, test, análisis y Release son pasos separados; CI usa las operaciones del mismo Makefile que el gate local, evitando comandos duplicados.
 
 CI usa Xcode **26.6 (17F113)** en `macos-26` arm64, ruta `/Applications/Xcode_26.6.app/Contents/Developer`, checkout del head SHA explícito y un simulador exclusivo eliminado al terminar. El resultado de tests se conserva siete días bajo `ios-launch-<head SHA>`; los logs de cada paso quedan en Actions. Release sin firma no acredita instalación en hardware ni distribución.
