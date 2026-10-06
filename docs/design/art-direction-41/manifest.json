@@ -104,8 +104,8 @@
       "tipo": "lámina de apoyo",
       "ancho": 1536,
       "alto": 1024,
-      "bytes": 1716354,
-      "sha256": "71cc7ed72e5f8a80de81924b49dc166f1761178cde45dcca5b1144daa333513a"
+      "bytes": 1885499,
+      "sha256": "f6a23b431949eb99ea3811c12f0055902f8c5820bb149b0f32b5359809434d81"
     },
     {
       "archivo": "test-conceptual.png",
@@ -115,5 +115,12 @@
       "bytes": 2448234,
       "sha256": "d96c7969f0012e9f930ef096c4200b5a0984e1d244187da07fc9f726044e292d"
     }
-  ]
+  ],
+  "suplemento": {
+    "dossier": "suplemento/README.md",
+    "inventario": "suplemento/manifest.json",
+    "imagenes": 11,
+    "conceptos": 12,
+    "autoría": "Chat Implementar la Issue 41 · 01a111b2-a828-7a93-9b98-6166c4538592"
+  }
 }

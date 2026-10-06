@@ -1,0 +1,84 @@
+{
+  "issue": 41,
+  "fecha": "2026-10-06",
+  "estado": "Suplemento integrado en PR42; pendiente de selección de Product",
+  "imagenes": [
+    {
+      "archivo": "images/01-mood-plegar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2130575,
+      "sha256": "812cd386b776d6cdbd16472e306bd4d0cd24383b1316349c6799d9d489fefe00"
+    },
+    {
+      "archivo": "images/02-mood-imprimir.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2422192,
+      "sha256": "d653c34ca1fc6dc24d20ade808774869c9382c4286f8adf361b97f1134052e9e"
+    },
+    {
+      "archivo": "images/03-mood-agregar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2189873,
+      "sha256": "fc6c65d5ebdd264f1c0c4868ef405960787d4e1c207cbe836a0f3976b4d92e8f"
+    },
+    {
+      "archivo": "images/04-mood-entrelazar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2534246,
+      "sha256": "755f837ecaf653876377c826af554deb56de82a29af79e078018b25e31d4810e"
+    },
+    {
+      "archivo": "images/05-firmas-plegar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2316311,
+      "sha256": "ac4801e9968f25eb5025c8c74d08c946e7f1f5a9e622a806d87077fe3e8b8d34"
+    },
+    {
+      "archivo": "images/06-firmas-imprimir.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2603170,
+      "sha256": "e89a1934014295e7646e87c3c52f03aac001dc77b0e8224f8063a4b2db133e60"
+    },
+    {
+      "archivo": "images/07-firmas-agregar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2304788,
+      "sha256": "bd152ac6c6bb6d4974b8028cd4f728fde289ca7219f84ac2eee0989c9d7788d6"
+    },
+    {
+      "archivo": "images/08-firmas-entrelazar.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2424446,
+      "sha256": "34797fb2c0558dbce168e8a273a5eb6127faeeb7730c8404d88b20eba27d23f3"
+    },
+    {
+      "archivo": "images/09-familias-cromaticas.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 1364406,
+      "sha256": "e0a2110890d1f3e910262cb7a9104c1069c89e79305c22a936f9656bfc4611ba"
+    },
+    {
+      "archivo": "images/10-contenido-materiales.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2030171,
+      "sha256": "c41c0bdbedca37d1e31bb7516e25c2eadd7673419b170a04549b98d553f75ad4"
+    },
+    {
+      "archivo": "images/11-motion-storyboard.png",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2679277,
+      "sha256": "4d67ae43f4d1d3f8c19396a41d9b211b55580b2944b45a0d911bd3192575eae6"
+    }
+  ]
+}

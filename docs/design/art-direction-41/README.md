@@ -2,6 +2,8 @@
 
 Entrega de Fase 1 para César/Product, 6 de octubre de 2026. **Exploración pendiente de selección**, sin aprobación de identidad ni autorización para Figma. [Issue #41](https://github.com/montunolabs/HealthGoals/issues/41) define el alcance; #30 continúa bloqueada. Ninguna imagen representa una pantalla terminada.
 
+La entrega reúne esta exploración principal y un [suplemento independiente de Design](suplemento/README.md), integrado tras la autorización de César para coordinar y reunir los dos chats. El conjunto conserva **ocho moodboards, veinticuatro conceptos de firma y dos estudios de tres familias cromáticas**, con materiales y motion de ambas propuestas. Papel y tejido comparten territorio; impresión y mosaico amplían la divergencia. Los códigos del suplemento son locales a su dossier: «suplemento C02» no es «principal C02». Sus recomendaciones se conservan junto a las de esta exploración. La selección conjunta de Design está al final del test conceptual; César/Product mantiene la decisión.
+
 ## Punto de partida
 
 Se leyeron completos el [benchmark Product #38](https://github.com/montunolabs/HealthGoals/issues/38), el [benchmark independiente y entrega #39](https://github.com/montunolabs/HealthGoals/issues/39#issuecomment-6014904321), la [revisión Product de #40](https://github.com/montunolabs/HealthGoals/issues/40#issuecomment-6018471087) y las decisiones funcionales de [#32](https://github.com/montunolabs/HealthGoals/issues/32). #38, #39 y #40 están cerradas; #40 terminó sin selección. Se conserva edición inline, progreso semanal en Punto de partida, validación junto al campo, vacío limpio, transiciones de métricas y reconocimiento del progreso. No se reabren sus decisiones de comportamiento ni se resuelven silenciosamente los contratos de validación pendientes.
@@ -119,11 +121,13 @@ Storyboard conceptual con un objeto aislado como vehículo común; no establece 
 | Actual ↔ habitual | Testigo identificado → separación contextual de dos planos → reposo con actual 24.000 / habitual 21.500 | No cambia el dato por revelar la explicación; no sugerir ritmo en tiempo real | Explicación aparece estática; mismos estilos y posiciones |
 | Completar objetivo | 39.500 / 500 restantes → alcanza límite → 40.000 / 0 y «Completado» | Meta 40.000; conservar actual incluso si supera meta; forma puede saturar sin ocultar excedente textual | Estado y gap cambian directamente; sin brillo/barrido celebratorio |
 | Añadir/retirar métrica | Un objeto → espacio para segundo → dos independientes; retirada recorre el orden inverso | Primera métrica conserva datos/objetivo/testigo; eliminación activa sigue con confirmación existente | Recomposición inmediata, foco asociado a acción; sin desplazamiento |
-| Entrada a edición | Valor junto a objeto → controles desde ese origen → campo editable y contexto estable | Editar borrador sigue inline; edición activa conserva su flujo vigente. Cancelar restaura; no autorizar nueva validación | Cambio inmediato de modo y foco; sin morph ni zoom |
+| Entrada a edición | Propuesta u objetivo 40.000 junto a su límite → controles desde ese origen → campo editable 40.000 y contexto estable | Acumulado HealthKit 24.000 siempre de solo lectura. Editar borrador sigue inline; edición activa conserva su flujo vigente. Cancelar restaura; no autorizar nueva validación | Cambio inmediato de modo y foco; sin morph ni zoom |
 
 Referencia orientativa de 180–240 ms para cambios geométricos; entrada a edición subordinada a la presentación nativa elegida más adelante. Actualizar también admite correcciones a la baja, sin pérdida de puntos. Un testigo habitual puede cambiar al cambiar el contexto temporal sin que eso signifique actividad nueva. Ausencia de ritmo retira el testigo y muestra «No podemos estimar tu ritmo»; ausencia de progreso no rellena el objeto a cero.
 
 ![Cinco secuencias y alternativas estáticas con Reduce Motion](motion-keyframes.png)
+
+La fila de edición se corrigió tras revisión independiente: el campo corresponde a la propuesta u objetivo **40.000**; el acumulado **24.000** permanece **solo lectura**. El render anterior sugería editar el progreso HealthKit y no debe usarse como referencia. Se conserva el prompt de la edición junto al de generación.
 
 ## Test conceptual y candidatas
 
@@ -156,13 +160,25 @@ Son juicios de Design sobre potencial visual, no resultados de pruebas con usuar
 
 La inspección visual encontró errores concretos que no deben trasladarse a Figma: en el moodboard Materia y M02 la disposición aparente del habitual puede quedar después del actual, aunque 21.500 es menor que 24.000; en P03 la hoja habitual parece más larga que la actual. Esas relaciones se descartan. En T01 el líder de «restan» baja hacia el inicio; el intervalo correcto está entre actual y meta. En C01 hay puntos fuera del frente y en el test de Pliegue la pieza parece totalmente formada: ambas requieren reconstruir el borde realizado y el vacío restante. En el storyboard algunas marcas 53,75 % aparecen por encima del frente 60 % y la altura 55 % → 60 % se distingue poco: conservar el disparador y la secuencia, reconstruir las posiciones según el cuadro numérico. La lámina de materiales estudia planos y óptica; la distribución de sus puntos no representa los datos comunes. Los hex y algunas tipografías impresas por el generador son aproximaciones; las familias exactas son las del cuadro escrito. Estos fallos limitan la precisión de las imágenes, pero permiten evaluar el material y la gramática sin presentar una UI aprobada.
 
+### Recomendación conjunta para Product
+
+Tras reunir las dos exploraciones, la terna que mejor combina legibilidad potencial y diversidad es:
+
+| Orden | Combinación inequívoca | Motivo y condición |
+| --- | --- | --- |
+| 1 | **Principal: Trama + T01 Trama abierta + F1 Tinta eléctrica** | Es la mejor demostración de actual/habitual/restante en una misma materia y cuenta con el test de tres relaciones. Probar que la urdimbre abierta no se lea como deuda. La [Trama testigo D01 del suplemento](suplemento/README.md#tres-combinaciones-recomendadas) aporta una silueta alternativa del mismo territorio, no un cuarto lenguaje. |
+| 2 | **Suplemento: Agregar + C02 Mosaico + F3 Baya / Sol** | Frente y soporte estable ofrecen una alternativa a fibras y partículas dispersas. Reconstruir áreas equivalentes, separar habitual del frente y usar un pigmento por métrica. No convertir teselas en cuotas ni anillos. |
+| 3 | **Suplemento: Imprimir + B01 Doble impresión + F2 Violeta / Mandarina** | La huella y el registro aportan un lenguaje plano de impresión que contrasta con ambas materias. Unificar escala, reducir grano y agresividad tipográfica; evitar interpretar huellas como pasos literales. |
+
+Las ocho respuestas de T01 están en la matriz anterior; las de C02 y B01 están en la [matriz del suplemento](suplemento/README.md#ocho-preguntas-para-las-candidatas). Ambas forman parte de la entrega de #41. Las ternas de cada exploración permanecen para comparar alternativas, pero esta es la recomendación conjunta de las tres mejores combinaciones. Pliegue/P01 y Campo/C01 quedan como reservas, por ambigüedad de perspectiva o borde. Product puede seleccionar otras combinaciones del conjunto o ninguna.
+
 ## Evidencia, límites y gate
 
-La entrega conserva las imágenes originales generadas con la herramienta integrada `image_gen.imagegen` y los prompts completos en [prompts.json](prompts.json). El inventario [manifest.json](manifest.json) identifica archivos, dimensiones y SHA-256 para la revisión del conjunto. No contiene credenciales, datos personales ni imágenes tomadas de otras apps.
+La entrega conserva copias íntegras de las imágenes finales generadas con la herramienta integrada `image_gen.imagegen` y los prompts completos en [prompts.json](prompts.json), incluida la edición semántica del storyboard. Los originales iniciales y editados permanecen preservados. El inventario [manifest.json](manifest.json) identifica los doce archivos principales, dimensiones y SHA-256; enlaza al [inventario de los once PNG del suplemento](suplemento/manifest.json). No contiene credenciales, datos personales ni imágenes tomadas de otras apps.
 
 Se comprueba cobertura de cuatro moodboards, doce conceptos, tres familias, capas, cinco secuencias con Reduce Motion y ocho preguntas por candidata. La comprobación cuantitativa se hace sobre el contrato escrito; no se presenta la perspectiva generada como escala exacta. Checks pertinentes: kit/helper/whitespace y enlaces/archivos del dossier. Swift, build local, simuladores y `make verify` no aplican a un cambio de documentación y artefactos visuales; CI clasificará imágenes/JSON como no exclusivamente Markdown y puede ejecutar el pipeline iOS existente.
 
-Validación local ejecutada: `make repository-checks` correcto (siete copias del kit, 23 tests del helper/clasificador y whitespace), doce PNG comparados byte a byte con sus originales, JSON parseable, hashes/dimensiones y enlaces locales comprobados. La prueba del transporte del helper necesita un servidor efímero de loopback; se ejecutó con permiso de sandbox para ese check. Repetir los checks sobre el commit publicado y consultar su CI en la PR.
+Validación local ejecutada en la primera entrega: `make repository-checks` correcto (siete copias del kit, 23 tests del helper/clasificador y whitespace), doce PNG comparados byte a byte con sus originales, JSON parseable, hashes/dimensiones y enlaces locales comprobados. Al integrar el suplemento se verificaron sus dieciséis archivos contra la entrega del otro chat y los once PNG finales contra su manifest; no se descartaron los originales previos. La prueba del transporte del helper necesita un servidor efímero de loopback; se ejecutó con permiso de sandbox para ese check. Repetir todos los checks pertinentes sobre el nuevo SHA combinado y consultar su CI/revisión en la PR.
 
 Para reproducir el inventario desde la raíz del checkout:
 

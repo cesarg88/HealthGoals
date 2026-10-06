@@ -14,4 +14,4 @@ Las Issues de implementación enlazarán los documentos relevantes y concretará
 ## Propuestas de diseño en revisión
 
 - [Experiencia completa del MVP](../design/experiencia-mvp.md): flujo, inventario de superficies, matriz de estados, wireframes y preguntas pendientes de la Issue #12. No modifica el alcance aprobado.
-- [Dirección artística · Issue #41](../design/art-direction-41/README.md): cuatro moodboards, doce exploraciones de firma, paletas, materiales y motion generados para selección de Product. No es diseño aprobado ni desbloquea #30; Figma queda para una Issue posterior.
+- [Dirección artística · Issue #41](../design/art-direction-41/README.md): entrega principal y suplemento coordinados, con ocho moodboards, veinticuatro exploraciones de firma, paletas, materiales y motion generados para selección de Product. No es diseño aprobado ni desbloquea #30; Figma queda para una Issue posterior.
