@@ -6,7 +6,7 @@ Todos los agentes usan exclusivamente la GitHub App `Cesar-IA-Agent`, con identi
 
 El helper `tools/agent-github/agent_github.py` requiere Python 3.9 o posterior, Git 2.31 o posterior y OpenSSL. Leer con `git config --local --get` estas claves; sus valores no se incluyen en archivos versionados:
 
-- `agentkit.github.repository`: `cesarg88/HealthGoals`
+- `agentkit.github.repository`: `montunolabs/HealthGoals`
 - `agentkit.github.mode`: `app`
 - `agentkit.github.actor`: `cesar-ia-agent[bot]`
 - `agentkit.github.actorEmail`: email noreply real del bot, con su identificador numérico
@@ -16,29 +16,36 @@ El helper `tools/agent-github/agent_github.py` requiere Python 3.9 o posterior, 
 - `agentkit.github.installationId`
 - `agentkit.github.pemPath`: ruta absoluta al PEM fuera de los checkouts, permisos `0600`
 
-Antes de un commit o acceso autenticado, verificar la configuración, `user.name` y `user.email` locales iguales al actor/email configurados, `credential.helper` local vacío y `origin` exactamente `https://github.com/cesarg88/HealthGoals.git`. Confirmar rama y destino. Los worktrees comparten normalmente la configuración; los clones independientes requieren su propia configuración. No copiar el PEM al checkout.
+Antes de un commit o acceso autenticado, verificar la configuración, `user.name` y `user.email` locales iguales al actor/email configurados, `credential.helper` local vacío y `origin` exactamente `https://github.com/montunolabs/HealthGoals.git`. Confirmar rama y destino. La configuración pertenece al checkout principal compartido; coordinar cualquier cambio para que ningún agente ejecute operaciones con valores anteriores. No crear worktrees ni clones adicionales. No copiar el PEM al checkout.
 
-Para migrar la configuración anterior, ejecutar en un checkout de HealthGoals:
+## Traslado a montunolabs
+
+El repositorio está en `montunolabs/HealthGoals`. El traslado cambia el destino y la instalación de la App; no requiere otra identidad ni una clave nueva. La instalación debe pertenecer a `montunolabs` y tener acceso a HealthGoals.
+
+Para actualizar el checkout principal, conservar primero los cambios pendientes y coordinar el uso exclusivo. Configurar:
 
 ```sh
-for key in repository actor actorEmail appId clientId installationId pemPath; do
-  value=$(git config --local --get "healthgoals.githubApp.$key") || exit 1
-  test -n "$value" || exit 1
-  git config --local "agentkit.github.$key" "$value" || exit 1
-done
+git remote set-url origin https://github.com/montunolabs/HealthGoals.git
+git config --local agentkit.github.repository montunolabs/HealthGoals
 git config --local agentkit.github.mode app
 git config --local agentkit.github.integrationBranch develop
+# APP_INSTALLATION_ID must be verified for montunolabs/HealthGoals.
+git config --local agentkit.github.installationId "$APP_INSTALLATION_ID"
 ```
 
-No imprime valores ni elimina las claves anteriores. Configurar además autor/email y origin si el clon aún no los tiene; detenerse si no corresponden al bot y repositorio previstos. La migración no concede permisos de instalación.
+Obtener el ID de instalación consultando `/repos/montunolabs/HealthGoals/installation` con un JWT de la misma App, después de verificar su identidad mediante `/app`, o desde la configuración de la instalación en GitHub. No reutilizar el ID de la instalación del propietario anterior. Conservar `appId`, `clientId`, `pemPath` y autor/email del bot si la App no ha cambiado. JWT, tokens y PEM no se imprimen ni guardan en el repo.
+
+Las claves históricas `healthgoals.githubApp.*` no son la configuración vigente: no copiarlas sobre `agentkit.github.*`, porque podrían restablecer el repositorio o la instalación anteriores. No depender de redirecciones desde la URL antigua; el helper las rechaza al enviar credenciales.
+
+Comprobar el acceso mediante una lectura de la Issue asignada con el helper y el destino nuevo. Si falla, revisar instalación y permisos sin recurrir a credenciales alternativas. Esta actualización no concede permisos nuevos ni cambia las protecciones de ramas.
 
 ## Operaciones
 
 Desde el checkout de la tarea:
 
 ```sh
-python3 tools/agent-github/agent_github.py api GET /repos/cesarg88/HealthGoals/issues/2 --permission issues
-python3 tools/agent-github/agent_github.py api POST /repos/cesarg88/HealthGoals/pulls --permission pull_requests --body-file /ruta/temporal/pr.json
+python3 tools/agent-github/agent_github.py api GET /repos/montunolabs/HealthGoals/issues/2 --permission issues
+python3 tools/agent-github/agent_github.py api POST /repos/montunolabs/HealthGoals/pulls --permission pull_requests --body-file /ruta/temporal/pr.json
 python3 tools/agent-github/agent_github.py push feature/2-adopt-agent-kit --workflows
 ```
 
