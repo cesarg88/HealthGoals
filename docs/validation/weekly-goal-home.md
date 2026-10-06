@@ -6,7 +6,7 @@
 
 ## Preparación
 
-Abrir `HealthGoals.xcodeproj` en el checkout del candidato de la PR, scheme `HealthGoals`, iPhone real. Seleccionar localmente `Cesar Gonzalez (Personal Team)` en Signing & Capabilities y conservar `com.example.HealthGoals`. No versionar cambios personales de firma. Build sin firma de CI no acredita instalación.
+Abrir `HealthGoals.xcodeproj` en el checkout del candidato de la PR, scheme `HealthGoals`, iPhone real. Team `4A669F9FP4` y firma automática ya están versionados; conservar `com.example.HealthGoals`. Mantener cuenta, certificados y perfiles locales según la [guía de onboarding](onboarding-healthkit.md). Build sin firma de CI no acredita instalación.
 
 Si la instalación conserva S03 de la entrega anterior, se vuelve a consultar el baseline y aparece la propuesta. Para repetir ambas intenciones después de aceptar, eliminar/reinstalar la app restablece su configuración local. No elimina datos de Salud; puede conservar autorizaciones nativas. No hay un botón de reinicio ni edición activa en esta entrega.
 

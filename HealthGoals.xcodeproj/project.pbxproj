@@ -175,6 +175,8 @@
 		"000000000000000000000032" = {
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
+				"DEVELOPMENT_TEAM" = "4A669F9FP4";
+				"CODE_SIGN_STYLE" = "Automatic";
 				"CLANG_ENABLE_MODULES" = "YES";
 				"CLANG_ENABLE_OBJC_ARC" = "YES";
 				"SDKROOT" = "iphoneos";
@@ -195,6 +197,8 @@
 		"000000000000000000000033" = {
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
+				"DEVELOPMENT_TEAM" = "4A669F9FP4";
+				"CODE_SIGN_STYLE" = "Automatic";
 				"CLANG_ENABLE_MODULES" = "YES";
 				"CLANG_ENABLE_OBJC_ARC" = "YES";
 				"SDKROOT" = "iphoneos";
