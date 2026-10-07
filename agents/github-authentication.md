@@ -16,7 +16,7 @@ El helper `tools/agent-github/agent_github.py` requiere Python 3.9 o posterior, 
 - `agentkit.github.installationId`
 - `agentkit.github.pemPath`: ruta absoluta al PEM fuera de los checkouts, permisos `0600`
 
-Antes de un commit o acceso autenticado, verificar la configuración, `user.name` y `user.email` locales iguales al actor/email configurados, `credential.helper` local vacío y `origin` exactamente `https://github.com/montunolabs/HealthGoals.git`. Confirmar rama y destino. La configuración pertenece al checkout principal compartido; coordinar cualquier cambio para que ningún agente ejecute operaciones con valores anteriores. No crear worktrees ni clones adicionales. No copiar el PEM al checkout.
+Antes de un commit o acceso autenticado, verificar la configuración, `user.name` y `user.email` locales iguales al actor/email configurados, `credential.helper` local vacío y `origin` exactamente `https://github.com/montunolabs/HealthGoals.git`. Confirmar rama y destino. La configuración local es compartida por el checkout principal y sus worktrees bajo `.worktrees/`; coordinar cualquier cambio para que ningún agente ejecute operaciones con valores anteriores. Un clon adicional no hereda esa configuración y requiere configurarla antes de usarlo. No copiar el PEM a ningún checkout.
 
 ## Traslado a montunolabs
 

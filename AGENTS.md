@@ -9,7 +9,7 @@ Estas instrucciones se aplican a todo el repositorio.
 - Usa exclusivamente `Cesar-IA-Agent` (`cesar-ia-agent[bot]`) para acceso autenticado a GitHub y autoría de commits. Lee y cumple [la política de autenticación](agents/github-authentication.md); nunca recurras a cuentas personales, de trabajo o SSH como alternativa.
 - Usa una Issue como unidad de ejecución. Debe contener contexto suficiente sin depender del historial de un chat: objetivo, alcance, exclusiones, referencias, dependencias y criterios de aceptación verificables.
 - Si falta una decisión necesaria, registra el bloqueo y solicita a César o al responsable de la Issue que lo resuelva. No inventes requisitos de producto ni criterios para poder cerrar la tarea.
-- Desde `develop` actualizado y limpio, crea una rama exclusiva por tarea en el checkout principal. No crees worktrees ni clones adicionales. Solo un agente puede escribir en el proyecto a la vez; implementación y revisión hacen un handoff secuencial. No trabajes directamente sobre la rama de integración. Esta política local, confirmada por César el 5 de octubre de 2026, prevalece sobre los ejemplos del kit.
+- Desde `develop` actualizado y limpio, crea una rama exclusiva por tarea y trabaja en un checkout exclusivo: el principal o un worktree bajo `.worktrees/`, ya ignorado por Git. Varios agentes pueden escribir en paralelo siempre que cada uno use su propia rama y checkout; nunca dos agentes sobre el mismo checkout. No trabajes directamente sobre la rama de integración. Esta regla sustituye la política de escritor único del 5 de octubre de 2026; ver [la decisión 0001](docs/decisions/0001-checkouts-paralelos.md).
 
 ## Kit reutilizable
 
