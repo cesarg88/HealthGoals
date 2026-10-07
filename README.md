@@ -26,7 +26,7 @@ GitHub es la fuente de verdad: las Issues definen unidades de ejecución, las PR
 
 1. Leer `AGENTS.md` y los documentos vinculados en la Issue.
 2. Confirmar que la Issue tiene alcance y criterios de aceptación verificables y que sus dependencias están resueltas.
-3. Crear una rama desde `develop` actualizado y limpio en el checkout principal; implementación y revisión se relevan secuencialmente, sin nuevos worktrees.
+3. Crear una rama desde `develop` actualizado y limpio en un checkout exclusivo, el principal o un worktree bajo `.worktrees/`; varios agentes pueden trabajar en paralelo, cada uno en su rama y checkout.
 
 El líder técnico coordina las asignaciones y revisiones con Product, Design e Infra según las [responsabilidades y autorización de coordinación](agents/README.md#coordinación-entre-chats). César realiza o autoriza los merges. Los [roles y dos skills del kit](agents/README.md#kit-reutilizable) apoyan ese workflow manual; no hay orquestación automática ni protección de ramas configurada por estos archivos.
 
