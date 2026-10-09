@@ -1,0 +1,156 @@
+{
+  "issue": 41,
+  "fecha": "2026-10-06",
+  "base_develop": "98789ae9a3fc5582bd14be331b7e884a1797bfeb",
+  "estado": "Exploración pendiente de selección de Product",
+  "datos_ficticios": {
+    "pasos": {
+      "actual": 24000,
+      "habitual": 21500,
+      "meta": 40000,
+      "restante": 16000
+    },
+    "actividad_kcal": {
+      "actual": 1200,
+      "habitual": 1075,
+      "meta": 2000,
+      "restante": 800
+    }
+  },
+  "nota": "PNG copiados sin modificación de originales de image_gen.imagegen; prompts en prompts.json. Los valores escritos rigen sobre la perspectiva generada.",
+  "imagenes": [
+    {
+      "archivo": "moodboard-01-trama.png",
+      "tipo": "moodboard",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2846604,
+      "sha256": "e2d664911810cac7668d19bccace986cc78d405ffd0bf37dc17473d05d32cbda"
+    },
+    {
+      "archivo": "moodboard-02-pliegue.png",
+      "tipo": "moodboard",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2124096,
+      "sha256": "88b2bab2e34415429d1cf781dc58329e88ec74938542d0f0dc23aa4ba27d00cb"
+    },
+    {
+      "archivo": "moodboard-03-materia.png",
+      "tipo": "moodboard",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2048408,
+      "sha256": "a5d8d664e9e641e7ace2cf4a8002a4f03242aebccb378562f603366c09cc6573"
+    },
+    {
+      "archivo": "moodboard-04-campo.png",
+      "tipo": "moodboard",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2565422,
+      "sha256": "844d18d55e994b235d8de4d5af6849408a00ef8d5148d461ff1c388448b3d83d"
+    },
+    {
+      "archivo": "conceptos-01-trama.png",
+      "tipo": "tres conceptos de firma",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2425198,
+      "sha256": "3ef3c676758c173b92235eb0f0011f73a740b4d044c02b0bd59b1340d1fb98be"
+    },
+    {
+      "archivo": "conceptos-02-pliegue.png",
+      "tipo": "tres conceptos de firma",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 1826203,
+      "sha256": "73fd5d0464a48f753d21534bd87e6d94004aa0f2b25bbf4c14b8d588c2be7709"
+    },
+    {
+      "archivo": "conceptos-03-materia.png",
+      "tipo": "tres conceptos de firma",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 1933562,
+      "sha256": "7394ba5f19a30694ef9b600257f58cb36181e5bb5d106273a6c2a018c175b04e"
+    },
+    {
+      "archivo": "conceptos-04-campo.png",
+      "tipo": "tres conceptos de firma",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2343589,
+      "sha256": "92750f8e988025977122dc1cf39c3d8aef4db2bc7f4bab959ee207ce14c113fd"
+    },
+    {
+      "archivo": "familias-cromaticas.png",
+      "tipo": "lámina de apoyo",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2024086,
+      "sha256": "7daf0c4f46f0d2393ec88edf1a984ef2dc6d1fba4068740b8d0a13f5fe227e15"
+    },
+    {
+      "archivo": "materiales-ios26.png",
+      "tipo": "lámina de apoyo",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2139306,
+      "sha256": "f7b834e80dfb263baefa10cc3aac034a1905307fe4011198d93ccdce59126c44"
+    },
+    {
+      "archivo": "motion-keyframes.png",
+      "tipo": "lámina de apoyo",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 1885499,
+      "sha256": "f6a23b431949eb99ea3811c12f0055902f8c5820bb149b0f32b5359809434d81"
+    },
+    {
+      "archivo": "test-conceptual.png",
+      "tipo": "lámina de apoyo",
+      "ancho": 1536,
+      "alto": 1024,
+      "bytes": 2448234,
+      "sha256": "d96c7969f0012e9f930ef096c4200b5a0984e1d244187da07fc9f726044e292d"
+    }
+  ],
+  "suplemento": {
+    "dossier": "suplemento/README.md",
+    "inventario": "suplemento/manifest.json",
+    "imagenes": 11,
+    "conceptos": 12,
+    "autoría": "Chat Implementar la Issue 41 · 01a111b2-a828-7a93-9b98-6166c4538592"
+  },
+  "candidata_05": {
+    "nombre": "05 · Marcas: Tú y tu ritmo",
+    "origen": "Render propio en HTML/SVG con Chrome headless a escala 2x; no procede de image_gen ni de otra app",
+    "familia": "F1 Tinta eléctrica reutilizada; en Dark los tonos de métrica se aclaran (#6B86FF, #FFA06A) para contraste sobre tinta",
+    "autoría": "Propuesta del agente a petición de César en este chat, 6 de octubre de 2026",
+    "archivos": [
+      {
+        "archivo": "candidata-05-tu-y-tu-ritmo.html",
+        "bytes": 26852,
+        "sha256": "1fe6c6b293550f610f41cf103737063a47698650253817ed0b61b1a4c1ee9904",
+        "tipo": "fuente HTML/SVG reproducible"
+      },
+      {
+        "archivo": "candidata-05-home.png",
+        "bytes": 367192,
+        "sha256": "3d7c1f4ea6ae9e8b52561d17c21f1ec6616dae332297073b3182bf409773b9f0",
+        "ancho": 2240,
+        "alto": 2800,
+        "tipo": "lámina renderizada"
+      },
+      {
+        "archivo": "candidata-05-estados.png",
+        "bytes": 313521,
+        "sha256": "9eb088b76140686e6d9df7019d1a579da20897d6523934f1352a177cfb4cd6c0",
+        "ancho": 2240,
+        "alto": 2800,
+        "tipo": "lámina renderizada"
+      }
+    ]
+  }
+}

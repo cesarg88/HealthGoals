@@ -1,0 +1,22 @@
+{
+  "tool": "image_gen.imagegen (integrada)",
+  "date": "2026-10-06",
+  "use_case": "precise-object-edit",
+  "prompts": [
+    {
+      "id": "09-familias-cromaticas-v2",
+      "source": "images/09-familias-cromaticas.png",
+      "prompt": "Edit this color research board. Preserve the three family headings, exact swatches and hex labels, and Light/Dark column pairs. Replace ALL lifestyle/people/landscape photographs and ALL intertwined/two-goal merging sculptures with simple abstract MATTE irregular data shapes on flat respective light/dark grounds, actual solid, habitual fine dashed reference, outer open goal. No humans, athletes, skies, scenes, steps/stairs, meditation, plants, walking metaphor, rings or bars. Remove every marketing slogan including discipline, wellness promises and family subtitles. Only labels 'F1 COBALTO / BRASA', 'F2 VIOLETA / MANDARINA', 'F3 BAYA / SOL', 'Pasos','Actividad','Light','Dark','Acento','POR DEBAJO','A TU RITMO','POR DELANTE','ESTUDIOS DE COLOR'. Preserve stable metric hue across the three states. Bottom strip show two clearly separate opaque woven shape samples BLUE PASOS and SAFFRON ACTIVIDAD with one dashed reference each, never interlocking. Retain beautiful original color board organization. Not UI, no design system or token claims. Replace warped F3 Pasos hex with exact #B22F68; F2 accent exact#C9C1FF. This board is only color exploration."
+    },
+    {
+      "id": "10-contenido-materiales-v2",
+      "source": "images/10-contenido-materiales.png",
+      "prompt": "Edit this conceptual material sheet. Preserve art-direction material samples left and neutral native-control studies right with exploded-layer drawing and opaque-control alternative bottom. Remove all wrong functional copy: 'Movimiento','Aprendizaje','Nutrición','Bienestar', slogans, and tiny values 8/12/20 etc. Replace four material sample titles with ONLY 'PLEGAR','IMPRIMIR','AGREGAR','ENTRELAZAR'. Under content samples put only 'PROGRESO REAL / REFERENCIA HABITUAL / OBJETIVO SEMANAL'. No nutrition, learning, lifestyle metrics or health claims. Controls right should depict only back, a two-button pencil/ellipsis toolbar, contextual pencil, opaque numeric field '40.000' with cancel and confirm, a simple editing overlay, and floating plus for add metric. Remove share, heart/favourite, sliders preferences; no invention of features. No glass on content or double glass. Exact headers 'CONTENIDO PROPIO','CONTROLES NATIVOS · REFERENCIA CONCEPTUAL','CAPAS SEPARADAS','REDUCIR TRANSPARENCIA'. Keep data plane matte opaque, upper control plane separate; no exact runtime visual claims. Native overlays are schematic, not UI screens. Preserve professional landscape composition."
+    },
+    {
+      "id": "11-motion-storyboard-v2",
+      "source": "images/11-motion-storyboard.png",
+      "prompt": "Edit this six-row storyboard, preserve woven visual language and 6x3 grid, headings, blue actual fibers, dashed habitual marker and empty final mesh, single/two-metric sequence and reduced-motion row. Correct these critical semantics: Row3 middle REAL 40.100 has RESTAN 0, never ~100; exact text '40.100 · interpolación visual', and right 'REAL40.600 · META40.000 · RESTAN0'. No intermediate animation quantity is a new data reading; Row1 middle label ONLY 'Interpolación visual' and remove numeric values23.000/17.000, keeping first real22.000 remaining18.000 and last real24.000 remaining16.000. Maintain reference21.500 fixed only in update-row; goal40k. Row5 edit-confirm control must be BLUE neutral, remove green success moral code; labels '40.000', no product slogans. Change all long lifestyle copy at left to minimal exact event labels ACTUALIZAR, RELACION, COMPLETAR, ANADIR/RETIRAR, EDITAR, REDUCE MOTION. Row2 should show dashed reference already present in every frame, temporary emphasis only, never a hidden-to-visible new metric, actual24k unchanged. Row4 two goals independent blue/saffron, no merge. Bottom no movement interpolation, immediate replacement of initial55% to final60%. Crucially the real front endpoint and reference should stay clearly different in every object. This is concept keyframes, not a bar-based final identity or validated animation."
+    }
+  ]
+}
