@@ -1,7 +1,9 @@
-# HealthGoals — Estrategia de marca y territorios de exploración
+# HealthGoals — Estrategia de marca e identidad visual V1
 
-**Estado:** cierre provisional de Brand Discovery · 9 de octubre de 2026  
-**Uso:** brief para encargar exploraciones visuales. Las formulaciones son estratégicas; no constituyen copy final ni amplían el MVP.
+**Estado:** identidad visual V1 decidida para MVP · 10 de octubre de 2026  
+**Uso:** estrategia de marca y decisión visual ejecutable aprobada por Product Owner en la [Issue #49](https://github.com/montunolabs/HealthGoals/issues/49). Las formulaciones estratégicas no constituyen copy final ni amplían el MVP.
+
+Brand Discovery está cerrado para el MVP. No habrá más Brand Discovery durante esta etapa; los territorios anteriores se conservan únicamente como exploración histórica cerrada. La decisión V1 no cambia la estrategia, la visión, la propuesta de valor ni el alcance funcional.
 
 **Base y grado de certeza**
 
@@ -69,7 +71,43 @@ La celebración expresiva no exige badges, rankings ni nuevas mecánicas de gami
 
 “Premium”, “minimalista” y “calmada” no son atributos obligatorios. La accesibilidad, la privacidad y la integridad de la información sí son requisitos.
 
-**Tres territorios visuales**
+## Identidad visual V1 vigente para el MVP
+
+### Paleta base
+
+| Color | Valor | Uso |
+| --- | --- | --- |
+| Ciruela | `#2B1630` | Oscuro principal / tinta |
+| Crema | `#FFF4E6` | Superficies claras |
+| Caléndula | `#FFB21E` | Acento energético y celebración |
+| Coral | `#FF5A3C` | Acento secundario |
+| Rubor | `#FFD6C7` | Superficies secundarias |
+
+Se permiten ajustes técnicos justificados por contraste, accesibilidad y Dark Mode, conservando el carácter cálido de la dirección. No es obligatorio usar los cinco colores en todas las pantallas.
+
+### Tipografía e interfaz
+
+- SF Pro / tipografía nativa del sistema, con Dynamic Type. Sin serif ni familias externas en el MVP.
+- SwiftUI y controles nativos como primera opción. Conservar la [UX y el comportamiento aprobados](../design/experiencia-mvp.md).
+- Progreso mediante representaciones convencionales y comprensibles. No introducir metáforas gráficas que requieran aprender un nuevo lenguaje.
+- Personalizar solo cuando aporte identidad o claridad.
+
+### Expresión e icono
+
+- Uso habitual: claro, cercano y respetuoso.
+- Estados difíciles o insuficientes: sin culpa ni presión.
+- Al completar un objetivo: mayor expresión de color y animación breve, respetando Reduce Motion. La celebración reconoce el logro; no implica escalada automática.
+- Icono provisional coherente con la dirección V1. El logotipo definitivo no bloquea el MVP.
+
+### Límites y validación
+
+La implementación visual V1 se valida en la app real, incluidos contraste, claro/oscuro, Dynamic Type y Reduce Motion. Las antiguas altas fidelidades conservan contexto de UX; sus paletas o estilos no prevalecen sobre esta decisión. Este registro no acredita una implementación ni una validación en dispositivo.
+
+Esta decisión conserva los contratos funcionales: no modifica producto, Goal Engine, pacing ni HealthKit. Esta entrega es únicamente documental. Quedan fuera el rediseño de pantallas, la creación de tokens, la edición de SwiftUI, la investigación estética y la creación de un design system.
+
+## Territorios visuales históricos — exploración cerrada
+
+Los tres territorios siguientes pertenecen al brief del 9 de octubre de 2026. Se conservan como contexto, no como alternativas pendientes ni instrucciones de trabajo. La identidad V1 anterior es la decisión vigente.
 
 **1. Orientación clara**
 
@@ -101,10 +139,10 @@ Representa la satisfacción de cumplir algo que has elegido, dentro de una vida 
 
 **Riesgos:** parecer infantil, gamificada o excesivamente estimulante; convertir la celebración en presión por completar. Necesita igual cuidado en semanas parciales y estados desconocidos.
 
-**Condiciones del encargo posterior**
+**Condiciones históricas del encargo — sin vigencia**
 
-Explorar los tres territorios sobre las mismas situaciones: consulta habitual, ritmo inferior al habitual, objetivo completado, ajuste y datos insuficientes. Conservar contenido, comportamiento y prioridades de la experiencia aprobada.
+El brief planteaba explorar los tres territorios sobre las mismas situaciones: consulta habitual, ritmo inferior al habitual, objetivo completado, ajuste y datos insuficientes, conservando contenido, comportamiento y prioridades de la experiencia aprobada.
 
-Cada propuesta deberá demostrar comprensión, autonomía, celebración y reconocimiento propio, además de funcionar en claro/oscuro, EN/ES y con accesibilidad.
+Pedía demostrar comprensión, autonomía, celebración y reconocimiento propio, además de funcionar en claro/oscuro, EN/ES y con accesibilidad. Las diferencias debían ser perceptibles en su lógica expresiva, incluso sin depender del color.
 
-Las diferencias deben ser perceptibles en su lógica expresiva, incluso sin depender del color. La selección posterior se basará en qué territorio hace más creíble esta estrategia y en sus costes de uso. Este cierre permite encargar la exploración; no selecciona todavía un territorio.
+La selección posterior se habría basado en qué territorio hacía más creíble la estrategia y en sus costes de uso. Ese encargo queda cerrado y sustituido por la decisión V1; no requiere nuevas propuestas ni seleccionar uno de estos territorios.

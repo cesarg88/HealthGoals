@@ -11,6 +11,7 @@ Product Lead define el alcance y los criterios de éxito. Product Designer docum
 
 Las Issues de implementación enlazarán los documentos relevantes y concretarán criterios de aceptación verificables. Las decisiones necesarias para ejecutar una Issue deben estar resueltas antes de asignarla a implementación.
 
-## Propuestas de diseño en revisión
+## Diseño y marca
 
 - [Experiencia completa del MVP](../design/experiencia-mvp.md): flujo, inventario de superficies, matriz de estados, wireframes y preguntas pendientes de la Issue #12. No modifica el alcance aprobado.
+- [Estrategia de marca e identidad visual V1](../brand/brand-strategy.md): decisión vigente de paleta, tipografía y límites del MVP; Brand Discovery cerrado, con territorios anteriores conservados como contexto histórico.
