@@ -15,3 +15,4 @@ Las Issues de implementación enlazarán los documentos relevantes y concretará
 
 - [Experiencia completa del MVP](../design/experiencia-mvp.md): flujo, inventario de superficies, matriz de estados, wireframes y preguntas pendientes de la Issue #12. No modifica el alcance aprobado.
 - [Estrategia de marca e identidad visual V1](../brand/brand-strategy.md): decisión vigente de paleta, tipografía y límites del MVP; Brand Discovery cerrado, con territorios anteriores conservados como contexto histórico.
+- [Tokens visuales mínimos V1](../design/tokens-visuales-v1.md): API SwiftUI, roles Light/Dark, ajustes de contraste y catálogo de previews para las entregas de superficies.
