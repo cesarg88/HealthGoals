@@ -2,7 +2,11 @@
 
 Estado: dirección UX aprobada por César y wireframes cerrados tras los ajustes del 4 de octubre. Las decisiones del motor, edición y datos aún pendientes no quedan aprobadas por este cierre. Fecha: 4 de octubre de 2026. [Issue #12](https://github.com/cesarg88/HealthGoals/issues/12). Fuentes leídas en `develop` integrado `d0c855e58b3099d58f10ae279382ecb620701ea2`: [One-Pager](../product/one-pager.md), [MVP Scope](../product/mvp-scope.md), README y AGENTS.
 
-[Figma editable](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13): flujo, wireframes, estados/adaptación y elementos reutilizables. Figma será la referencia visual; este documento registra comportamiento, estados y preguntas. Todo dato mostrado es ficticio. Los ejemplos numéricos no son reglas del motor.
+[Figma editable](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13): flujo, wireframes, estados/adaptación y elementos reutilizables. El archivo conserva evidencia de flujo, composición y UX; sus antiguas paletas y estilos son referencias históricas. Este documento registra comportamiento, estados y preguntas. Todo dato mostrado es ficticio. Los ejemplos numéricos no son reglas del motor.
+
+**Dirección visual vigente (10 de octubre de 2026):** la [identidad visual V1](../brand/brand-strategy.md#identidad-visual-v1-vigente-para-el-mvp), aprobada por Product Owner en la [Issue #49](https://github.com/montunolabs/HealthGoals/issues/49), define paleta cálida, SF Pro con Dynamic Type y controles nativos como primera opción. Brand Discovery está cerrado para el MVP. Las altas fidelidades anteriores no son fuente visual definitiva cuando contradicen V1.
+
+La implementación visual V1 se valida en la app real, con claro/oscuro, contraste, Dynamic Type, VoiceOver y Reduce Motion; Figma y este registro documental no acreditan esa validación. Se conservan los contratos UX y comportamientos aprobados de selección, autorización, propuesta, edición, progreso, restante y continuidad. La decisión visual no modifica producto, Goal Engine, pacing ni HealthKit, ni resuelve decisiones funcionales pendientes.
 
 ## 1. Síntesis y límite
 
@@ -112,7 +116,7 @@ El permiso de lectura concedido/denegado no es observable por tipo; `authorizati
 
 iPhone compacto y ventanas estrechas: una columna desplazable, sin números truncados. Paisaje: misma secuencia con menos altura; acciones accesibles mediante scroll y teclado sin tapar Aplicar. iPad ancho: columna de contexto y objetivos al lado cuando ambas caben; dos métricas no se fuerzan en paralelo si texto ampliado/ventana estrecha. Onboarding centrado con anchura legible. S05 hoja adaptativa, no pantalla rígida de móvil estirada. Sin breakpoint arbitrario como requisito del producto: probar ancho efectivo y contenido.
 
-Texto escalable, sin altura fija en tarjetas o botones con copy largo; orden VoiceOver: métrica, estado, progreso, restante y acciones; la explicación secundaria se lee solo al expandirla. La barra es decorativa si repite la frase accesible. Color nunca es única señal. Objetivos táctiles propuestos de al menos 44 pt; contraste y foco se comprobarán en alta fidelidad y dispositivo, no se declaran validados por wireframes. Movimiento reducido compatible; animaciones no necesarias para comprender.
+Texto escalable, sin altura fija en tarjetas o botones con copy largo; orden VoiceOver: métrica, estado, progreso, restante y acciones; la explicación secundaria se lee solo al expandirla. La barra es decorativa si repite la frase accesible. Color nunca es única señal. Objetivos táctiles propuestos de al menos 44 pt; contraste y foco de V1 se comprobarán en la app real, no se declaran validados por wireframes ni por la alta fidelidad histórica. Movimiento reducido compatible; animaciones no necesarias para comprender.
 
 Los wireframes usan SF Pro y neutros, con modos Claro/Oscuro para probar jerarquía, no branding final. El kit iOS26 fue descubierto pero importar el botón falló por permisos; los elementos locales son esquemáticos, no copia de Apple Fitness. No hay iconos reconstruidos ni UI rasterizada.
 
@@ -138,7 +142,7 @@ Números, fechas, plurales y unidades deben formatearse según región; no conca
 
 ## 7. Preguntas y contradicciones reales
 
-No bloquean exploración reversible; sí impiden cerrar un handoff implementable de esos comportamientos.
+Estas preguntas funcionales impiden cerrar un handoff implementable de los comportamientos afectados. No reabren Brand Discovery ni la identidad visual V1.
 
 | ID | Decisión pendiente | Recomendación y motivo | Responsable |
 | --- | --- | --- | --- |
@@ -195,14 +199,14 @@ Dirección general aprobada; seis ajustes completados antes de alta fidelidad: s
 
 El estado dual conserva la Home de un objetivo: la segunda métrica sigue optativa. [Home dual principal](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=4-123). Al confirmar el primer objetivo a mitad de semana, no se empieza un intervalo móvil de siete días ni se reduce la meta por los días restantes. D01 aún concreta zona horaria/cambio temporal y el motor define cómo obtiene datos aptos.
 
-Este cierre autoriza preparar la siguiente fase visual, sin aprobar algoritmos pendientes, implementación, merge o publicación. Las fuentes canónicas conservan el comportamiento vigente; la alta fidelidad no reabre estas decisiones.
+En el cierre histórico del 4 de octubre se autorizó preparar la siguiente fase visual, sin aprobar algoritmos pendientes, implementación, merge o publicación. Esa fase queda como antecedente de V1, no como encargo visual pendiente. Las fuentes canónicas conservan el comportamiento vigente; la decisión visual V1 no reabre estas decisiones.
 
 Validación del cierre: composiciones Figma principal, estados y flujo revisadas tras los ajustes; Home principal/dual y variantes sin texto diario. Composición principal final: 136 descendientes (10 frames, 102 textos, 24 instancias), SF Pro, sin imágenes; estado dual principal con CTA Ajustar objetivos y explicación secundaria. El detalle explicativo es una entrada contraída, no prototipo funcional. `git diff --check` ejecutado sin errores.
 
 
-## 11. Alta fidelidad del MVP — Issue #23
+## 11. Alta fidelidad histórica del MVP — Issue #23
 
-Dirección visual S01–S04 aprobada por César. Figma es la fuente visual editable; esta sección enlaza la entrega y registra límites de interacción, sin duplicar valores de estilo. [Issue #23](https://github.com/cesarg88/HealthGoals/issues/23).
+La dirección visual S01–S04 fue aprobada por César durante la entrega de #23. Figma conserva esa alta fidelidad como evidencia histórica editable; la identidad visual vigente es V1. Sus antiguas paletas y estilos no prevalecen sobre V1. Esta sección conserva los contratos de interacción aprobados y sus límites, sin duplicar valores de estilo. [Issue #23](https://github.com/cesarg88/HealthGoals/issues/23).
 
 - [Base y Home](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-2): SF Pro y Light/Dark; restante sobre acumulado, ritmo sin waveform, estado neutral y Ajustar como acción de texto.
 - [S05–S07 y widget](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=37-114): edición de propuesta, resultado completo/parcial, continuidad automática, ajustes básicos y widget mediano de uno/dos objetivos.
@@ -215,7 +219,7 @@ Widget: tap abre Home, sin edición. Dato desconocido no muestra cero ni diagnos
 
 Aviso local opcional: «Así va tu semana» / «Mira cómo estás avanzando y qué te queda». Sin valores de salud; tap abre Home. La presentación y autorización pertenecen a iOS; horario y programación siguen D09.
 
-Las tarjetas/campos crecen con texto, acciones tienen área mínima de 44 pt y lectura semántica con unidad/estado; barras y símbolos decorativos no duplican VoiceOver. S05 debe permitir scroll con teclado sin ocultar Guardar/Aplicar. iPad/paisaje conservan orden y ancho legible. Se verifica editabilidad, fuente, contraste de la base y composición en Figma; Dynamic Type, VoiceOver, Reduce Motion, teclado y WidgetKit reales requieren validación en dispositivo. No se presenta el mockup como prototipo funcional ni como prueba de SwiftUI.
+Las tarjetas/campos crecen con texto, acciones tienen área mínima de 44 pt y lectura semántica con unidad/estado; barras y símbolos decorativos no duplican VoiceOver. S05 debe permitir scroll con teclado sin ocultar Guardar/Aplicar. iPad/paisaje conservan orden y ancho legible. La evidencia histórica en Figma cubre editabilidad, fuente, contraste de aquella base y composición; Dynamic Type, VoiceOver, Reduce Motion, teclado y WidgetKit reales requieren validación en dispositivo. No se presenta el mockup como prototipo funcional ni como prueba de SwiftUI.
 
 ## 12. Primera Home funcional — Issue #20
 
@@ -236,7 +240,7 @@ Corrección tras recorrido físico de #22: Product aprueba ayuda neutral por mé
 
 ## 14. Selección independiente y autorización por métrica — Issue #29
 
-La [Issue #29](https://github.com/cesarg88/HealthGoals/issues/29) reemplaza la exclusividad inicial de las entregas históricas #16/#22: Qué quieres mejorar permite seleccionar/deseleccionar Pasos y Actividad independientemente. Casillas con marca y estado accesible, ninguna selección inicial y Continuar deshabilitado con cero. La ayuda «Puedes elegir una o las dos» aclara la interacción sin reabrir dirección visual. [Estados Figma](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=64-208), [Claro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-6) y [Oscuro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-178) mantienen la composición aprobada, con [evidencia de Design](https://github.com/cesarg88/HealthGoals/issues/29#issuecomment-5995411129). Se usan nombres humanos de superficies; los códigos anteriores se conservan como referencias históricas/Figma.
+La [Issue #29](https://github.com/cesarg88/HealthGoals/issues/29) reemplaza la exclusividad inicial de las entregas históricas #16/#22: Qué quieres mejorar permite seleccionar/deseleccionar Pasos y Actividad independientemente. Casillas con marca y estado accesible, ninguna selección inicial y Continuar deshabilitado con cero. La ayuda «Puedes elegir una o las dos» aclara la interacción sin reabrir dirección visual. [Estados Figma](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=64-208), [Claro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-6) y [Oscuro](https://www.figma.com/design/dAffHzxDalwnkz5jkBXA13?node-id=29-178) conservan la composición y selección aprobadas como referencia de UX, con estilos históricos sujetos a V1 y [evidencia de Design](https://github.com/cesarg88/HealthGoals/issues/29#issuecomment-5995411129). Se usan nombres humanos de superficies; los códigos anteriores se conservan como referencias históricas/Figma.
 
 Conectar con Salud explica solo los tipos elegidos y solicita su lectura sin escritura. Añadir una métrica comprueba con HealthKit si corresponde presentar una solicitud, la completa cuando sea necesario y solo entonces consulta su baseline. La necesidad de solicitud y su finalización no revelan acceso READ. Tu punto de partida muestra cada métrica elegida incluso si es insuficiente: Reintentar vuelve a consultar, la ayuda neutral explica cómo revisar acceso en Salud y Retirar Pasos/Actividad cambia la selección únicamente por acción del usuario. No se acepta una propuesta mientras siga seleccionada otra sin propuesta apta; retirarla permite aceptar la apta. Ambas insuficientes o cero selecciones impiden aceptar. Ajustar conserva borradores independientes y no acepta por métrica.
 
